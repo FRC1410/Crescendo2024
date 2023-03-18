@@ -1,0 +1,25 @@
+plugins {
+    id "edu.wpi.first.GradleRIO"
+    id "java-library"
+}
+
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+// This build script is in Groovy instead of Kotlin because WPILib's dependency toolchain is weird.
+
+dependencies {
+    api wpi.java.deps.wpilib()
+    api wpi.java.vendor.java()
+
+    nativeDebug wpi.java.deps.wpilibJniDebug(wpi.platforms.desktop)
+    nativeDebug wpi.java.vendor.jniDebug(wpi.platforms.desktop)
+    simulationDebug wpi.sim.enableDebug()
+
+    nativeRelease wpi.java.deps.wpilibJniRelease(wpi.platforms.desktop)
+    nativeRelease wpi.java.vendor.jniRelease(wpi.platforms.desktop)
+    simulationRelease wpi.sim.enableRelease()
+
+    compileOnly "org.jetbrains:annotations:23.0.0"
+    implementation "it.unimi.dsi:fastutil:8.2.1"
+}
