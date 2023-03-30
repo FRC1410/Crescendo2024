@@ -97,7 +97,7 @@ public final class Robot extends PhaseDrivenRobot {
 
 	@Override
 	public void teleopSequence() {
-
+		// L + rip Bozo
 	}
 
 	@Override
