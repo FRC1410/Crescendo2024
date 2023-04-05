@@ -7,13 +7,17 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import org.frc1410.chargedup2023.util.NetworkTables;
 import org.frc1410.framework.scheduler.subsystem.TickedSubsystem;
 
 import static org.frc1410.chargedup2023.util.Tuning.*;
 
 public class SwerveModule implements TickedSubsystem {
+
+
 	private static final double wheelRaidus = 1;
 	private static final double encoderResoulution = 4092;
 	private static final double maxAngularVel = 0;
@@ -43,20 +47,28 @@ public class SwerveModule implements TickedSubsystem {
 		drivingEncoder = new CANCoder(drivingEncoderID);
 		turningEncoder = new CANCoder(steeringEncoderID);
 
-		drivingEncoder.getPosition();
-		turningEncoder.getAbsolutePosition();
+//		drivingEncoder.getPosition();
+//		turningEncoder.getAbsolutePosition();
 
 		turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 	}
 
-	public SwerveModuleState getPosition() {
-		return new SwerveModuleState(drivingEncoder.getPosition(), new Rotation2d(turningEncoder.getPosition()));
+	public SwerveModuleState getState() {
+		return new SwerveModuleState(
+			drivingEncoder.getVelocity(), new Rotation2d(turningEncoder.getAbsolutePosition())
+		);
+	}
+
+	public SwerveModulePosition getPos() {
+		return new SwerveModulePosition(
+			drivingEncoder.getPosition(), new Rotation2d(turningEncoder.getAbsolutePosition())
+		);
 	}
 
 	public void setDesiredState(SwerveModuleState desiredState) {
 		SwerveModuleState state = SwerveModuleState.optimize(desiredState, Rotation2d.fromDegrees(turningEncoder.getAbsolutePosition()));
 
-		final double driveOutput = drivePIDController.calculate(drivingEncoder.getPosition(), state.speedMetersPerSecond);
+		final double driveOutput = drivePIDController.calculate(drivingEncoder.getVelocity(), state.speedMetersPerSecond);
 		final double turnOutput = turningPIDController.calculate(turningEncoder.getAbsolutePosition(), state.angle.getRadians());
 
 		double drivefeed = driveFeedForward.calculate(state.speedMetersPerSecond);
