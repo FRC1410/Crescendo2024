@@ -10,17 +10,13 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import org.frc1410.chargedup2023.util.NetworkTables;
-import org.frc1410.framework.scheduler.subsystem.TickedSubsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static org.frc1410.chargedup2023.util.Tuning.*;
 
-public class SwerveModule implements TickedSubsystem {
+public class SwerveModule extends SubsystemBase {
 
-
-	private static final double wheelRaidus = 1;
-	private static final double encoderResoulution = 4092;
-	private static final double maxAngularVel = 0;
+	private static final double maxAngularVel = 1;
 	private static final double maxAngularAcc = 2 * Math.PI;  // raidians per sec squared
 	private final CANSparkMax driveMotor;
 	private final CANSparkMax turningMotor;
@@ -59,7 +55,7 @@ public class SwerveModule implements TickedSubsystem {
 		);
 	}
 
-	public SwerveModulePosition getPos() {
+	public SwerveModulePosition getPosition() {
 		return new SwerveModulePosition(
 			drivingEncoder.getPosition(), new Rotation2d(turningEncoder.getAbsolutePosition())
 		);
@@ -77,10 +73,5 @@ public class SwerveModule implements TickedSubsystem {
 
 		driveMotor.setVoltage(driveOutput + drivefeed);
 		turningMotor.setVoltage(turnOutput + turnFeed);
-	}
-
-	@Override
-	public void periodic() {
-
 	}
 }
