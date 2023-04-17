@@ -7,7 +7,11 @@ public interface Constants {
 
 
 	// Swerve module constants
-	int wheelRadius = 1;
-	int swerveModuleEncoderRes = 4095;
+	double DRIVING_GEAR_RATIO = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
+	double MAX_ANGULAR_VEL = 25.57;
+	double MAX_ANGULAR_ACC = 2 * Math.PI;  // radians per sec squared
+
+	int WHEEL_RADIUS = 2;
+	int SWERVE_MODULE_ENCODER_RES = 4095;
 }
 
