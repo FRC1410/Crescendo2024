@@ -44,6 +44,12 @@ public class SwerveModule extends SubsystemBase {
 		steerEncoder = new CANCoder(steeringEncoderID);
 
 		turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
+
+		driveMotor.restoreFactoryDefaults();
+		driveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+
+		steerMotor.restoreFactoryDefaults();
+		steerMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 	}
 
 	public double getDriveVel() {
