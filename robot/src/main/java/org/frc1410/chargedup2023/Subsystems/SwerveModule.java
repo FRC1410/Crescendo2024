@@ -19,10 +19,10 @@ import static org.frc1410.chargedup2023.util.Tuning.*;
 public class SwerveModule extends SubsystemBase {
 
 	private final CANSparkMax driveMotor;
-	private final CANSparkMax turningMotor;
+	private final CANSparkMax steerMotor;
 
 	private final RelativeEncoder driveEncoder;
-	private final CANCoder turningEncoder;
+	private final CANCoder steerEncoder;
 
 	private final PIDController drivePIDController = new PIDController(SWERVE_DRIVE_KP, SWERVE_DRIVE_KI, SWERVE_DRIVE_KD);
 
@@ -36,12 +36,12 @@ public class SwerveModule extends SubsystemBase {
 			new TrapezoidProfile.Constraints(MAX_ANGULAR_VEL, MAX_ANGULAR_ACC)
 	);
 
-	public SwerveModule(int driveMotorID, int turningMotorID, int steeringEncoderID) {
+	public SwerveModule(int driveMotorID, int steeringMotorID, int steeringEncoderID) {
 		driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
-		turningMotor = new CANSparkMax(turningMotorID, MotorType.kBrushless);
+		steerMotor = new CANSparkMax(steeringMotorID, MotorType.kBrushless);
 
 		driveEncoder = driveMotor.getEncoder();
-		turningEncoder = new CANCoder(steeringEncoderID);
+		steerEncoder = new CANCoder(steeringEncoderID);
 
 		turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 	}
@@ -56,26 +56,26 @@ public class SwerveModule extends SubsystemBase {
 
 	public SwerveModuleState getState() {
 		return new SwerveModuleState(
-			getDriveVel(), new Rotation2d(turningEncoder.getAbsolutePosition())
+			getDriveVel(), new Rotation2d(steerEncoder.getAbsolutePosition())
 		);
 	}
 
 	public SwerveModulePosition getPosition() {
 		return new SwerveModulePosition(
-			getDrivePosition(), new Rotation2d(turningEncoder.getAbsolutePosition())
+			getDrivePosition(), new Rotation2d(steerEncoder.getAbsolutePosition())
 		);
 	}
 
 	public void setDesiredState(SwerveModuleState desiredState) {
-		SwerveModuleState state = SwerveModuleState.optimize(desiredState, Rotation2d.fromDegrees(turningEncoder.getAbsolutePosition()));
+		SwerveModuleState state = SwerveModuleState.optimize(desiredState, Rotation2d.fromDegrees(steerEncoder.getAbsolutePosition()));
 
 		final double driveOutput = drivePIDController.calculate(getDriveVel(), state.speedMetersPerSecond);
-		final double turnOutput = turningPIDController.calculate(turningEncoder.getAbsolutePosition(), state.angle.getRadians());
+		final double turnOutput = turningPIDController.calculate(steerEncoder.getAbsolutePosition(), state.angle.getRadians());
 
 		double driveFeed = driveFeedForward.calculate(state.speedMetersPerSecond);
-		double turnFeed = turningFeedForward.calculate(turningEncoder.getAbsolutePosition(), state.angle.getRadians());
+		double turnFeed = turningFeedForward.calculate(steerEncoder.getAbsolutePosition(), state.angle.getRadians());
 
 		driveMotor.setVoltage(driveOutput + driveFeed);
-		turningMotor.setVoltage(turnOutput + turnFeed);
+		steerMotor.setVoltage(turnOutput + turnFeed);
 	}
 }
