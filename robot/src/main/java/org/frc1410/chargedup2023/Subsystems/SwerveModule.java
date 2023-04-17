@@ -12,6 +12,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import org.frc1410.chargedup2023.util.Tuning.*;
+
 import static org.frc1410.chargedup2023.util.Tuning.*;
 
 public class SwerveModule extends SubsystemBase {
@@ -21,12 +23,11 @@ public class SwerveModule extends SubsystemBase {
 	private final CANSparkMax driveMotor;
 	private final CANSparkMax turningMotor;
 
-	private final CANCoder drivingEncoder;
 	private final CANCoder turningEncoder;
 
 	private final PIDController drivePIDController = new PIDController(SWERVE_DRIVE_KP, SWERVE_DRIVE_KI, SWERVE_DRIVE_KD);
 
-	private final SimpleMotorFeedforward driveFeedForward = new SimpleMotorFeedforward(DRIVE_KS, DRIVE_KV, DRIVE_KA);
+	private final SimpleMotorFeedforward driveFeedForward = new SimpleMotorFeedforward(SWERVE_DRIVE_KS, SWERVE_DRIVE_KV, SWERVE_DRIVE_KA);
 	private final SimpleMotorFeedforward turningFeedForward = new SimpleMotorFeedforward(TURN_KS, TURN_KV, TURN_KA);
 
 	private final ProfiledPIDController turningPIDController = new ProfiledPIDController(
@@ -36,35 +37,31 @@ public class SwerveModule extends SubsystemBase {
 			new TrapezoidProfile.Constraints(maxAngularVel, maxAngularAcc)
 	);
 
-	public SwerveModule(int driveID, int turningID, int drivingEncoderID, int steeringEncoderID) {
-		driveMotor = new CANSparkMax(driveID, MotorType.kBrushless);
-		turningMotor = new CANSparkMax(turningID, MotorType.kBrushless);
+	public SwerveModule(int driveMotorID, int turningMotorID, int steeringEncoderID) {
+		driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
+		turningMotor = new CANSparkMax(turningMotorID, MotorType.kBrushless);
 
-		drivingEncoder = new CANCoder(drivingEncoderID);
 		turningEncoder = new CANCoder(steeringEncoderID);
-
-//		drivingEncoder.getPosition();
-//		turningEncoder.getAbsolutePosition();
 
 		turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 	}
 
 	public SwerveModuleState getState() {
 		return new SwerveModuleState(
-			drivingEncoder.getVelocity(), new Rotation2d(turningEncoder.getAbsolutePosition())
+			driveMotor.getEncoder().getVelocity(), new Rotation2d(turningEncoder.getAbsolutePosition())
 		);
 	}
 
 	public SwerveModulePosition getPosition() {
 		return new SwerveModulePosition(
-			drivingEncoder.getPosition(), new Rotation2d(turningEncoder.getAbsolutePosition())
+			driveMotor.getEncoder().getPosition(), new Rotation2d(turningEncoder.getAbsolutePosition())
 		);
 	}
 
 	public void setDesiredState(SwerveModuleState desiredState) {
 		SwerveModuleState state = SwerveModuleState.optimize(desiredState, Rotation2d.fromDegrees(turningEncoder.getAbsolutePosition()));
 
-		final double driveOutput = drivePIDController.calculate(drivingEncoder.getVelocity(), state.speedMetersPerSecond);
+		final double driveOutput = drivePIDController.calculate(driveMotor.getEncoder().getVelocity(), state.speedMetersPerSecond);
 		final double turnOutput = turningPIDController.calculate(turningEncoder.getAbsolutePosition(), state.angle.getRadians());
 
 		double drivefeed = driveFeedForward.calculate(state.speedMetersPerSecond);

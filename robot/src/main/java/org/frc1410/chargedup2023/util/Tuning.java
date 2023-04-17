@@ -13,9 +13,9 @@ public interface Tuning {
 	double SWERVE_TURNING_KD = 0;
 
 	// Speed, Velocity, and Acceleration values for swerve module
-	double DRIVE_KS = 0;
-	double DRIVE_KV = 0;
-	double DRIVE_KA = 0;
+	double SWERVE_DRIVE_KS = 0;
+	double SWERVE_DRIVE_KV = 0;
+	double SWERVE_DRIVE_KA = 0;
 
 	double TURN_KS = 0;
 	double TURN_KV = 0;
