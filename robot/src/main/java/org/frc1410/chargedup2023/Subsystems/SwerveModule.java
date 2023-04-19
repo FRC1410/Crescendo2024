@@ -84,4 +84,17 @@ public class SwerveModule extends SubsystemBase {
 		driveMotor.setVoltage(driveOutput + driveFeed);
 		steerMotor.setVoltage(turnOutput + turnFeed);
 	}
+
+	public void setDriveCoast() {
+		driveMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
+	}
+
+	public void setDriveBreak() {
+		driveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+	}
+
+	public void lock() {
+		driveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		steerMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+	}
 }
