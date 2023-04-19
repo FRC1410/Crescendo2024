@@ -107,11 +107,11 @@ public class Drivetrain implements TickedSubsystem {
 		backRight.setDriveBreak();
 	}
 
-	public void lock() {
-		frontLeft.lock();
-		frontRight.lock();
-		backLeft.lock();
-		backRight.lock();
+	public void Lock(boolean locked) {
+		frontLeft.islocked(locked);
+		frontRight.islocked(locked);
+		backLeft.islocked(locked);
+		backRight.islocked(locked);
 	}
 
 	@Override

@@ -93,8 +93,10 @@ public class SwerveModule extends SubsystemBase {
 		driveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 	}
 
-	public void lock() {
-		driveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		steerMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+	public void islocked(boolean isLocked) {
+		if(isLocked) {
+			driveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+			steerMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		}
 	}
 }
