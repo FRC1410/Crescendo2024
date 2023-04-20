@@ -27,12 +27,12 @@ public class SwerveModule extends SubsystemBase {
 	private final PIDController drivePIDController = new PIDController(SWERVE_DRIVE_KP, SWERVE_DRIVE_KI, SWERVE_DRIVE_KD);
 
 	private final SimpleMotorFeedforward driveFeedForward = new SimpleMotorFeedforward(SWERVE_DRIVE_KS, SWERVE_DRIVE_KV, SWERVE_DRIVE_KA);
-	private final SimpleMotorFeedforward turningFeedForward = new SimpleMotorFeedforward(TURN_KS, TURN_KV, TURN_KA);
+	private final SimpleMotorFeedforward turningFeedForward = new SimpleMotorFeedforward(STEER_KS, STEER_KV, STEER_KA);
 
 	private final ProfiledPIDController turningPIDController = new ProfiledPIDController(
-			SWERVE_TURNING_KP,
-			SWERVE_TURNING_KI,
-			SWERVE_TURNING_KD,
+			SWERVE_STEERING_KP,
+			SWERVE_STEERING_KI,
+			SWERVE_STEERING_KD,
 			new TrapezoidProfile.Constraints(MAX_ANGULAR_VEL, MAX_ANGULAR_ACC)
 	);
 
@@ -93,10 +93,4 @@ public class SwerveModule extends SubsystemBase {
 		driveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 	}
 
-	public void islocked(boolean isLocked) {
-		if(isLocked) {
-			driveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-			steerMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		}
-	}
 }

@@ -1,26 +1,22 @@
 package org.frc1410.chargedup2023.Subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.networktables.DoublePublisher;
-import edu.wpi.first.networktables.DoubleTopic;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import org.frc1410.chargedup2023.util.NetworkTables;
 import org.frc1410.framework.scheduler.subsystem.TickedSubsystem;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import static org.frc1410.chargedup2023.util.IDs.*;
 import static org.frc1410.chargedup2023.util.Constants.*;
 import static edu.wpi.first.wpilibj.SerialPort.Port.kUSB;
 
-
 public class Drivetrain implements TickedSubsystem {
 
-	// Network tables
+	// Networktables
 	private final NetworkTable table = NetworkTableInstance.getDefault().getTable("Drivetrain");
 	private final DoublePublisher xPub = NetworkTables.PublisherFactory(table, "X", 0);
 	private final DoublePublisher yPub = NetworkTables.PublisherFactory(table, "Y", 0);
@@ -49,7 +45,6 @@ public class Drivetrain implements TickedSubsystem {
 
 	private final AHRS gyro = new AHRS(kUSB);
 
-
 	private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
 			frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation
 	);
@@ -68,7 +63,7 @@ public class Drivetrain implements TickedSubsystem {
 		gyro.reset();
 	}
 
-	public void drive(double speed, double strafe, double rotation, boolean isFieldRelative) {
+	public void drive(double speed, double strafe, double rotation, boolean isFieldRelative, boolean isLocked) {
 		var swerveModuleStates =
 				kinematics.toSwerveModuleStates(
 						isFieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(speed, strafe, rotation, gyro.getRotation2d())
@@ -79,6 +74,13 @@ public class Drivetrain implements TickedSubsystem {
 		frontRight.setDesiredState(swerveModuleStates[1]);
 		backLeft.setDesiredState(swerveModuleStates[2]);
 		backRight.setDesiredState(swerveModuleStates[3]);
+
+		if(isLocked = true) {
+			frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+			frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(135)));
+			backLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(225)));
+			backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(315)));
+		}
 	}
 
 	public void updateOdometry() {
@@ -105,13 +107,6 @@ public class Drivetrain implements TickedSubsystem {
 		frontRight.setDriveBreak();
 		backLeft.setDriveBreak();
 		backRight.setDriveBreak();
-	}
-
-	public void Lock(boolean locked) {
-		frontLeft.islocked(locked);
-		frontRight.islocked(locked);
-		backLeft.islocked(locked);
-		backRight.islocked(locked);
 	}
 
 	@Override
