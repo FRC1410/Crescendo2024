@@ -12,11 +12,12 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import org.frc1410.framework.scheduler.subsystem.TickedSubsystem;
 
 import static org.frc1410.chargedup2023.util.Constants.*;
 import static org.frc1410.chargedup2023.util.Tuning.*;
 
-public class SwerveModule extends SubsystemBase {
+public class SwerveModule implements TickedSubsystem {
 
 	private final CANSparkMax driveMotor;
 	private final CANSparkMax steerMotor;
@@ -28,6 +29,7 @@ public class SwerveModule extends SubsystemBase {
 
 	private final SimpleMotorFeedforward driveFeedForward = new SimpleMotorFeedforward(SWERVE_DRIVE_KS, SWERVE_DRIVE_KV, SWERVE_DRIVE_KA);
 	private final SimpleMotorFeedforward turningFeedForward = new SimpleMotorFeedforward(STEER_KS, STEER_KV, STEER_KA);
+	private SwerveModuleState desiredState;
 
 	private final ProfiledPIDController turningPIDController = new ProfiledPIDController(
 			SWERVE_STEERING_KP,
@@ -73,16 +75,7 @@ public class SwerveModule extends SubsystemBase {
 	}
 
 	public void setDesiredState(SwerveModuleState desiredState) {
-		SwerveModuleState state = SwerveModuleState.optimize(desiredState, Rotation2d.fromDegrees(steerEncoder.getAbsolutePosition()));
-
-		final double driveOutput = drivePIDController.calculate(getDriveVel(), state.speedMetersPerSecond);
-		final double turnOutput = turningPIDController.calculate(steerEncoder.getAbsolutePosition(), state.angle.getRadians());
-
-		double driveFeed = driveFeedForward.calculate(state.speedMetersPerSecond);
-		double turnFeed = turningFeedForward.calculate(steerEncoder.getAbsolutePosition(), state.angle.getRadians());
-
-		driveMotor.setVoltage(driveOutput + driveFeed);
-		steerMotor.setVoltage(turnOutput + turnFeed);
+		this.desiredState = desiredState;
 	}
 
 	public void setDriveCoast() {
@@ -93,4 +86,19 @@ public class SwerveModule extends SubsystemBase {
 		driveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 	}
 
+	@Override
+	public void periodic() {
+		if(desiredState != null) {
+			SwerveModuleState state = SwerveModuleState.optimize(desiredState, Rotation2d.fromDegrees(steerEncoder.getAbsolutePosition()));
+
+			final double driveOutput = drivePIDController.calculate(getDriveVel(), state.speedMetersPerSecond);
+			final double turnOutput = turningPIDController.calculate(steerEncoder.getAbsolutePosition(), state.angle.getRadians());
+
+			double driveFeed = driveFeedForward.calculate(state.speedMetersPerSecond);
+			double turnFeed = turningFeedForward.calculate(steerEncoder.getAbsolutePosition(), state.angle.getRadians());
+
+			driveMotor.setVoltage(driveOutput + driveFeed);
+			steerMotor.setVoltage(turnOutput + turnFeed);
+		}
+	}
 }

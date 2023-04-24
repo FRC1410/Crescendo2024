@@ -30,7 +30,6 @@ public class Drivetrain implements TickedSubsystem {
 	private final DoublePublisher backLeftSpeed = NetworkTables.PublisherFactory(table, "Back left speed", 0);
 	private final DoublePublisher backRightSpeed = NetworkTables.PublisherFactory(table, "Back right speed", 0);
 
-
 	//Position from center of the Chassis
 	private final Translation2d frontLeftLocation = new Translation2d(-0.263525, 0.263525);
 	private final Translation2d frontRightLocation = new Translation2d(0.263525, 0.263525);
@@ -64,25 +63,25 @@ public class Drivetrain implements TickedSubsystem {
 	}
 
 	public void drive(double speed, double strafe, double rotation, boolean isFieldRelative, boolean isLocked) {
-		var swerveModuleStates =
-				kinematics.toSwerveModuleStates(
-						isFieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(speed, strafe, rotation, gyro.getRotation2d())
-								: new ChassisSpeeds(speed, strafe, rotation));
-
-		SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, MAX_SPEED);
-		frontLeft.setDesiredState(swerveModuleStates[0]);
-		frontRight.setDesiredState(swerveModuleStates[1]);
-		backLeft.setDesiredState(swerveModuleStates[2]);
-		backRight.setDesiredState(swerveModuleStates[3]);
-
-		if(isLocked = true) {
+		if (isLocked = true) {
 			frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
 			frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(135)));
 			backLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(225)));
 			backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(315)));
+		} else {
+
+			var swerveModuleStates =
+				kinematics.toSwerveModuleStates(
+					isFieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(speed, strafe, rotation, gyro.getRotation2d())
+						: new ChassisSpeeds(speed, strafe, rotation));
+
+			SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, MAX_SPEED);
+			frontLeft.setDesiredState(swerveModuleStates[0]);
+			frontRight.setDesiredState(swerveModuleStates[1]);
+			backLeft.setDesiredState(swerveModuleStates[2]);
+			backRight.setDesiredState(swerveModuleStates[3]);
 		}
 	}
-
 	public void updateOdometry() {
 		odometry.update(
 				gyro.getRotation2d(),
