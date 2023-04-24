@@ -62,6 +62,7 @@ public final class Robot extends PhaseDrivenRobot {
 				"topics": ["LBork/Line Break"]
 			}]
 		}]""";
+
 		// grid, line break, auto, time
 		var pub = NetworkTables.PublisherFactory(nt.getTable("viridian"), "layout", layout);
 	}
