@@ -58,12 +58,14 @@ public class Drivetrain implements TickedSubsystem {
 					backRight.getPosition()
 			});
 
+	public boolean isLocked = false;
+
 	public Drivetrain() {
 		gyro.reset();
 	}
 
-	public void drive(double speed, double strafe, double rotation, boolean isFieldRelative, boolean isLocked) {
-		if (isLocked = true) {
+	public void drive(double speed, double strafe, double rotation, boolean isFieldRelative) {
+		if (isLocked) {
 			frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
 			frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(135)));
 			backLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(225)));
@@ -82,6 +84,7 @@ public class Drivetrain implements TickedSubsystem {
 			backRight.setDesiredState(swerveModuleStates[3]);
 		}
 	}
+	
 	public void updateOdometry() {
 		odometry.update(
 				gyro.getRotation2d(),

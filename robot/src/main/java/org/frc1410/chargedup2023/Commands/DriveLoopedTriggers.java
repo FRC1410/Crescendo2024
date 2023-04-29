@@ -4,22 +4,23 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import org.frc1410.chargedup2023.Subsystems.Drivetrain;
 import org.frc1410.framework.control.Axis;
 
-
-public class DriveLooped extends CommandBase {
-	private final Drivetrain drivetrain;
+public class DriveLoopedTriggers extends CommandBase {
+    private final Drivetrain drivetrain;
 
 	private final Axis rightXAxis;
 	private final Axis rightYAxis;
 
-	private final Axis leftXAxis;
+	private final Axis leftTrigger;
+    private final Axis rightTrigger;
 
 	private boolean previousTickHadInput = false;
 	
-	public DriveLooped(Drivetrain drivetrain, Axis rightXAxis, Axis rightYAxis, Axis leftXAxis) {
+	public DriveLoopedTriggers(Drivetrain drivetrain, Axis rightXAxis, Axis rightYAxis, Axis leftTrigger, Axis rightTrigger) {
 		this.drivetrain = drivetrain;
 		this.rightXAxis = rightXAxis;
 		this.rightYAxis = rightYAxis;
-		this.leftXAxis = leftXAxis;
+		this.leftTrigger = leftTrigger;
+        this.rightTrigger = rightTrigger;
 	}
 
 	@Override
@@ -31,7 +32,7 @@ public class DriveLooped extends CommandBase {
 	public void execute() {
 		var xVelocity = rightYAxis.get();
 		var yVelocity = rightXAxis.get();
-		var rotation = leftXAxis.get();
+		var rotation = rightTrigger.get() - leftTrigger.get();
 
 		var hasInput = xVelocity != 0 || yVelocity != 0 || rotation != 0;
 
@@ -39,7 +40,7 @@ public class DriveLooped extends CommandBase {
 			drivetrain.isLocked = false;
 		}
 
-		drivetrain.drive(rightYAxis.get(), rightXAxis.get(), leftXAxis.get(), true);
+		drivetrain.drive(rightYAxis.get(), rightXAxis.get(), rotation, true);
 
 		previousTickHadInput = hasInput;
 	}
