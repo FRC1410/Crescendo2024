@@ -8,8 +8,15 @@ import org.frc1410.chargedup2023.util.NetworkTables;
 import org.frc1410.framework.AutoSelector;
 import org.frc1410.framework.PhaseDrivenRobot;
 import org.frc1410.framework.control.Controller;
+import org.frc1410.framework.scheduler.task.TaskPersistence;
 
 import static org.frc1410.chargedup2023.util.Constants.*;
+
+import org.frc1410.chargedup2023.Commands.DriveLooped;
+import org.frc1410.chargedup2023.Commands.DriveLoopedTriggers;
+import org.frc1410.chargedup2023.Commands.LockDrivetrainHeld;
+import org.frc1410.chargedup2023.Commands.LockDrivetrainPressed;
+import org.frc1410.chargedup2023.Subsystems.Drivetrain;
 
 public final class Robot extends PhaseDrivenRobot {
 
@@ -21,6 +28,8 @@ public final class Robot extends PhaseDrivenRobot {
 	//<editor-fold desc="Auto Selector">
 	private final NetworkTableInstance nt = NetworkTableInstance.getDefault();
 	private final NetworkTable table = nt.getTable("Auto");
+
+	private final Drivetrain drivetrain = new Drivetrain();
 
 	{
 		var layout = """
@@ -54,7 +63,7 @@ public final class Robot extends PhaseDrivenRobot {
 				"topics": ["Drivetrain/Scoring Pose Index"]
 			}, {
 				"type": "boolean",
-				"title": "L'Bork Line Break",
+				"title": "LBork Line Break",
 				"layout": {
 					"pos": [6, 1],
 					"size": [1, 1]
@@ -98,7 +107,11 @@ public final class Robot extends PhaseDrivenRobot {
 
 	@Override
 	public void teleopSequence() {
-		// L + rip Bozo
+		scheduler.scheduleDefaultCommand(new DriveLooped(drivetrain, driverController.RIGHT_X_AXIS, driverController.RIGHT_Y_AXIS, driverController.LEFT_X_AXIS), TaskPersistence.GAMEPLAY);
+		driverController.A.whileHeld(new LockDrivetrainHeld(drivetrain), TaskPersistence.EPHEMERAL);
+		
+		scheduler.scheduleDefaultCommand(new DriveLoopedTriggers(drivetrain, operatorController.RIGHT_X_AXIS, operatorController.RIGHT_Y_AXIS, operatorController.LEFT_TRIGGER, operatorController.RIGHT_TRIGGER), TaskPersistence.GAMEPLAY);
+		operatorController.A.whenPressed(new LockDrivetrainPressed(drivetrain), TaskPersistence.EPHEMERAL);
 	}
 
 	@Override
