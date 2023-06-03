@@ -37,10 +37,10 @@ public class Drivetrain implements TickedSubsystem {
 	private final Translation2d backRightLocation = new Translation2d(0.263525, -0.263525);
 
 	// Swerve modules
-	private final SwerveModule frontLeft = new SwerveModule(LEFT_FRONT_DRIVE_MOTOR, LEFT_FRONT_STEER_MOTOR, LEFT_FRONT_STEER_ENCODER);
-	private final SwerveModule frontRight = new SwerveModule(RIGHT_FRONT_DRIVE_MOTOR, RIGHT_FRONT_STEER_MOTOR, RIGHT_FRONT_STEER_ENCODER);
-	private final SwerveModule backLeft = new SwerveModule(LEFT_BACK_DRIVE_MOTOR, LEFT_BACK_STEER_MOTOR, LEFT_BACK_STEER_ENCODER);
-	private final SwerveModule backRight = new SwerveModule(RIGHT_BACK_DRIVE_MOTOR, RIGHT_BACK_STEER_MOTOR, RIGHT_BACK_STEER_ENCODER);
+	private final SwerveModule frontLeft = new SwerveModule(FRONT_LEFT_DRIVE_MOTOR, FRONT_LEFT_STEER_MOTOR, FRONT_LEFT_STEER_ENCODER);
+	private final SwerveModule frontRight = new SwerveModule(FRONT_RIGHT_DRIVE_MOTOR, FRONT_RIGHT_STEER_MOTOR, FRONT_RIGHT_STEER_ENCODER);
+	private final SwerveModule backLeft = new SwerveModule(BACK_LEFT_DRIVE_MOTOR, BACK_LEFT_STEER_MOTOR, BACK_LEFT_STEER_ENCODER);
+	private final SwerveModule backRight = new SwerveModule(BACK_RIGHT_DRIVE_MOTOR, BACK_RIGHT_STEER_MOTOR, BACK_RIGHT_STEER_ENCODER);
 
 	private final AHRS gyro = new AHRS(kUSB);
 
