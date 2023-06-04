@@ -30,6 +30,11 @@ public class Drivetrain implements TickedSubsystem {
 	private final DoublePublisher backLeftSpeed = NetworkTables.PublisherFactory(table, "Back left speed", 0);
 	private final DoublePublisher backRightSpeed = NetworkTables.PublisherFactory(table, "Back right speed", 0);
 
+	private final DoublePublisher frontLeftEncoderValue = NetworkTables.PublisherFactory(table, "Front left encoder value", 0);
+	private final DoublePublisher frontRightEncoderValue = NetworkTables.PublisherFactory(table, "Front right encoder value", 0);
+	private final DoublePublisher backLeftEncoderValue = NetworkTables.PublisherFactory(table, "Back left encoder value", 0);
+	private final DoublePublisher backRightEncoderValue = NetworkTables.PublisherFactory(table, "Back right encoder value", 0);
+
 	//Position from center of the Chassis
 	private final Translation2d frontLeftLocation = new Translation2d(-0.263525, 0.263525);
 	private final Translation2d frontRightLocation = new Translation2d(0.263525, 0.263525);
@@ -61,23 +66,33 @@ public class Drivetrain implements TickedSubsystem {
 	public boolean isLocked = false;
 
 	public Drivetrain() {
+		backLeft.setEncoderValue();
+		backRight.setEncoderValue();
+		frontLeft.setEncoderValue();
+		frontRight.setEncoderValue();
+
 		gyro.reset();
 	}
 
 	public void drive(double speed, double strafe, double rotation, boolean isFieldRelative) {
+		if (speed != 0) {
+//			System.out.println("SPEED: " + speed);
+		}
 		if (isLocked) {
 			frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
 			frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(135)));
 			backLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(225)));
 			backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(315)));
 		} else {
-
+//			System.out.println("NOT LOCKED");
 			var swerveModuleStates =
 				kinematics.toSwerveModuleStates(
 					isFieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(speed, strafe, rotation, gyro.getRotation2d())
 						: new ChassisSpeeds(speed, strafe, rotation));
 
 			SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, MAX_SPEED);
+//			System.out.println("Swerve Module State 0 Speed: " + swerveModuleStates[0].speedMetersPerSecond);
+//			System.out.println("Swerve Module State 0 Angle: " + swerveModuleStates[0].angle);
 			frontLeft.setDesiredState(swerveModuleStates[0]);
 			frontRight.setDesiredState(swerveModuleStates[1]);
 			backLeft.setDesiredState(swerveModuleStates[2]);
@@ -130,5 +145,15 @@ public class Drivetrain implements TickedSubsystem {
 		frontRightSpeed.set(frontRight.getDriveVel());
 		backLeftSpeed.set(backLeft.getDriveVel());
 		backRightSpeed.set(backRight.getDriveVel());
+
+		frontLeft.quoteUnquotePeriodic();
+		frontRight.quoteUnquotePeriodic();
+		backLeft.quoteUnquotePeriodic();
+		backRight.quoteUnquotePeriodic();
+
+		frontLeftEncoderValue.set(frontLeft.getEncoderValue());
+		frontRightEncoderValue.set(frontRight.getEncoderValue());
+		backLeftEncoderValue.set(backLeft.getEncoderValue());
+		backRightEncoderValue.set(backRight.getEncoderValue());
 	}
 }

@@ -39,7 +39,8 @@ public class DriveLooped extends CommandBase {
 			drivetrain.isLocked = false;
 		}
 
-		drivetrain.drive(rightYAxis.get(), rightXAxis.get(), leftXAxis.get(), true);
+//		drivetrain.drive(rightYAxis.get(), rightXAxis.get(), leftXAxis.get(), true);
+		drivetrain.drive(rightYAxis.get(), rightXAxis.get(), leftXAxis.get(), false);
 
 		previousTickHadInput = hasInput;
 	}
