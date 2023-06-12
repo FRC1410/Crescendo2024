@@ -1,5 +1,6 @@
 package org.frc1410.chargedup2023.Subsystems;
 
+import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -11,8 +12,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Subsystem;
-import org.frc1410.framework.scheduler.subsystem.TickedSubsystem;
 
 import static org.frc1410.chargedup2023.util.Constants.*;
 import static org.frc1410.chargedup2023.util.Tuning.*;
@@ -27,9 +28,9 @@ public class SwerveModule implements Subsystem {
 
 	private final PIDController drivePIDController = new PIDController(SWERVE_DRIVE_KP, SWERVE_DRIVE_KI, SWERVE_DRIVE_KD);
 
-	private final SimpleMotorFeedforward driveFeedForward = new SimpleMotorFeedforward(SWERVE_DRIVE_KS, SWERVE_DRIVE_KV, SWERVE_DRIVE_KA);
-	private final SimpleMotorFeedforward turningFeedForward = new SimpleMotorFeedforward(STEER_KS, STEER_KV, STEER_KA);
-	private SwerveModuleState desiredState;
+	private final SimpleMotorFeedforward driveFeedForward = new SimpleMotorFeedforward(SWERVE_DRIVE_KS, SWERVE_DRIVE_KV);
+	private final SimpleMotorFeedforward turningFeedForward = new SimpleMotorFeedforward(STEER_KS, STEER_KV);
+	public SwerveModuleState desiredState = new SwerveModuleState();
 
 	private final ProfiledPIDController turningPIDController = new ProfiledPIDController(
 			SWERVE_STEERING_KP,
@@ -40,13 +41,16 @@ public class SwerveModule implements Subsystem {
 
 	private double offset = 0;
 
-	public SwerveModule(int driveMotorID, int steeringMotorID, int steeringEncoderID) {
+	public SwerveModule(int driveMotorID, int steeringMotorID, int steeringEncoderID, boolean motorInverted) {
 
 		driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
 		steerMotor = new CANSparkMax(steeringMotorID, MotorType.kBrushless);
 
 		driveEncoder = driveMotor.getEncoder();
 		steerEncoder = new CANCoder(steeringEncoderID);
+
+		steerEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180);
+		// steerEncoder.configMagnetOffset(magnetOffset);
 
 		turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -59,27 +63,29 @@ public class SwerveModule implements Subsystem {
 		System.out.println("steer encoder position PRE:" + getEncoderValue());
 		steerEncoder.setPosition(0);
 		System.out.println("steer encoder position POST:" + getEncoderValue());
+
+		steerMotor.setInverted(motorInverted);
 	}
 
 	public double getDriveVel() {
 //		return driveEncoder.getVelocity() / DRIVING_GEAR_RATIO / 60 * 0.102 * 2 * Math.PI;
-		return driveEncoder.getVelocity() / DRIVING_GEAR_RATIO / 60;
+		return driveEncoder.getVelocity() * DRIVE_ENCODER_CONSTANT / 60;
 	}
 
 	public double getDrivePosition() {
 //		return driveEncoder.getPosition() / DRIVING_GEAR_RATIO / 60 * 0.102 * 2 * Math.PI;
-		return driveEncoder.getPosition() / DRIVING_GEAR_RATIO;
+		return driveEncoder.getPosition() * DRIVE_ENCODER_CONSTANT;
 	}
 
 	public SwerveModuleState getState() {
 		return new SwerveModuleState(
-			getDriveVel(), new Rotation2d(steerEncoder.getPosition())
+			getDriveVel(), new Rotation2d(steerEncoder.getAbsolutePosition())
 		);
 	}
 
 	public SwerveModulePosition getPosition() {
 		return new SwerveModulePosition(
-			getDrivePosition(), new Rotation2d(steerEncoder.getPosition())
+			getDrivePosition(), new Rotation2d(steerEncoder.getAbsolutePosition())
 		);
 	}
 
@@ -87,11 +93,16 @@ public class SwerveModule implements Subsystem {
 		return steerEncoder.getPosition();
 	}
 
-	public void setEncoderValue() {
-		steerEncoder.setPosition(0);
+	// public void setEncoderValue(double position) {
+	// 	steerEncoder.setPosition(position);
+	// }
+
+	public void setEncoderOffset(double offset) {
+		steerEncoder.setPosition(steerEncoder.getAbsolutePosition() - offset);
 	}
 
 	public void setDesiredState(SwerveModuleState desiredState) {
+		// SwerveModuleState optimized = SwerveModuleState.optimize(desiredState, Rotation2d.fromDegrees(steerEncoder.getAbsolutePosition()));
 		this.desiredState = desiredState;
 	}
 
@@ -105,22 +116,22 @@ public class SwerveModule implements Subsystem {
 
 //	@Override
 	public void quoteUnquotePeriodic() {
-		if(desiredState != null) {
-			SwerveModuleState state = SwerveModuleState.optimize(desiredState, Rotation2d.fromDegrees(steerEncoder.getPosition()));
+		// if (true) return;
 //			System.out.println("state.angle = " + state.angle);
 //			System.out.println("state.speed = " + state.speedMetersPerSecond);
 
+		final double driveOutput = drivePIDController.calculate(getDriveVel(), desiredState.speedMetersPerSecond);
+		final double turnOutput = turningPIDController.calculate(Units.degreesToRadians(steerEncoder.getPosition()), desiredState.angle.getRadians());
 
-			final double driveOutput = drivePIDController.calculate(getDriveVel(), state.speedMetersPerSecond);
-			final double turnOutput = turningPIDController.calculate(steerEncoder.getPosition(), state.angle.getRadians());
+		double driveFeed = driveFeedForward.calculate(desiredState.speedMetersPerSecond);
+		// double turnFeed = turningFeedForward.calculate(turningPIDController.getSetpoint().velocity);
 
-			double driveFeed = driveFeedForward.calculate(state.speedMetersPerSecond);
-			double turnFeed = turningFeedForward.calculate(steerEncoder.getPosition(), state.angle.getRadians());
+		// driveMotor.setVoltage(driveFeed + driveOutput);
+		steerMotor.setVoltage(turnOutput);
+	}
 
-			driveMotor.setVoltage((driveOutput + driveFeed) * 12);
-//			System.out.println("drive = " + driveOutput + driveFeed);
-			steerMotor.setVoltage((turnOutput + turnFeed) * 12);
-//			System.out.println("steer = " + turnOutput + turnFeed);
-		}
+	public void runSteeringMotor() {
+		// new NullPointerException("Running steer motor with inverted set to " + steerMotor.getInverted()).printStackTrace();
+		// steerMotor.set(0.5);
 	}
 }

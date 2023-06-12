@@ -35,6 +35,11 @@ public class Drivetrain implements TickedSubsystem {
 	private final DoublePublisher backLeftEncoderValue = NetworkTables.PublisherFactory(table, "Back left encoder value", 0);
 	private final DoublePublisher backRightEncoderValue = NetworkTables.PublisherFactory(table, "Back right encoder value", 0);
 
+	private final DoublePublisher frontLeftDesiredStateAngle = NetworkTables.PublisherFactory(table, "Front left desired angle", 0);
+	private final DoublePublisher frontRightDesiredStateAngle = NetworkTables.PublisherFactory(table, "Front right desired angle", 0);
+	private final DoublePublisher backLeftDesiredStateAngle = NetworkTables.PublisherFactory(table, "Back left desired angle", 0);
+	private final DoublePublisher backRightDesiredStateAngle = NetworkTables.PublisherFactory(table, "Back right desired angle", 0);
+
 	//Position from center of the Chassis
 	private final Translation2d frontLeftLocation = new Translation2d(-0.263525, 0.263525);
 	private final Translation2d frontRightLocation = new Translation2d(0.263525, 0.263525);
@@ -42,10 +47,10 @@ public class Drivetrain implements TickedSubsystem {
 	private final Translation2d backRightLocation = new Translation2d(0.263525, -0.263525);
 
 	// Swerve modules
-	private final SwerveModule frontLeft = new SwerveModule(FRONT_LEFT_DRIVE_MOTOR, FRONT_LEFT_STEER_MOTOR, FRONT_LEFT_STEER_ENCODER);
-	private final SwerveModule frontRight = new SwerveModule(FRONT_RIGHT_DRIVE_MOTOR, FRONT_RIGHT_STEER_MOTOR, FRONT_RIGHT_STEER_ENCODER);
-	private final SwerveModule backLeft = new SwerveModule(BACK_LEFT_DRIVE_MOTOR, BACK_LEFT_STEER_MOTOR, BACK_LEFT_STEER_ENCODER);
-	private final SwerveModule backRight = new SwerveModule(BACK_RIGHT_DRIVE_MOTOR, BACK_RIGHT_STEER_MOTOR, BACK_RIGHT_STEER_ENCODER);
+	private final SwerveModule frontLeft = new SwerveModule(FRONT_LEFT_DRIVE_MOTOR, FRONT_LEFT_STEER_MOTOR, FRONT_LEFT_STEER_ENCODER, true);
+	private final SwerveModule frontRight = new SwerveModule(FRONT_RIGHT_DRIVE_MOTOR, FRONT_RIGHT_STEER_MOTOR, FRONT_RIGHT_STEER_ENCODER, true);
+	private final SwerveModule backLeft = new SwerveModule(BACK_LEFT_DRIVE_MOTOR, BACK_LEFT_STEER_MOTOR, BACK_LEFT_STEER_ENCODER, true);
+	private final SwerveModule backRight = new SwerveModule(BACK_RIGHT_DRIVE_MOTOR, BACK_RIGHT_STEER_MOTOR, BACK_RIGHT_STEER_ENCODER, true);
 
 	private final AHRS gyro = new AHRS(kUSB);
 
@@ -66,10 +71,10 @@ public class Drivetrain implements TickedSubsystem {
 	public boolean isLocked = false;
 
 	public Drivetrain() {
-		backLeft.setEncoderValue();
-		backRight.setEncoderValue();
-		frontLeft.setEncoderValue();
-		frontRight.setEncoderValue();
+		backLeft.setEncoderOffset(BL_ANGLE_OFFSET);
+		backRight.setEncoderOffset(BR_ANGLE_OFFSET);
+		frontLeft.setEncoderOffset(FL_ANGLE_OFFSET);
+		frontRight.setEncoderOffset(FR_ANGLE_OFFSET);
 
 		gyro.reset();
 	}
@@ -136,6 +141,15 @@ public class Drivetrain implements TickedSubsystem {
 		xPub.set(odometry.getPoseMeters().getX());
 		yPub.set(odometry.getPoseMeters().getY());
 
+		frontLeft.quoteUnquotePeriodic();
+		frontRight.quoteUnquotePeriodic();
+		backLeft.quoteUnquotePeriodic();
+		backRight.quoteUnquotePeriodic();
+
+		reportEncoderValues();
+	}
+
+	public void reportEncoderValues() {
 		frontLeftModulePub.set(frontLeft.getDrivePosition());
 		frontRightModulePub.set(frontRight.getDrivePosition());
 		backLeftModulePub.set(backLeft.getDrivePosition());
@@ -146,14 +160,19 @@ public class Drivetrain implements TickedSubsystem {
 		backLeftSpeed.set(backLeft.getDriveVel());
 		backRightSpeed.set(backRight.getDriveVel());
 
-		frontLeft.quoteUnquotePeriodic();
-		frontRight.quoteUnquotePeriodic();
-		backLeft.quoteUnquotePeriodic();
-		backRight.quoteUnquotePeriodic();
-
 		frontLeftEncoderValue.set(frontLeft.getEncoderValue());
 		frontRightEncoderValue.set(frontRight.getEncoderValue());
 		backLeftEncoderValue.set(backLeft.getEncoderValue());
 		backRightEncoderValue.set(backRight.getEncoderValue());
+
+		frontLeftDesiredStateAngle.set(frontLeft.desiredState.angle.getDegrees());
+		frontRightDesiredStateAngle.set(frontRight.desiredState.angle.getDegrees());
+		backLeftDesiredStateAngle.set(backLeft.desiredState.angle.getDegrees());
+		backRightDesiredStateAngle.set(backRight.desiredState.angle.getDegrees());
+	}
+
+	public void runSteer() {
+		// done: backRight,
+		frontRight.runSteeringMotor();
 	}
 }

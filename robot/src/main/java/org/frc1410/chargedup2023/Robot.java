@@ -4,6 +4,8 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StringPublisher;
 import edu.wpi.first.networktables.StringSubscriber;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+
 import org.frc1410.chargedup2023.util.NetworkTables;
 import org.frc1410.framework.AutoSelector;
 import org.frc1410.framework.PhaseDrivenRobot;
@@ -16,6 +18,7 @@ import org.frc1410.chargedup2023.Commands.DriveLooped;
 import org.frc1410.chargedup2023.Commands.DriveLoopedTriggers;
 import org.frc1410.chargedup2023.Commands.LockDrivetrainHeld;
 import org.frc1410.chargedup2023.Commands.LockDrivetrainPressed;
+import org.frc1410.chargedup2023.Commands.RunSteer;
 import org.frc1410.chargedup2023.Subsystems.Drivetrain;
 
 public final class Robot extends PhaseDrivenRobot {
@@ -109,6 +112,11 @@ public final class Robot extends PhaseDrivenRobot {
 	public void teleopSequence() {
 		scheduler.scheduleDefaultCommand(new DriveLooped(drivetrain, driverController.RIGHT_X_AXIS, driverController.RIGHT_Y_AXIS, driverController.LEFT_X_AXIS), TaskPersistence.GAMEPLAY);
 		driverController.A.whileHeld(new LockDrivetrainHeld(drivetrain), TaskPersistence.EPHEMERAL);
+
+		scheduler.scheduleDefaultCommand(new RunSteer(drivetrain), TaskPersistence.EPHEMERAL);
+		// scheduler.scheduleDefaultCommand(new RunCommand(() -> {
+		// 	drivetrain.reportEncoderValues();
+		// }), TaskPersistence.EPHEMERAL);
 		
 //		scheduler.scheduleDefaultCommand(new DriveLoopedTriggers(drivetrain, operatorController.RIGHT_X_AXIS, operatorController.RIGHT_Y_AXIS, operatorController.LEFT_TRIGGER, operatorController.RIGHT_TRIGGER), TaskPersistence.GAMEPLAY);
 //		operatorController.A.whenPressed(new LockDrivetrainPressed(drivetrain), TaskPersistence.EPHEMERAL);
@@ -116,6 +124,17 @@ public final class Robot extends PhaseDrivenRobot {
 
 	@Override
 	public void testSequence() {
+		scheduler.scheduleDefaultCommand(new RunSteer(drivetrain), TaskPersistence.EPHEMERAL);
 
+		scheduler.scheduleDefaultCommand(new RunCommand(() -> {
+			drivetrain.reportEncoderValues();
+		}), TaskPersistence.EPHEMERAL);
+	}
+
+	@Override
+	protected void disabledSequence() {
+		// scheduler.scheduleDefaultCommand(new RunCommand(() -> {
+		// 	drivetrain.reportEncoderValues();
+		// }), TaskPersistence.DURABLE);
 	}
 }
