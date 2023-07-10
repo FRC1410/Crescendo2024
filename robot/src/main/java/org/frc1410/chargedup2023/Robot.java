@@ -4,6 +4,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StringPublisher;
 import edu.wpi.first.networktables.StringSubscriber;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 
 import org.frc1410.chargedup2023.util.NetworkTables;
@@ -11,6 +12,7 @@ import org.frc1410.framework.AutoSelector;
 import org.frc1410.framework.PhaseDrivenRobot;
 import org.frc1410.framework.control.Controller;
 import org.frc1410.framework.scheduler.task.TaskPersistence;
+import org.frc1410.framework.scheduler.task.impl.CommandTask;
 
 import static org.frc1410.chargedup2023.util.Constants.*;
 
@@ -114,12 +116,23 @@ public final class Robot extends PhaseDrivenRobot {
 		driverController.A.whileHeld(new LockDrivetrainHeld(drivetrain), TaskPersistence.EPHEMERAL);
 
 		scheduler.scheduleDefaultCommand(new RunSteer(drivetrain), TaskPersistence.EPHEMERAL);
+
+		driverController.Y.whenPressed(new CommandTask(new InstantCommand(() -> {
+			System.out.println("coast");
+			drivetrain.setSteerCoastMode();
+		})), TaskPersistence.EPHEMERAL);
+		driverController.X.whenPressed(new CommandTask(new InstantCommand(() -> {
+			drivetrain.setSteerBreakMode();
+		})), TaskPersistence.EPHEMERAL);
+
+
 		// scheduler.scheduleDefaultCommand(new RunCommand(() -> {
 		// 	drivetrain.reportEncoderValues();
 		// }), TaskPersistence.EPHEMERAL);
 		
 //		scheduler.scheduleDefaultCommand(new DriveLoopedTriggers(drivetrain, operatorController.RIGHT_X_AXIS, operatorController.RIGHT_Y_AXIS, operatorController.LEFT_TRIGGER, operatorController.RIGHT_TRIGGER), TaskPersistence.GAMEPLAY);
 //		operatorController.A.whenPressed(new LockDrivetrainPressed(drivetrain), TaskPersistence.EPHEMERAL);
+	
 	}
 
 	@Override

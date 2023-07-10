@@ -40,6 +40,21 @@ public class Drivetrain implements TickedSubsystem {
 	private final DoublePublisher backLeftDesiredStateAngle = NetworkTables.PublisherFactory(table, "Back left desired angle", 0);
 	private final DoublePublisher backRightDesiredStateAngle = NetworkTables.PublisherFactory(table, "Back right desired angle", 0);
 
+	private final DoublePublisher frontLeftSetpointVelocity = NetworkTables.PublisherFactory(table, "Front left setpoit vel", 0);
+	private final DoublePublisher frontRightSetpointVelocity = NetworkTables.PublisherFactory(table, "Front right setpoit vel", 0);
+	private final DoublePublisher backLeftSetpointVelocity = NetworkTables.PublisherFactory(table, "Back left setpoit vel", 0);
+	private final DoublePublisher backRightSetpointVelocity = NetworkTables.PublisherFactory(table, "Back right setpoit vel", 0);
+
+	private final DoublePublisher frontLeftVolts = NetworkTables.PublisherFactory(table, "Front left feed", 0);
+	private final DoublePublisher frontRightVolts = NetworkTables.PublisherFactory(table, "Front right feed", 0);
+	private final DoublePublisher backLeftVolts = NetworkTables.PublisherFactory(table, "Back left feed", 0);
+	private final DoublePublisher backRightVolts = NetworkTables.PublisherFactory(table, "Back right feed", 0);
+
+	private final DoublePublisher frontLeftPID = NetworkTables.PublisherFactory(table, "Front left pid", 0);
+	private final DoublePublisher frontRightPID = NetworkTables.PublisherFactory(table, "Front right pid", 0);
+	private final DoublePublisher backLeftPID = NetworkTables.PublisherFactory(table, "Back left pid", 0);
+	private final DoublePublisher backRightPID = NetworkTables.PublisherFactory(table, "Back right pid", 0);
+
 	//Position from center of the Chassis
 	private final Translation2d frontLeftLocation = new Translation2d(-0.263525, 0.263525);
 	private final Translation2d frontRightLocation = new Translation2d(0.263525, 0.263525);
@@ -47,10 +62,10 @@ public class Drivetrain implements TickedSubsystem {
 	private final Translation2d backRightLocation = new Translation2d(0.263525, -0.263525);
 
 	// Swerve modules
-	private final SwerveModule frontLeft = new SwerveModule(FRONT_LEFT_DRIVE_MOTOR, FRONT_LEFT_STEER_MOTOR, FRONT_LEFT_STEER_ENCODER, true);
-	private final SwerveModule frontRight = new SwerveModule(FRONT_RIGHT_DRIVE_MOTOR, FRONT_RIGHT_STEER_MOTOR, FRONT_RIGHT_STEER_ENCODER, true);
-	private final SwerveModule backLeft = new SwerveModule(BACK_LEFT_DRIVE_MOTOR, BACK_LEFT_STEER_MOTOR, BACK_LEFT_STEER_ENCODER, true);
-	private final SwerveModule backRight = new SwerveModule(BACK_RIGHT_DRIVE_MOTOR, BACK_RIGHT_STEER_MOTOR, BACK_RIGHT_STEER_ENCODER, true);
+	private final SwerveModule frontLeft = new SwerveModule(FRONT_LEFT_DRIVE_MOTOR, FRONT_LEFT_STEER_MOTOR, FRONT_LEFT_STEER_ENCODER, false, true, FRONT_LEFT_STEER_ENCODER_OFFSET, frontLeftVolts, frontLeftPID);
+	private final SwerveModule frontRight = new SwerveModule(FRONT_RIGHT_DRIVE_MOTOR, FRONT_RIGHT_STEER_MOTOR, FRONT_RIGHT_STEER_ENCODER, false, true, FRONT_RIGHT_STEER_ENCODER_OFFSET, frontRightVolts, frontRightPID);
+	private final SwerveModule backLeft = new SwerveModule(BACK_LEFT_DRIVE_MOTOR, BACK_LEFT_STEER_MOTOR, BACK_LEFT_STEER_ENCODER, true, true, BACK_LEFT_STEER_ENCODER_OFFSET, backLeftVolts, backLeftPID);
+	private final SwerveModule backRight = new SwerveModule(BACK_RIGHT_DRIVE_MOTOR, BACK_RIGHT_STEER_MOTOR, BACK_RIGHT_STEER_ENCODER, false, true, BACK_RIGHT_STEER_ENCODER_OFFSET, backRightVolts, backRightPID);
 
 	private final AHRS gyro = new AHRS(kUSB);
 
@@ -71,10 +86,10 @@ public class Drivetrain implements TickedSubsystem {
 	public boolean isLocked = false;
 
 	public Drivetrain() {
-		backLeft.setEncoderOffset(BL_ANGLE_OFFSET);
-		backRight.setEncoderOffset(BR_ANGLE_OFFSET);
-		frontLeft.setEncoderOffset(FL_ANGLE_OFFSET);
-		frontRight.setEncoderOffset(FR_ANGLE_OFFSET);
+		// backLeft.setEncoderOffset(BL_ANGLE_OFFSET);
+		// backRight.setEncoderOffset(BR_ANGLE_OFFSET);
+		// frontLeft.setEncoderOffset(FL_ANGLE_OFFSET);
+		// frontRight.setEncoderOffset(FR_ANGLE_OFFSET);
 
 		gyro.reset();
 	}
@@ -98,10 +113,10 @@ public class Drivetrain implements TickedSubsystem {
 			SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, MAX_SPEED);
 //			System.out.println("Swerve Module State 0 Speed: " + swerveModuleStates[0].speedMetersPerSecond);
 //			System.out.println("Swerve Module State 0 Angle: " + swerveModuleStates[0].angle);
-			frontLeft.setDesiredState(swerveModuleStates[0]);
-			frontRight.setDesiredState(swerveModuleStates[1]);
-			backLeft.setDesiredState(swerveModuleStates[2]);
-			backRight.setDesiredState(swerveModuleStates[3]);
+			frontLeft.setDesiredState(swerveModuleStates[1]);
+			frontRight.setDesiredState(swerveModuleStates[3]);
+			backLeft.setDesiredState(swerveModuleStates[0]);
+			backRight.setDesiredState(swerveModuleStates[2]);
 		}
 	}
 	
@@ -129,6 +144,20 @@ public class Drivetrain implements TickedSubsystem {
 		frontRight.setDriveBreak();
 		backLeft.setDriveBreak();
 		backRight.setDriveBreak();
+	}
+
+	public void setSteerCoastMode() {
+		frontLeft.setSteerCoastMode();
+		frontRight.setSteerCoastMode();
+		backLeft.setSteerCoastMode();
+		backRight.setSteerCoastMode();
+	}
+
+	public void setSteerBreakMode() {
+		frontLeft.setSteerBreakMode();
+		frontRight.setSteerBreakMode();
+		backLeft.setSteerBreakMode();
+		backRight.setSteerBreakMode();
 	}
 
 	@Override
@@ -169,6 +198,16 @@ public class Drivetrain implements TickedSubsystem {
 		frontRightDesiredStateAngle.set(frontRight.desiredState.angle.getDegrees());
 		backLeftDesiredStateAngle.set(backLeft.desiredState.angle.getDegrees());
 		backRightDesiredStateAngle.set(backRight.desiredState.angle.getDegrees());
+
+		frontLeftSetpointVelocity.set(frontLeft.getSetpoint());
+		frontRightSetpointVelocity.set(frontRight.getSetpoint());
+		backLeftSetpointVelocity.set(backLeft.getSetpoint());
+		backRightSetpointVelocity.set(backRight.getSetpoint());
+
+		// frontLeftVolts.set(frontLeft.getSteerVolts());
+		// frontRightVolts.set(frontRight.getSteerVolts());
+		// backLeftVolts.set(backLeft.getSteerVolts());
+		// backRightVolts.set(backRight.getSteerVolts());
 	}
 
 	public void runSteer() {
