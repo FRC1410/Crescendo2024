@@ -8,7 +8,7 @@ public interface Tuning {
 	double SWERVE_DRIVE_KD = 0;
 
 	// PID values for the steering motor
-	double SWERVE_STEERING_KP = 5;
+	double SWERVE_STEERING_KP = 4;
 	double SWERVE_STEERING_KI = 0;
 	double SWERVE_STEERING_KD = 0;
 	// double SWERVE_STEERING_KP = 0;

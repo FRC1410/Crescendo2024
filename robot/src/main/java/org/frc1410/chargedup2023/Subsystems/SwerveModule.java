@@ -5,6 +5,8 @@ import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
+
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -52,6 +54,7 @@ public class SwerveModule implements Subsystem {
 
 		driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
 		steerMotor = new CANSparkMax(steeringMotorID, MotorType.kBrushless);
+		// steerMotor.setCurre
 
 		driveEncoder = driveMotor.getEncoder();
 		steerEncoder = new CANCoder(steeringEncoderID);
@@ -74,6 +77,9 @@ public class SwerveModule implements Subsystem {
 		System.out.println("steer encoder position POST:" + getEncoderValue());
 
 		steerMotor.setInverted(steerMotorInverted);
+		steerMotor.setSmartCurrentLimit(30);
+
+		driveMotor.setSmartCurrentLimit(40);
 
 		this.offset = offset;
 
@@ -142,8 +148,8 @@ public class SwerveModule implements Subsystem {
 	// }
 
 	public void setDesiredState(SwerveModuleState desiredState) {
-		// SwerveModuleState optimized = SwerveModuleState.optimize(desiredState, Rotation2d.fromDegrees(steerEncoder.getAbsolutePosition()));
-		this.desiredState = desiredState;
+		SwerveModuleState optimized = SwerveModuleState.optimize(desiredState, Rotation2d.fromDegrees(steerEncoder.getAbsolutePosition()));
+		this.desiredState = optimized;
 	}
 
 	public void setDriveCoast() {
@@ -173,14 +179,15 @@ public class SwerveModule implements Subsystem {
 //			System.out.println("state.speed = " + state.speedMetersPerSecond);
 
 		final double driveOutput = drivePIDController.calculate(getDriveVel(), desiredState.speedMetersPerSecond);
-		final double turnOutput = turningPIDController.calculate(Units.degreesToRadians(getEncoderValue()), desiredState.angle.getRadians());
+		final double turnOutput = turningPIDController.calculate(Units.degreesToRadians(getEncoderValue()), MathUtil.angleModulus(desiredState.angle.getRadians()));
 
 		double driveFeed = driveFeedForward.calculate(desiredState.speedMetersPerSecond);
 		// double turnFeed = turningFeedForward.calculate(turningPIDController.getSetpoint().velocity);
-
+		pub.set(driveFeed);
 		driveMotor.setVoltage(driveFeed + driveOutput);
 		// pub.set(turnFeed);
-		pub2.set(turnOutput);
+		pub2.set(driveOutput);
+		// steerMotor.setVoltage(Math.max(-4, Math.min(turnOutput, 4)));
 		steerMotor.setVoltage(turnOutput);
 	}
 

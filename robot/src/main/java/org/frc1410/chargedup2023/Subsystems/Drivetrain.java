@@ -194,10 +194,10 @@ public class Drivetrain implements TickedSubsystem {
 		backLeftEncoderValue.set(backLeft.getEncoderValue());
 		backRightEncoderValue.set(backRight.getEncoderValue());
 
-		frontLeftDesiredStateAngle.set(frontLeft.desiredState.angle.getDegrees());
-		frontRightDesiredStateAngle.set(frontRight.desiredState.angle.getDegrees());
-		backLeftDesiredStateAngle.set(backLeft.desiredState.angle.getDegrees());
-		backRightDesiredStateAngle.set(backRight.desiredState.angle.getDegrees());
+		frontLeftDesiredStateAngle.set(frontLeft.desiredState.speedMetersPerSecond);
+		frontRightDesiredStateAngle.set(frontRight.desiredState.speedMetersPerSecond);
+		backLeftDesiredStateAngle.set(backLeft.desiredState.speedMetersPerSecond);
+		backRightDesiredStateAngle.set(backRight.desiredState.speedMetersPerSecond);
 
 		frontLeftSetpointVelocity.set(frontLeft.getSetpoint());
 		frontRightSetpointVelocity.set(frontRight.getSetpoint());
