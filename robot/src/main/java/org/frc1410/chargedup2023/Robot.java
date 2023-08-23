@@ -4,23 +4,17 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StringPublisher;
 import edu.wpi.first.networktables.StringSubscriber;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RunCommand;
 
 import org.frc1410.chargedup2023.util.NetworkTables;
 import org.frc1410.framework.AutoSelector;
 import org.frc1410.framework.PhaseDrivenRobot;
 import org.frc1410.framework.control.Controller;
 import org.frc1410.framework.scheduler.task.TaskPersistence;
-import org.frc1410.framework.scheduler.task.impl.CommandTask;
 
 import static org.frc1410.chargedup2023.util.Constants.*;
 
 import org.frc1410.chargedup2023.Commands.DriveLooped;
-import org.frc1410.chargedup2023.Commands.DriveLoopedTriggers;
 import org.frc1410.chargedup2023.Commands.LockDrivetrainHeld;
-import org.frc1410.chargedup2023.Commands.LockDrivetrainPressed;
-import org.frc1410.chargedup2023.Commands.RunSteer;
 import org.frc1410.chargedup2023.Subsystems.Drivetrain;
 
 public final class Robot extends PhaseDrivenRobot {
@@ -34,7 +28,7 @@ public final class Robot extends PhaseDrivenRobot {
 	private final NetworkTableInstance nt = NetworkTableInstance.getDefault();
 	private final NetworkTable table = nt.getTable("Auto");
 
-	private final Drivetrain drivetrain = subsystems.track(new Drivetrain());
+	private final Drivetrain drivetrain = subsystems.track(new Drivetrain(subsystems));
 
 	{
 		var layout = """
@@ -112,36 +106,36 @@ public final class Robot extends PhaseDrivenRobot {
 
 	@Override
 	public void teleopSequence() {
-		scheduler.scheduleDefaultCommand(new DriveLooped(drivetrain, driverController.RIGHT_X_AXIS, driverController.RIGHT_Y_AXIS, driverController.LEFT_X_AXIS), TaskPersistence.GAMEPLAY);
+		scheduler.scheduleDefaultCommand(new DriveLooped(drivetrain, driverController.LEFT_Y_AXIS, driverController.LEFT_X_AXIS, driverController.RIGHT_X_AXIS), TaskPersistence.GAMEPLAY);
 		driverController.A.whileHeld(new LockDrivetrainHeld(drivetrain), TaskPersistence.EPHEMERAL);
 
-		scheduler.scheduleDefaultCommand(new RunSteer(drivetrain), TaskPersistence.EPHEMERAL);
+		// scheduler.scheduleDefaultCommand(new RunSteer(drivetrain), TaskPersistence.EPHEMERAL);
 
-		driverController.Y.whenPressed(new CommandTask(new InstantCommand(() -> {
-			System.out.println("coast");
-			drivetrain.setSteerCoastMode();
-		})), TaskPersistence.EPHEMERAL);
-		driverController.X.whenPressed(new CommandTask(new InstantCommand(() -> {
-			drivetrain.setSteerBreakMode();
-		})), TaskPersistence.EPHEMERAL);
+		// driverController.Y.whenPressed(new CommandTask(new InstantCommand(() -> {
+		// 	System.out.println("coast");
+		// 	drivetrain.setSteerCoastMode();
+		// })), TaskPersistence.EPHEMERAL);
+		// driverController.X.whenPressed(new CommandTask(new InstantCommand(() -> {
+		// 	drivetrain.setSteerBreakMode();
+		// })), TaskPersistence.EPHEMERAL);
 
 
 		// scheduler.scheduleDefaultCommand(new RunCommand(() -> {
 		// 	drivetrain.reportEncoderValues();
 		// }), TaskPersistence.EPHEMERAL);
 		
-//		scheduler.scheduleDefaultCommand(new DriveLoopedTriggers(drivetrain, operatorController.RIGHT_X_AXIS, operatorController.RIGHT_Y_AXIS, operatorController.LEFT_TRIGGER, operatorController.RIGHT_TRIGGER), TaskPersistence.GAMEPLAY);
-//		operatorController.A.whenPressed(new LockDrivetrainPressed(drivetrain), TaskPersistence.EPHEMERAL);
+		// scheduler.scheduleDefaultCommand(new DriveLoopedTriggers(drivetrain, driverController.LEFT_X_AXIS, driverController.LEFT_Y_AXIS, driverController.LEFT_TRIGGER, driverController.RIGHT_TRIGGER), TaskPersistence.GAMEPLAY);
+		// driverController.A.whenPressed(new LockDrivetrainPressed(drivetrain), TaskPersistence.EPHEMERAL);
 	
 	}
 
 	@Override
 	public void testSequence() {
-		scheduler.scheduleDefaultCommand(new RunSteer(drivetrain), TaskPersistence.EPHEMERAL);
+		// scheduler.scheduleDefaultCommand(new RunSteer(drivetrain), TaskPersistence.EPHEMERAL);
 
-		scheduler.scheduleDefaultCommand(new RunCommand(() -> {
-			drivetrain.reportEncoderValues();
-		}), TaskPersistence.EPHEMERAL);
+		// scheduler.scheduleDefaultCommand(new RunCommand(() -> {
+		// 	drivetrain.reportEncoderValues();
+		// }), TaskPersistence.EPHEMERAL);
 	}
 
 	@Override

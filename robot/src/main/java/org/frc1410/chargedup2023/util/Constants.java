@@ -1,5 +1,7 @@
 package org.frc1410.chargedup2023.util;
 
+import edu.wpi.first.math.geometry.Translation2d;
+
 public interface Constants {
 	// Controller constants
 	int DRIVER_CONTROLLER = 0;
@@ -8,7 +10,7 @@ public interface Constants {
 
 	// Swerve module constants
 	double DRIVING_GEAR_RATIO = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
-	double DRIVE_ENCODER_CONSTANT = (1 / DRIVING_GEAR_RATIO) * 0.1016 * Math.PI;
+	double DRIVE_ROTATIONS_TO_METERES = (1 / DRIVING_GEAR_RATIO) * 0.1016 * Math.PI;
 	double MAX_ANGULAR_VEL = 25.57;
 	double MAX_ANGULAR_ACC = 100;  // radians per sec squared
 	double MAX_SPEED = 4.2;
@@ -26,5 +28,10 @@ public interface Constants {
 	double FRONT_RIGHT_STEER_ENCODER_OFFSET = 89.385;
 	double BACK_LEFT_STEER_ENCODER_OFFSET = 79.189;
 	double BACK_RIGHT_STEER_ENCODER_OFFSET = 18.633;
+
+	Translation2d FRONT_LEFT_SWERVE_MODULE_LOCATION = new Translation2d(-0.263525, 0.263525);
+	Translation2d FRONT_RIGHT_SWERVE_MODULE_LOCATION = new Translation2d(0.263525, 0.263525);
+	Translation2d BACK_LEFT_SWERVE_MODULE_LOCATION = new Translation2d(-0.263525, -0.263525);
+	Translation2d BACK_RIGHT_SWERVE_MODULE_LOCATION = new Translation2d(0.263525, -0.263525);
 }
 
