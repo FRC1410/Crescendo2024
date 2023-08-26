@@ -21,7 +21,7 @@ public final class Robot extends PhaseDrivenRobot {
 
 	//<editor-fold desc="Controllers">
 	private final Controller driverController = new Controller(scheduler, DRIVER_CONTROLLER, 0.2);
-	private final Controller operatorController = new Controller(scheduler, OPERATOR_CONTROLLER, 0.25);
+	private final Controller operatorController = new Controller(scheduler, OPERATOR_CONTROLLER, 0);
 	//</editor-fold>
 
 	//<editor-fold desc="Auto Selector">
@@ -95,9 +95,6 @@ public final class Robot extends PhaseDrivenRobot {
 
 	@Override
 	public void autonomousSequence() {
-
-		// ree
-
 		NetworkTables.SetPersistence(autoPublisher.getTopic(), true);
 		String autoProfile = autoSubscriber.get();
 		var autoCommand = autoSelector.select(autoProfile);
@@ -108,40 +105,15 @@ public final class Robot extends PhaseDrivenRobot {
 	public void teleopSequence() {
 		scheduler.scheduleDefaultCommand(new DriveLooped(drivetrain, driverController.LEFT_Y_AXIS, driverController.LEFT_X_AXIS, driverController.RIGHT_X_AXIS), TaskPersistence.GAMEPLAY);
 		driverController.A.whileHeld(new LockDrivetrainHeld(drivetrain), TaskPersistence.EPHEMERAL);
-
-		// scheduler.scheduleDefaultCommand(new RunSteer(drivetrain), TaskPersistence.EPHEMERAL);
-
-		// driverController.Y.whenPressed(new CommandTask(new InstantCommand(() -> {
-		// 	System.out.println("coast");
-		// 	drivetrain.setSteerCoastMode();
-		// })), TaskPersistence.EPHEMERAL);
-		// driverController.X.whenPressed(new CommandTask(new InstantCommand(() -> {
-		// 	drivetrain.setSteerBreakMode();
-		// })), TaskPersistence.EPHEMERAL);
-
-
-		// scheduler.scheduleDefaultCommand(new RunCommand(() -> {
-		// 	drivetrain.reportEncoderValues();
-		// }), TaskPersistence.EPHEMERAL);
-		
-		// scheduler.scheduleDefaultCommand(new DriveLoopedTriggers(drivetrain, driverController.LEFT_X_AXIS, driverController.LEFT_Y_AXIS, driverController.LEFT_TRIGGER, driverController.RIGHT_TRIGGER), TaskPersistence.GAMEPLAY);
-		// driverController.A.whenPressed(new LockDrivetrainPressed(drivetrain), TaskPersistence.EPHEMERAL);
-	
 	}
 
 	@Override
 	public void testSequence() {
-		// scheduler.scheduleDefaultCommand(new RunSteer(drivetrain), TaskPersistence.EPHEMERAL);
 
-		// scheduler.scheduleDefaultCommand(new RunCommand(() -> {
-		// 	drivetrain.reportEncoderValues();
-		// }), TaskPersistence.EPHEMERAL);
 	}
 
 	@Override
 	protected void disabledSequence() {
-		// scheduler.scheduleDefaultCommand(new RunCommand(() -> {
-		// 	drivetrain.reportEncoderValues();
-		// }), TaskPersistence.DURABLE);
+
 	}
 }
