@@ -21,7 +21,7 @@ public final class Robot extends PhaseDrivenRobot {
 
 	//<editor-fold desc="Controllers">
 	private final Controller driverController = new Controller(scheduler, DRIVER_CONTROLLER, 0.2);
-	private final Controller operatorController = new Controller(scheduler, OPERATOR_CONTROLLER, 0);
+	private final Controller operatorController = new Controller(scheduler, OPERATOR_CONTROLLER, 0.2);
 	//</editor-fold>
 
 	//<editor-fold desc="Auto Selector">
@@ -105,6 +105,7 @@ public final class Robot extends PhaseDrivenRobot {
 	public void teleopSequence() {
 		scheduler.scheduleDefaultCommand(new DriveLooped(drivetrain, driverController.LEFT_Y_AXIS, driverController.LEFT_X_AXIS, driverController.RIGHT_X_AXIS), TaskPersistence.GAMEPLAY);
 		driverController.A.whileHeld(new LockDrivetrainHeld(drivetrain), TaskPersistence.EPHEMERAL);
+		drivetrain.zero();
 	}
 
 	@Override

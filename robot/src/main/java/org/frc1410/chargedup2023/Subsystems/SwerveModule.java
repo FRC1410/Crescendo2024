@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.DoublePublisher;
 
 import static org.frc1410.chargedup2023.util.Constants.*;
 import static org.frc1410.chargedup2023.util.Tuning.*;
@@ -33,7 +34,9 @@ public class SwerveModule implements TickedSubsystem {
 
 	public SwerveModuleState desiredState = new SwerveModuleState();
 
-	public SwerveModule(int driveMotorID, int steeringMotorID, int steeringEncoderID, boolean driveMotorInverted, boolean steerMotorInverted, double offset) {
+	private final DoublePublisher voltage;
+
+	public SwerveModule(int driveMotorID, int steeringMotorID, int steeringEncoderID, boolean driveMotorInverted, boolean steerMotorInverted, double offset, DoublePublisher voltage) {
 		driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
 		driveMotor.restoreFactoryDefaults();
 		driveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
@@ -51,7 +54,9 @@ public class SwerveModule implements TickedSubsystem {
 		steerEncoder = new CANCoder(steeringEncoderID);
 		steerEncoder.configMagnetOffset(-offset);
 
-		turningPIDController.enableContinuousInput(-Math.PI, Math.PI);		
+		turningPIDController.enableContinuousInput(-Math.PI, Math.PI);	
+		
+		this.voltage = voltage;
 	}
 
 	@Override
@@ -60,8 +65,6 @@ public class SwerveModule implements TickedSubsystem {
 		double drivePIDOutput = drivePIDController.calculate(getDriveVelocity(), desiredState.speedMetersPerSecond);
 
 		double steerPIDOutput = turningPIDController.calculate(getSteerPosition(), MathUtil.angleModulus(desiredState.angle.getRadians()));
-
-		System.out.println(driveFeedOutput + drivePIDOutput);
 
 		driveMotor.setVoltage(driveFeedOutput + drivePIDOutput);
 		steerMotor.setVoltage(steerPIDOutput);

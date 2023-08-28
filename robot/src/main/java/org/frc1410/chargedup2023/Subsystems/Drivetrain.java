@@ -28,6 +28,13 @@ public class Drivetrain implements TickedSubsystem {
 	private final DoublePublisher chassisSpeedsY = NetworkTables.PublisherFactory(table, "ChassisSpeeds Y", 0);
 	private final DoublePublisher chassisSpeedsRotation = NetworkTables.PublisherFactory(table, "ChassisSpeeds Rotation", 0);
 
+	private final DoublePublisher frontLeftVoltage = NetworkTables.PublisherFactory(table, "frontLeftVoltage", 0);
+	private final DoublePublisher frontRightVoltage = NetworkTables.PublisherFactory(table, "frontRightVoltage", 0);
+	private final DoublePublisher backLeftVoltage = NetworkTables.PublisherFactory(table, "backLeftVoltage", 0);
+	private final DoublePublisher backRightVoltage = NetworkTables.PublisherFactory(table, "backRightVoltage", 0);
+	
+	private final DoublePublisher navXYaw = NetworkTables.PublisherFactory(table, "NavX Yaw", 0);
+
 	private final SwerveModule frontLeft;
 	private final SwerveModule frontRight;
 	private final SwerveModule backLeft;
@@ -47,13 +54,13 @@ public class Drivetrain implements TickedSubsystem {
 
 	public Drivetrain(SubsystemStore subsystems) {
 		this.frontLeft = subsystems.track(new SwerveModule(FRONT_LEFT_DRIVE_MOTOR, FRONT_LEFT_STEER_MOTOR,
-				FRONT_LEFT_STEER_ENCODER, false, true, FRONT_LEFT_STEER_ENCODER_OFFSET));
+				FRONT_LEFT_STEER_ENCODER, false, true, FRONT_LEFT_STEER_ENCODER_OFFSET, frontLeftVoltage));
 		this.frontRight = subsystems.track(new SwerveModule(FRONT_RIGHT_DRIVE_MOTOR, FRONT_RIGHT_STEER_MOTOR,
-				FRONT_RIGHT_STEER_ENCODER, false, true, FRONT_RIGHT_STEER_ENCODER_OFFSET));
+				FRONT_RIGHT_STEER_ENCODER, false, true, FRONT_RIGHT_STEER_ENCODER_OFFSET, frontRightVoltage));
 		this.backLeft = subsystems.track(new SwerveModule(BACK_LEFT_DRIVE_MOTOR, BACK_LEFT_STEER_MOTOR,
-				BACK_LEFT_STEER_ENCODER, true, true, BACK_LEFT_STEER_ENCODER_OFFSET));
+				BACK_LEFT_STEER_ENCODER, true, true, BACK_LEFT_STEER_ENCODER_OFFSET, backLeftVoltage));
 		this.backRight = subsystems.track(new SwerveModule(BACK_RIGHT_DRIVE_MOTOR, BACK_RIGHT_STEER_MOTOR,
-				BACK_RIGHT_STEER_ENCODER, false, true, BACK_RIGHT_STEER_ENCODER_OFFSET));
+				BACK_RIGHT_STEER_ENCODER, false, true, BACK_RIGHT_STEER_ENCODER_OFFSET, backRightVoltage));
 
 		this.odometry = new SwerveDriveOdometry(
 				kinematics,
@@ -68,7 +75,15 @@ public class Drivetrain implements TickedSubsystem {
 		gyro.reset();
 	}
 
+	public void zero() {
+		frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0)));
+			frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0)));
+			backLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0)));
+			backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0)));
+	}
+
 	public void drive(double xVelocity, double yVelocity, double rotation, boolean isFieldRelative) {
+		navXYaw.set(gyro.getYaw());
 		if (isLocked) {
 			frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
 			frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(135)));
