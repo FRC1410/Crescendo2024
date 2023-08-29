@@ -68,6 +68,8 @@ public class SwerveModule implements TickedSubsystem {
 
 		driveMotor.setVoltage(driveFeedOutput + drivePIDOutput);
 		steerMotor.setVoltage(steerPIDOutput);
+		voltage.set(Units.radiansToDegrees(getSteerPosition()));
+		//this.steerMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
 	}
 
 	public void setDesiredState(SwerveModuleState desiredState) {
