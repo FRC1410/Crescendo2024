@@ -30,9 +30,9 @@ public class DriveLooped extends CommandBase {
 
 	@Override
 	public void execute() {
-		var xVelocity = xAxis.get();
-		var yVelocity = yAxis.get();
-		var rotation = rotationAxis.get();
+		var xVelocity = xAxis.get() * 4;
+		var yVelocity = yAxis.get() * 4;
+		var rotation = rotationAxis.get() * 4;
 
 		var hasInput = xVelocity != 0 || yVelocity != 0 || rotation != 0;
 

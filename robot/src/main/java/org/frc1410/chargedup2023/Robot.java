@@ -4,6 +4,8 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StringPublisher;
 import edu.wpi.first.networktables.StringSubscriber;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 
 import org.frc1410.chargedup2023.util.NetworkTables;
 import org.frc1410.framework.AutoSelector;
@@ -105,7 +107,13 @@ public final class Robot extends PhaseDrivenRobot {
 	public void teleopSequence() {
 		scheduler.scheduleDefaultCommand(new DriveLooped(drivetrain, driverController.LEFT_Y_AXIS, driverController.LEFT_X_AXIS, driverController.RIGHT_X_AXIS), TaskPersistence.GAMEPLAY);
 		driverController.A.whileHeld(new LockDrivetrainHeld(drivetrain), TaskPersistence.EPHEMERAL);
-		drivetrain.zero();
+		driverController.B.whenPressed(
+			new InstantCommand(
+				() -> { drivetrain.zeroYaw(); }
+			),
+			TaskPersistence.EPHEMERAL
+		);
+		// drivetrain.zero();
 	}
 
 	@Override
