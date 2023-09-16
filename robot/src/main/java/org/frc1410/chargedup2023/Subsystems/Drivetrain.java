@@ -146,7 +146,8 @@ public class Drivetrain implements TickedSubsystem {
 				? ChassisSpeeds.fromFieldRelativeSpeeds(xVelocity, yVelocity, rotation, gyro.getRotation2d())
 				: new ChassisSpeeds(xVelocity, yVelocity, rotation);
 
-			var swerveModuleStates = kinematics.toSwerveModuleStates(correctForDynamics(chassisSpeeds));
+			// var swerveModuleStates = kinematics.toSwerveModuleStates(correctForDynamics(chassisSpeeds));
+			var swerveModuleStates = kinematics.toSwerveModuleStates(chassisSpeeds);
 
 			SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, MAX_SPEED);
 
