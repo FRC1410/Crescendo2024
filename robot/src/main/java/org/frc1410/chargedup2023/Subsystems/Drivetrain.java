@@ -26,6 +26,7 @@ import org.frc1410.chargedup2023.util.NetworkTables;
 import static org.frc1410.chargedup2023.util.Constants.*;
 
 public class Drivetrain implements TickedSubsystem {
+	private final NetworkTableInstance instance = NetworkTableInstance.getDefault();
 	private final NetworkTable table = NetworkTableInstance.getDefault().getTable("Drivetrain");
 
 	private final DoublePublisher chassisSpeedsX = NetworkTables.PublisherFactory(table, "ChassisSpeeds X", 0);
@@ -98,23 +99,21 @@ public class Drivetrain implements TickedSubsystem {
 	}
 
 	public static Twist2d log(final Pose2d transform) {
+
 		double kEps = 1E-9;
-		final double dtheta = transform.getRotation().getRadians();
-		final double half_dtheta = 0.5 * dtheta;
-		final double cos_minus_one = Math.cos(transform.getRotation().getRadians()) - 1.0;
-		double halftheta_by_tan_of_halfdtheta;
-		if (Math.abs(cos_minus_one) < kEps) {
-		  halftheta_by_tan_of_halfdtheta = 1.0 - 1.0 / 12.0 * dtheta * dtheta;
-		} else {
-		  halftheta_by_tan_of_halfdtheta =
-			  -(half_dtheta * Math.sin(transform.getRotation().getRadians())) / cos_minus_one;
-		}
-		final Translation2d translation_part =
-			transform
-				.getTranslation()
-				.rotateBy(new Rotation2d(halftheta_by_tan_of_halfdtheta, -half_dtheta));
-		return new Twist2d(translation_part.getX(), translation_part.getY(), dtheta);
-	  }
+        final double dtheta = transform.getRotation().getRadians();
+        final double half_dtheta = 0.5 * dtheta;
+        final double cos_minus_one = transform.getRotation().getCos() - 1.0;
+        double halftheta_by_tan_of_halfdtheta;
+        if (Math.abs(cos_minus_one) < kEps) {
+            halftheta_by_tan_of_halfdtheta = 1.0 - 1.0 / 12.0 * dtheta * dtheta;
+        } else {
+            halftheta_by_tan_of_halfdtheta = -(half_dtheta * transform.getRotation().getSin()) / cos_minus_one;
+        }
+        final Translation2d translation_part = transform.getTranslation()
+                .rotateBy(new Rotation2d(halftheta_by_tan_of_halfdtheta, -half_dtheta));
+        return new Twist2d(translation_part.getX(), translation_part.getY(), dtheta);
+    }
 
 	private ChassisSpeeds correctForDynamics(ChassisSpeeds originalSpeeds) {
 		final double LOOP_TIME_S = 0.02;
@@ -130,8 +129,19 @@ public class Drivetrain implements TickedSubsystem {
 		return updatedSpeeds;
 	}
 
+	public static ChassisSpeeds discretize(double vx, double vy, double omega, double dt) {
+		var desiredDeltaPose = new Pose2d(vx * dt, vy * dt, new Rotation2d(omega * dt));
+		var twist = new Pose2d().log(desiredDeltaPose);
+		return new ChassisSpeeds(twist.dx / dt, twist.dy / dt, twist.dtheta / dt);
+	}
+
+	public static ChassisSpeeds discretize(ChassisSpeeds continuousSpeeds, double dt) {
+		return discretize(continuousSpeeds.vxMetersPerSecond, continuousSpeeds.vyMetersPerSecond, continuousSpeeds.omegaRadiansPerSecond, dt);
+	}
+
 	public void drive(double xVelocity, double yVelocity, double rotation, boolean isFieldRelative) {
 		navXYaw.set(gyro.getYaw());
+
 		if (isLocked) {
 			frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
 			frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(135)));
@@ -145,6 +155,20 @@ public class Drivetrain implements TickedSubsystem {
 			var chassisSpeeds = isFieldRelative
 				? ChassisSpeeds.fromFieldRelativeSpeeds(xVelocity, yVelocity, rotation, gyro.getRotation2d())
 				: new ChassisSpeeds(xVelocity, yVelocity, rotation);
+
+			// Pose2d robot_pose_vel = new Pose2d(
+			// 	chassisSpeeds.vxMetersPerSecond * 0.02, 
+			// 	chassisSpeeds.vyMetersPerSecond * 0.02, 
+			// 	Rotation2d.fromRadians(chassisSpeeds.omegaRadiansPerSecond * 0.02)
+			// );
+
+			// Twist2d twist_vel = Drivetrain.log(robot_pose_vel);
+
+			// ChassisSpeeds updated_chassis_speeds = new ChassisSpeeds(
+            // 	twist_vel.dx / 0.02,
+			// 	twist_vel.dy / 0.02,
+			// 	twist_vel.dtheta / 0.02
+			// );
 
 			// var swerveModuleStates = kinematics.toSwerveModuleStates(correctForDynamics(chassisSpeeds));
 			var swerveModuleStates = kinematics.toSwerveModuleStates(chassisSpeeds);

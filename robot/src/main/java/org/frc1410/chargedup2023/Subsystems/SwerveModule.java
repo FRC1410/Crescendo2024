@@ -33,13 +33,16 @@ public class SwerveModule implements TickedSubsystem {
 	private final SimpleMotorFeedforward driveFeedforward = new SimpleMotorFeedforward(SWERVE_DRIVE_KS, SWERVE_DRIVE_KV);
 	
 	// private final PIDController turningPIDController = new PIDController(SWERVE_STEERING_KP, SWERVE_STEERING_KI, SWERVE_STEERING_KD);
-	private final ProfiledPIDController turningPIDController = new ProfiledPIDController(
+	private final PIDController turningPIDController = new PIDController(
 		SWERVE_STEERING_KP, 
 		SWERVE_STEERING_KI, 
-		SWERVE_STEERING_KD, 
-		new TrapezoidProfile.Constraints(Math.PI, 2 * Math.PI)
+		SWERVE_STEERING_KD
+		// 27 rad/s
+		// 135 rad/s/s
+		// new TrapezoidProfile.Constraints(Math.PI, 2 * Math.PI)
+		// new TrapezoidProfile.Constraints(27, 135)
 	);
-	private final SimpleMotorFeedforward turningFeedforward = new SimpleMotorFeedforward(1, 0.5);
+	// private final SimpleMotorFeedforward turningFeedforward = new SimpleMotorFeedforward(0.15, 0.5);
 
 	public SwerveModuleState desiredState = new SwerveModuleState();
 
@@ -68,7 +71,7 @@ public class SwerveModule implements TickedSubsystem {
 		this.voltage = voltage;
 
 		// ?
-		this.turningPIDController.reset(getSteerPosition());
+		// this.turningPIDController.reset(getSteerPosition());
 	}
 
 	@Override
@@ -77,12 +80,15 @@ public class SwerveModule implements TickedSubsystem {
 		double drivePIDOutput = drivePIDController.calculate(getDriveVelocityMetersPerSecond(), desiredState.speedMetersPerSecond);
 
 		double steerPIDOutput = turningPIDController.calculate(getSteerPosition(), MathUtil.angleModulus(desiredState.angle.getRadians()));
-		double turnFeedOutput = turningFeedforward.calculate(turningPIDController.getSetpoint().velocity);
+		// double turnFeedOutput = turningFeedforward.calculate(turningPIDController.getSetpoint().velocity);
 
 		driveMotor.setVoltage(driveFeedOutput + drivePIDOutput);
-		// steerMotor.setVoltage(steerPIDOutput + turnFeedOutput);
-		steerMotor.setVoltage(12);
-		voltage.set(Units.degreesToRadians(steerEncoder.getVelocity()));
+		steerMotor.setVoltage(steerPIDOutput);
+		// steerMotor.setVoltage(12);
+		// voltage.set(turnFeedOutput);
+		// voltage.set(getSteerPosition());
+
+
 		// voltage.set(Units.radiansToDegrees(getSteerPosition()));
 		// this.steerMotor.setIdleMode(CANSparkMax.IdleMode.kCoast);
 	}

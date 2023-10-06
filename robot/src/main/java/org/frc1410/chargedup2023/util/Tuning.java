@@ -20,7 +20,7 @@ public interface Tuning {
 	double SWERVE_DRIVE_KV = 3;
 	// double SWERVE_DRIVE_KA = 0;
 
-	double STEER_KS = 0;
-	double STEER_KV = 0.38;
+	// double STEER_KS = 0;
+	// double STEER_KV = 0.38;
 	// double STEER_KA = 0;
 }
