@@ -17,6 +17,7 @@ import static org.frc1410.chargedup2023.util.Constants.*;
 
 import org.frc1410.chargedup2023.Commands.DriveLooped;
 import org.frc1410.chargedup2023.Commands.LockDrivetrainHeld;
+import org.frc1410.chargedup2023.Commands.Auto.Forward;
 import org.frc1410.chargedup2023.Subsystems.Drivetrain;
 
 public final class Robot extends PhaseDrivenRobot {
@@ -77,7 +78,8 @@ public final class Robot extends PhaseDrivenRobot {
 		var pub = NetworkTables.PublisherFactory(nt.getTable("viridian"), "layout", layout);
 	}
 
-	private final AutoSelector autoSelector = new AutoSelector();
+	private final AutoSelector autoSelector = new AutoSelector()
+		.add("FORWARD", () -> new Forward(this.drivetrain));
 
 	{
 		var profiles = new String[autoSelector.getProfiles().size()];

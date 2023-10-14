@@ -2,6 +2,7 @@ package org.frc1410.chargedup2023.Subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -41,12 +42,34 @@ public class Drivetrain implements TickedSubsystem {
 
 	private final DoublePublisher navXYaw = NetworkTables.PublisherFactory(table, "NavX Yaw", 0);
 
+	private final DoublePublisher frontLeftDesiredVel = NetworkTables.PublisherFactory(table, "frontLeft Desired Vel", 0);
+	private final DoublePublisher frontRightDesiredVel = NetworkTables.PublisherFactory(table, "frontRight Desired Vel", 0);
+	private final DoublePublisher backLeftDesiredVel = NetworkTables.PublisherFactory(table, "backLeft Desired Vel", 0);
+	private final DoublePublisher backRightDesiredVel = NetworkTables.PublisherFactory(table, "backRight Desired Vel", 0);
+
+	private final DoublePublisher frontLeftDesiredAngle = NetworkTables.PublisherFactory(table, "frontLeft Desired angle", 0);
+	private final DoublePublisher frontRightDesiredAngle = NetworkTables.PublisherFactory(table, "frontRight Desired angle", 0);
+	private final DoublePublisher backLeftDesiredAngle = NetworkTables.PublisherFactory(table, "backLeft Desired angle", 0);
+	private final DoublePublisher backRightDesiredAngle = NetworkTables.PublisherFactory(table, "backRight Desired angle", 0);
+
+	private final DoublePublisher frontLeftActualVel = NetworkTables.PublisherFactory(table, "frontLeft Actual Vel", 0);
+	private final DoublePublisher frontRightActualVel = NetworkTables.PublisherFactory(table, "frontRight Actual Vel", 0);
+	private final DoublePublisher backLeftActualVel = NetworkTables.PublisherFactory(table, "backLeft Actual Vel", 0);
+	private final DoublePublisher backRightActualVel = NetworkTables.PublisherFactory(table, "backRight Actual Vel", 0);
+
+	private final DoublePublisher frontLeftActualAngle = NetworkTables.PublisherFactory(table, "frontLeft Actual angle", 0);
+	private final DoublePublisher frontRightActualAngle = NetworkTables.PublisherFactory(table, "frontRight Actual angle", 0);
+	private final DoublePublisher backLeftActualAngle = NetworkTables.PublisherFactory(table, "backLeft Actual angle", 0);
+	private final DoublePublisher backRightActualAngle = NetworkTables.PublisherFactory(table, "backRight Actual angle", 0);
+
 	private final SwerveModule frontLeft;
 	private final SwerveModule frontRight;
 	private final SwerveModule backLeft;
 	private final SwerveModule backRight;
 
 	private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+
+	private final PIDController headingPidController = new PIDController(2, 0, 0);
 
 	private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(
 			FRONT_LEFT_SWERVE_MODULE_LOCATION,
@@ -58,15 +81,17 @@ public class Drivetrain implements TickedSubsystem {
 
 	public boolean isLocked = false;
 
+	private Rotation2d desiredHeading = new Rotation2d();
+
 	public Drivetrain(SubsystemStore subsystems) {
 		this.frontLeft = subsystems.track(new SwerveModule(FRONT_LEFT_DRIVE_MOTOR, FRONT_LEFT_STEER_MOTOR,
-				FRONT_LEFT_STEER_ENCODER, false, true, FRONT_LEFT_STEER_ENCODER_OFFSET, frontLeftVoltage));
+				FRONT_LEFT_STEER_ENCODER, false, true, FRONT_LEFT_STEER_ENCODER_OFFSET, frontLeftDesiredVel, frontLeftDesiredAngle, frontLeftActualVel, frontLeftActualAngle));
 		this.frontRight = subsystems.track(new SwerveModule(FRONT_RIGHT_DRIVE_MOTOR, FRONT_RIGHT_STEER_MOTOR,
-				FRONT_RIGHT_STEER_ENCODER, false, true, FRONT_RIGHT_STEER_ENCODER_OFFSET, frontRightVoltage));
+				FRONT_RIGHT_STEER_ENCODER, false, true, FRONT_RIGHT_STEER_ENCODER_OFFSET, frontRightDesiredVel, frontRightDesiredAngle, frontRightActualVel, frontRightActualAngle));
 		this.backLeft = subsystems.track(new SwerveModule(BACK_LEFT_DRIVE_MOTOR, BACK_LEFT_STEER_MOTOR,
-				BACK_LEFT_STEER_ENCODER, true, true, BACK_LEFT_STEER_ENCODER_OFFSET, backLeftVoltage));
+				BACK_LEFT_STEER_ENCODER, true, true, BACK_LEFT_STEER_ENCODER_OFFSET, backLeftDesiredVel, backLeftDesiredAngle, backLeftActualVel, backLeftActualAngle));
 		this.backRight = subsystems.track(new SwerveModule(BACK_RIGHT_DRIVE_MOTOR, BACK_RIGHT_STEER_MOTOR,
-				BACK_RIGHT_STEER_ENCODER, false, true, BACK_RIGHT_STEER_ENCODER_OFFSET, backRightVoltage));
+				BACK_RIGHT_STEER_ENCODER, false, true, BACK_RIGHT_STEER_ENCODER_OFFSET, backRightDesiredVel, backRightDesiredAngle, backRightActualVel, backRightActualAngle));
 
 		this.odometry = new SwerveDriveOdometry(
 				kinematics,
@@ -78,6 +103,8 @@ public class Drivetrain implements TickedSubsystem {
 						backRight.getPosition()
 				});
 
+		this.headingPidController.enableContinuousInput(-Math.PI, Math.PI);
+
 		gyro.reset();
 
 		gyro.calibrate();
@@ -88,6 +115,7 @@ public class Drivetrain implements TickedSubsystem {
 	public void zeroYaw() {
 		// System.out.println("zero Yaw");
 		this.gyro.zeroYaw();
+		this.desiredHeading = this.gyro.getRotation2d();
 		// yawOffset = this.gyro.getRotation2d()
 	}
 
@@ -139,8 +167,23 @@ public class Drivetrain implements TickedSubsystem {
 		return discretize(continuousSpeeds.vxMetersPerSecond, continuousSpeeds.vyMetersPerSecond, continuousSpeeds.omegaRadiansPerSecond, dt);
 	}
 
+	public void driveKeepingHeading(double xVelocity, double yVelocity, boolean isFieldRelative) {
+		var headingAdjustment = this.headingPidController.calculate(this.gyro.getRotation2d().getRadians(), this.desiredHeading.getRadians());
+		navXYaw.set(-headingAdjustment);
+		this.driveWithRotation(xVelocity, yVelocity, -headingAdjustment, isFieldRelative);
+	}
+
 	public void drive(double xVelocity, double yVelocity, double rotation, boolean isFieldRelative) {
-		navXYaw.set(gyro.getYaw());
+		// if (rotation == 0) {
+		// 	this.driveKeepingHeading(xVelocity, yVelocity, isFieldRelative);
+		// } else {
+			this.driveWithRotation(xVelocity, yVelocity, rotation, isFieldRelative);
+		// 	this.desiredHeading = gyro.getRotation2d();
+		// }
+	}
+
+	public void driveWithRotation(double xVelocity, double yVelocity, double rotation, boolean isFieldRelative) {
+		// navXYaw.set(gyro.getYaw());
 
 		if (isLocked) {
 			frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
@@ -170,8 +213,8 @@ public class Drivetrain implements TickedSubsystem {
 			// 	twist_vel.dtheta / 0.02
 			// );
 
-			// var swerveModuleStates = kinematics.toSwerveModuleStates(correctForDynamics(chassisSpeeds));
-			var swerveModuleStates = kinematics.toSwerveModuleStates(chassisSpeeds);
+			var swerveModuleStates = kinematics.toSwerveModuleStates(correctForDynamics(chassisSpeeds));
+			// var swerveModuleStates = kinematics.toSwerveModuleStates(chassisSpeeds);
 
 			SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, MAX_SPEED);
 
@@ -180,6 +223,10 @@ public class Drivetrain implements TickedSubsystem {
 			backLeft.setDesiredState(swerveModuleStates[0]);
 			backRight.setDesiredState(swerveModuleStates[2]);
 		}
+	}
+
+	public Pose2d getPoseMeters() {
+		return this.odometry.getPoseMeters();
 	}
 
 	public void updateOdometry() {
