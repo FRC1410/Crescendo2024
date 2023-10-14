@@ -16,16 +16,17 @@ public class DriveDistance extends CommandBase {
 
     @Override
     public void execute() {
-        this.drivetrain.drive(0, 4, 0, true);
+        this.drivetrain.drive(-2, 0, 0, false);
     }
 
     @Override
     public boolean isFinished() {
-        return this.drivetrain.getPoseMeters().getY() >= this.distanceMeters;
+        return false;
+        // return this.drivetrain.getPoseMeters().getY() >= this.distanceMeters;
     }
 
     @Override
     public void end(boolean interrupted) {
-
+        this.drivetrain.drive(0, 0, 0, false);
     }
 }

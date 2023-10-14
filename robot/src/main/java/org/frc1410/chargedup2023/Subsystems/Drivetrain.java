@@ -126,6 +126,10 @@ public class Drivetrain implements TickedSubsystem {
 		backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(0)));
 	}
 
+	public Rotation2d getPitch() {
+		return Rotation2d.fromDegrees(this.gyro.getPitch());
+	}
+
 	public static Twist2d log(final Pose2d transform) {
 
 		double kEps = 1E-9;
@@ -169,7 +173,7 @@ public class Drivetrain implements TickedSubsystem {
 
 	public void driveKeepingHeading(double xVelocity, double yVelocity, boolean isFieldRelative) {
 		var headingAdjustment = this.headingPidController.calculate(this.gyro.getRotation2d().getRadians(), this.desiredHeading.getRadians());
-		navXYaw.set(-headingAdjustment);
+		// navXYaw.set(-headingAdjustment);
 		this.driveWithRotation(xVelocity, yVelocity, -headingAdjustment, isFieldRelative);
 	}
 
@@ -233,15 +237,23 @@ public class Drivetrain implements TickedSubsystem {
 		odometry.update(
 				gyro.getRotation2d(),
 				new SwerveModulePosition[] {
-						frontLeft.getPosition(),
-						frontRight.getPosition(),
+						// frontLeft.getPosition(),
+						// frontRight.getPosition(),
+						// backLeft.getPosition(),
+						// backRight.getPosition()
 						backLeft.getPosition(),
-						backRight.getPosition()
+						frontLeft.getPosition(),
+						backRight.getPosition(),
+						frontRight.getPosition()
+
 				});
+		
+				// navXYaw.set(this.odometry.getPoseMeters().getX());
 	}
 
 	@Override
 	public void periodic() {
+		navXYaw.set(gyro.getPitch());
 		updateOdometry();
 	}
 }

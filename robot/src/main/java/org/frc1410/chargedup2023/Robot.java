@@ -17,6 +17,7 @@ import static org.frc1410.chargedup2023.util.Constants.*;
 
 import org.frc1410.chargedup2023.Commands.DriveLooped;
 import org.frc1410.chargedup2023.Commands.LockDrivetrainHeld;
+import org.frc1410.chargedup2023.Commands.Auto.Engage;
 import org.frc1410.chargedup2023.Commands.Auto.Forward;
 import org.frc1410.chargedup2023.Subsystems.Drivetrain;
 
@@ -79,6 +80,7 @@ public final class Robot extends PhaseDrivenRobot {
 	}
 
 	private final AutoSelector autoSelector = new AutoSelector()
+	.add("ENGAGE", () -> new Engage(this.drivetrain))
 		.add("FORWARD", () -> new Forward(this.drivetrain));
 
 	{
