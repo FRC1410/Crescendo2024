@@ -8,18 +8,19 @@ import org.frc1410.framework.control.Axis;
 public class DriveLooped extends CommandBase {
 	private final Drivetrain drivetrain;
 
-	private final Axis rightXAxis;
-	private final Axis rightYAxis;
+	private final Axis xAxis;
+	private final Axis yAxis;
 
-	private final Axis leftXAxis;
+	private final Axis rotationAxis;
 
 	private boolean previousTickHadInput = false;
 	
-	public DriveLooped(Drivetrain drivetrain, Axis rightXAxis, Axis rightYAxis, Axis leftXAxis) {
+	public DriveLooped(Drivetrain drivetrain, Axis xAxis, Axis yAxis, Axis rotationAxis) {
 		this.drivetrain = drivetrain;
-		this.rightXAxis = rightXAxis;
-		this.rightYAxis = rightYAxis;
-		this.leftXAxis = leftXAxis;
+
+		this.xAxis = xAxis;
+		this.yAxis = yAxis;
+		this.rotationAxis = rotationAxis;
 	}
 
 	@Override
@@ -29,9 +30,9 @@ public class DriveLooped extends CommandBase {
 
 	@Override
 	public void execute() {
-		var xVelocity = rightYAxis.get();
-		var yVelocity = rightXAxis.get();
-		var rotation = leftXAxis.get();
+		var xVelocity = xAxis.get() * 4;
+		var yVelocity = yAxis.get() * 4;
+		var rotation = rotationAxis.get() * 4;
 
 		var hasInput = xVelocity != 0 || yVelocity != 0 || rotation != 0;
 
@@ -39,7 +40,7 @@ public class DriveLooped extends CommandBase {
 			drivetrain.isLocked = false;
 		}
 
-		drivetrain.drive(rightYAxis.get(), rightXAxis.get(), leftXAxis.get(), true);
+		drivetrain.drive(xVelocity, yVelocity, rotation, true);
 
 		previousTickHadInput = hasInput;
 	}

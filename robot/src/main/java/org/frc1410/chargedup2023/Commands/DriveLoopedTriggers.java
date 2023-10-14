@@ -40,7 +40,7 @@ public class DriveLoopedTriggers extends CommandBase {
 			drivetrain.isLocked = false;
 		}
 
-		drivetrain.drive(rightYAxis.get(), rightXAxis.get(), rotation, true);
+		drivetrain.drive(rightYAxis.get(), rightXAxis.get(), rotation, false);
 
 		previousTickHadInput = hasInput;
 	}
