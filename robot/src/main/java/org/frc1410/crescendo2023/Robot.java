@@ -65,9 +65,7 @@ public final class Robot extends PhaseDrivenRobot {
 	public void autonomousSequence() {}
 
 	@Override
-	public void teleopSequence() {
-		//Test comment
-	}
+	public void teleopSequence() {}
 
 	@Override
 	public void testSequence() {
