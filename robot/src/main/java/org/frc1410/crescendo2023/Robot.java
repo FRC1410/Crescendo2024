@@ -2,10 +2,19 @@ package org.frc1410.crescendo2023;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import org.frc1410.crescendo2023.commands.RunIntakeLooped;
+import org.frc1410.crescendo2023.subsystems.Intake;
 import org.frc1410.crescendo2023.util.NetworkTables;
 import org.frc1410.framework.PhaseDrivenRobot;
+import org.frc1410.framework.control.Controller;
+import org.frc1410.framework.scheduler.task.TaskPersistence;
+
+import static org.frc1410.crescendo2023.util.Constants.*;
 
 public final class Robot extends PhaseDrivenRobot {
+
+	private final Controller operatorController = new Controller(scheduler, OPERATOR_CONTROLLER,0.1);
+	private final Intake intake = new Intake();
 
 	//<editor-fold desc="Controllers">
 	//</editor-fold>
@@ -65,7 +74,13 @@ public final class Robot extends PhaseDrivenRobot {
 	public void autonomousSequence() {}
 
 	@Override
-	public void teleopSequence() {}
+	public void teleopSequence() {
+		scheduler.scheduleDefaultCommand(
+			new RunIntakeLooped(
+				intake,operatorController.LEFT_TRIGGER
+			), TaskPersistence.GAMEPLAY
+		);
+	}
 
 	@Override
 	public void testSequence() {
