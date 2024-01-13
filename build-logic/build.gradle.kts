@@ -9,7 +9,7 @@ repositories {
 tasks {
 	compileKotlin {
 		val version = JavaVersion.VERSION_17.majorVersion
-		targetCompatibility = version
-		sourceCompatibility = version
+		// targetCompatibility = version
+		// sourceCompatibility = version
 	}
 }
