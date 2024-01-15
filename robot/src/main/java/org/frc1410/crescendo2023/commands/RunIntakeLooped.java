@@ -9,10 +9,12 @@ import static org.frc1410.crescendo2023.util.Constants.*;
 public class RunIntakeLooped extends Command {
 	private final Intake intake;
 	private final Axis leftTrigger;
+	private final Axis rightTrigger;
 
-	public RunIntakeLooped(Intake intake, Axis leftTrigger) {
+	public RunIntakeLooped(Intake intake, Axis leftTrigger, Axis rightTrigger) {
 		this.intake = intake;
 		this.leftTrigger = leftTrigger;
+		this.rightTrigger = rightTrigger;
 
 		addRequirements(intake);
 	}
@@ -28,6 +30,9 @@ public class RunIntakeLooped extends Command {
 	public void execute() {
 		if(leftTrigger.get() > 0.3) {
 			intake.setSpeed(INTAKE_SPEED);
+		}
+		if(rightTrigger.get() > .03) {
+			intake.setSpeed(-INTAKE_SPEED);
 		}
 	}
 

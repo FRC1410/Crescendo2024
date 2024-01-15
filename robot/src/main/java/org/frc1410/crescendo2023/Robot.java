@@ -77,7 +77,9 @@ public final class Robot extends PhaseDrivenRobot {
 	public void teleopSequence() {
 		scheduler.scheduleDefaultCommand(
 			new RunIntakeLooped(
-				intake,operatorController.LEFT_TRIGGER
+				intake,
+				operatorController.LEFT_TRIGGER,
+				operatorController.RIGHT_TRIGGER
 			), TaskPersistence.GAMEPLAY
 		);
 	}
