@@ -1,21 +1,27 @@
-package org.frc1410.crescendo2023;
+package org.frc1410.chargedup2023;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import org.frc1410.crescendo2023.commands.RunShooterLooped;
-import org.frc1410.crescendo2023.subsystems.Shooter;
-import org.frc1410.crescendo2023.util.NetworkTables;
+import org.frc1410.chargedup2023.commands.RunIntakeLooped;
+import org.frc1410.chargedup2023.commands.RunShooterLooped;
+import org.frc1410.chargedup2023.commands.RunStorage;
+import org.frc1410.chargedup2023.subsystems.Intake;
+import org.frc1410.chargedup2023.subsystems.Shooter;
+import org.frc1410.chargedup2023.subsystems.Storage;
+import org.frc1410.chargedup2023.util.NetworkTables;
 import org.frc1410.framework.PhaseDrivenRobot;
 import org.frc1410.framework.control.Controller;
 import org.frc1410.framework.scheduler.task.TaskPersistence;
 
-import static org.frc1410.crescendo2023.util.Constants.*;
+import static org.frc1410.chargedup2023.util.Constants.*;
 
 public final class Robot extends PhaseDrivenRobot {
 
-	private final Controller operatorController = new Controller(scheduler, OPPERATOR_CONTROLLER,  0.1);
+	private final Controller operatorController = new Controller(scheduler, OPERATOR_CONTROLLER,  0.1);
 
 	private final Shooter shooter = new Shooter();
+	private final Storage storage = new Storage();
+	private final Intake intake = new Intake();
 
 
 	//<editor-fold desc="Controllers">
@@ -83,6 +89,19 @@ public final class Robot extends PhaseDrivenRobot {
 				operatorController.RIGHT_TRIGGER
 			),
 			TaskPersistence.GAMEPLAY
+		);
+		scheduler.scheduleDefaultCommand(
+			new RunStorage(
+				storage,
+				operatorController.LEFT_Y_AXIS
+			), TaskPersistence.GAMEPLAY
+		);
+		scheduler.scheduleDefaultCommand(
+			new RunIntakeLooped(
+				intake,
+				operatorController.RIGHT_Y_AXIS,
+				operatorController.RIGHT_Y_AXIS
+			), TaskPersistence.GAMEPLAY
 		);
 	}
 

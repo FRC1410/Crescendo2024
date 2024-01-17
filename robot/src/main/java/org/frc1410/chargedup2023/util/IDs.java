@@ -1,0 +1,13 @@
+package org.frc1410.chargedup2023.util;
+
+public interface IDs {
+	int STORAGE_FRONT_LEFT_MOTOR_ID = 0;
+	int STORAGE_FRONT_RIGHT_MOTOR_ID = 1;
+	int STORAGE_BACK_LEFT_MOTOR_ID = 2;
+	int STORAGE_BACK_RIGHT_MOTOR_ID = 3;
+	int INTAKE_FRONT_MOTOR_ID = 4;
+	int INTAKE_BACK_MOTOR_ID = 5;
+	int SHOOTER_RIGHT_MOTOR_ID = 44;
+	int SHOOTER_LEFT_MOTOR_ID = 52;
+
+}

@@ -1,9 +1,9 @@
-package org.frc1410.crescendo2023.commands;
+package org.frc1410.chargedup2023.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import org.frc1410.crescendo2023.subsystems.Shooter;
+import org.frc1410.chargedup2023.subsystems.Shooter;
 import org.frc1410.framework.control.Axis;
-import static org.frc1410.crescendo2023.util.Constants.*;
+import static org.frc1410.chargedup2023.util.Constants.*;
 
 
 public class RunShooterLooped extends Command {
@@ -23,9 +23,9 @@ public class RunShooterLooped extends Command {
 
 	@Override
 	public void execute() {
-		if(rightTrigger.get() > 0.3) {
-			shooter.setSpeed(SHOOTER_SPEED);
-		}
+		//if(rightTrigger.get() > 0.3) {
+			shooter.setSpeed(1);
+		//}
 	}
 
 	@Override
