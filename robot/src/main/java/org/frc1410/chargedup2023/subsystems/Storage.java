@@ -13,8 +13,8 @@ public class Storage implements Subsystem {
 
 	public Storage() {
 		storageFrontLeft.setInverted(true);
-		storageBackLeft.setInverted(true);
 		storageFrontRight.setInverted(false);
+		storageBackLeft.setInverted(true);
 		storageBackRight.setInverted(false);
 	}
 
