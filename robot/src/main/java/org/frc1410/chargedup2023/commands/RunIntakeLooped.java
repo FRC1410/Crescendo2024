@@ -8,13 +8,11 @@ import static org.frc1410.chargedup2023.util.Constants.*;
 
 public class RunIntakeLooped extends Command {
 	private final Intake intake;
-	private final Axis leftTrigger;
-	private final Axis rightTrigger;
+	private final boolean isReversed;
 
-	public RunIntakeLooped(Intake intake, Axis leftTrigger, Axis rightTrigger) {
+	public RunIntakeLooped(Intake intake, boolean isReversed) {
 		this.intake = intake;
-		this.leftTrigger = leftTrigger;
-		this.rightTrigger = rightTrigger;
+		this.isReversed = isReversed;
 
 		addRequirements(intake);
 	}
@@ -28,11 +26,11 @@ public class RunIntakeLooped extends Command {
 
 	@Override
 	public void execute() {
-		if(leftTrigger.get() > 0.3) {
-			intake.setSpeed(INTAKE_SPEED);
-		}
-		if(rightTrigger.get() > .03) {
+		if(isReversed) {
 			intake.setSpeed(-INTAKE_SPEED);
+		}
+		if(!isReversed) {
+			intake.setSpeed(INTAKE_SPEED);
 		}
 	}
 

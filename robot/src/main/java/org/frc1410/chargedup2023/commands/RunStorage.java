@@ -8,11 +8,11 @@ import static org.frc1410.chargedup2023.util.Constants.*;
 
 public class RunStorage extends Command {
 	private final Storage storage;
-	private final Axis YAxis;
+	private final Boolean isReversed;
 
-	public RunStorage(Storage storage, Axis YAxis) {
+	public RunStorage(Storage storage, boolean isReveresed) {
 		this.storage = storage;
-		this.YAxis = YAxis;
+		this.isReversed = isReveresed;
 
 		addRequirements(this.storage);
 	}
@@ -25,10 +25,10 @@ public class RunStorage extends Command {
 
 	@Override
 	public void execute() {
-		if(YAxis.get() > .03) {
-			storage.setSpeed(STORAGE_SPEED);
-		} else if(YAxis.get() < -.3) {
+		if(isReversed) {
 			storage.setSpeed(-STORAGE_SPEED);
+		} else if(!isReversed) {
+			storage.setSpeed(STORAGE_SPEED);
 		}
 	}
 

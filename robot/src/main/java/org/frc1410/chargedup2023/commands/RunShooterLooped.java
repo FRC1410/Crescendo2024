@@ -23,9 +23,8 @@ public class RunShooterLooped extends Command {
 
 	@Override
 	public void execute() {
-		//if(rightTrigger.get() > 0.3) {
-			shooter.setSpeed(1);
-		//}
+		double rightTriggerSpeed = rightTrigger.getRaw();
+		shooter.setSpeed(rightTriggerSpeed);
 	}
 
 	@Override

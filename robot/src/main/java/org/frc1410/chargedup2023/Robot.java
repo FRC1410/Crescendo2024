@@ -83,6 +83,7 @@ public final class Robot extends PhaseDrivenRobot {
 
 	@Override
 	public void teleopSequence() {
+
 		scheduler.scheduleDefaultCommand(
 			new RunShooterLooped(
 				shooter,
@@ -90,17 +91,32 @@ public final class Robot extends PhaseDrivenRobot {
 			),
 			TaskPersistence.GAMEPLAY
 		);
-		scheduler.scheduleDefaultCommand(
+
+		operatorController.A.whileHeld(
 			new RunStorage(
 				storage,
-				operatorController.LEFT_Y_AXIS
+				false
 			), TaskPersistence.GAMEPLAY
 		);
-		scheduler.scheduleDefaultCommand(
+
+		operatorController.B.whileHeld(
+			new RunStorage(
+				storage,
+				true
+			), TaskPersistence.GAMEPLAY
+		);
+
+		operatorController.RIGHT_BUMPER.whileHeld(
 			new RunIntakeLooped(
 				intake,
-				operatorController.RIGHT_Y_AXIS,
-				operatorController.RIGHT_Y_AXIS
+				false
+			), TaskPersistence.GAMEPLAY
+		);
+
+		operatorController.LEFT_BUMPER.whileHeld(
+			new RunIntakeLooped(
+				intake,
+				true
 			), TaskPersistence.GAMEPLAY
 		);
 	}

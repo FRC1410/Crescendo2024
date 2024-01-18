@@ -12,7 +12,6 @@ public class Intake implements Subsystem {
 	private final WPI_TalonSRX intakeMotorBack = new WPI_TalonSRX(INTAKE_BACK_MOTOR_ID);
 	public Intake () {
 
-
 		intakeMotorFront.setInverted(false);
 		intakeMotorBack.setInverted(false);
 		// One motor will be inverted (front) and the other will go in normal direction (opposite)

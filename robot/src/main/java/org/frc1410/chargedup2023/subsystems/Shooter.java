@@ -20,8 +20,8 @@ public class Shooter implements Subsystem {
 		shooterMotorLeft.restoreFactoryDefaults();
 		shooterMotorRight.restoreFactoryDefaults();
 
-		shooterMotorLeft.setInverted(true);
-		shooterMotorRight.setInverted(false);
+		shooterMotorLeft.setInverted(false);
+		shooterMotorRight.setInverted(true);
 		//One Motor Will be Inverted (Double fly wheel)
 
 		shooterMotorLeft.setIdleMode(CANSparkBase.IdleMode.kBrake);
