@@ -87,19 +87,19 @@ public final class Robot extends PhaseDrivenRobot {
 		scheduler.scheduleDefaultCommand(
 			new RunShooterLooped(
 				shooter,
-				operatorController.RIGHT_TRIGGER
+				operatorController
 			),
 			TaskPersistence.GAMEPLAY
 		);
 
-		operatorController.A.whileHeld(
+		operatorController.LEFT_BUMPER.whileHeld(
 			new RunStorage(
 				storage,
 				false
 			), TaskPersistence.GAMEPLAY
 		);
 
-		operatorController.B.whileHeld(
+		operatorController.RIGHT_BUMPER.whileHeld(
 			new RunStorage(
 				storage,
 				true
