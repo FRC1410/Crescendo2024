@@ -27,7 +27,7 @@ public class RunShooterLooped extends Command {
 
 	@Override
 	public void execute() {
-		if (rightTrigger.getRaw() > 0.0) {
+		if (rightTrigger.getRaw() > 0.2) {
 			shooter.setSpeed(rightTrigger.getRaw());
 		} else if (operatorController.Y.isActive()) {
 			shooter.setSpeed(0.9);
