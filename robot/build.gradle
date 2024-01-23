@@ -8,7 +8,7 @@ plugins {
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
-def ROBOT_MAIN_CLASS = "org.frc1410.chargedup2023.Main"
+def ROBOT_MAIN_CLASS = "org.frc1410.crescendo2024.Main"
 
 deploy {
     targets {

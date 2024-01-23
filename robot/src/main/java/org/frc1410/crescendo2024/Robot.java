@@ -1,8 +1,8 @@
-package org.frc1410.crescendo2023;
+package org.frc1410.crescendo2024;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import org.frc1410.crescendo2023.util.NetworkTables;
+import org.frc1410.crescendo2024.util.NetworkTables;
 import org.frc1410.framework.PhaseDrivenRobot;
 
 public final class Robot extends PhaseDrivenRobot {
