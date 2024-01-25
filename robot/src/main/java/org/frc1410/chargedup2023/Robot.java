@@ -1,20 +1,21 @@
-package org.frc1410.crescendo2023;
+package org.frc1410.chargedup2023;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import org.frc1410.crescendo2023.commands.ClimbLooped;
-import org.frc1410.crescendo2023.subsystems.Climb;
-import org.frc1410.crescendo2023.util.NetworkTables;
+import org.frc1410.chargedup2023.commands.ClimbLooped;
+import org.frc1410.chargedup2023.subsystems.Climb;
+import org.frc1410.chargedup2023.util.NetworkTables;
 import org.frc1410.framework.PhaseDrivenRobot;
 import org.frc1410.framework.control.Controller;
 import org.frc1410.framework.scheduler.task.TaskPersistence;
 
-import static org.frc1410.crescendo2023.util.IDs.*;
+import static org.frc1410.chargedup2023.util.IDs.*;
 
 public final class Robot extends PhaseDrivenRobot {
+	Climb climb = new Climb();
 
 	Controller operatorController = new Controller(scheduler, OPERATOR_CONTROLLER, .1);
-	Climb climb = new Climb();
+
 	//<editor-fold desc="Controllers">
 	//</editor-fold>
 
@@ -74,11 +75,8 @@ public final class Robot extends PhaseDrivenRobot {
 
 	@Override
 	public void teleopSequence() {
-		scheduler.scheduleDefaultCommand(
-			new ClimbLooped(
-				climb,
-				operatorController.LEFT_Y_AXIS
-			), TaskPersistence.GAMEPLAY
+		operatorController.A.whileHeld(
+			new ClimbLooped(climb), TaskPersistence.GAMEPLAY
 		);
 	}
 
