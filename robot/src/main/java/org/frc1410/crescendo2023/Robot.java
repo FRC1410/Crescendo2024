@@ -80,6 +80,7 @@ public final class Robot extends PhaseDrivenRobot {
 		operatorController.RIGHT_BUMPER.whileHeld(
 			new RunIntakeLooped(
 				intake,
+prelim-mechanism
 				storage,
 				false
 			), TaskPersistence.GAMEPLAY
@@ -89,6 +90,10 @@ public final class Robot extends PhaseDrivenRobot {
 			new RunIntakeLooped(
 				intake,storage,
 				false
+=======
+				operatorController.LEFT_TRIGGER,
+				operatorController.RIGHT_TRIGGER
+ prelim-intake
 			), TaskPersistence.GAMEPLAY
 		);
 	}
