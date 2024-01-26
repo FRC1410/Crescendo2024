@@ -2,23 +2,19 @@ package org.frc1410.crescendo2023.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import org.frc1410.crescendo2023.subsystems.Intake;
-import org.frc1410.crescendo2023.subsystems.Storage;
 import org.frc1410.framework.control.Axis;
 import static org.frc1410.crescendo2023.util.Constants.*;
 
 
 public class RunIntakeLooped extends Command {
 	private final Intake intake;
-	 boolean isReversed;
-	 private final Storage storage;
+	private final Axis leftTrigger;
 
-	public RunIntakeLooped(Intake intake, Storage storage, boolean isReversed ) {
+	public RunIntakeLooped(Intake intake, Axis leftTrigger) {
 		this.intake = intake;
-		this.isReversed = isReversed;
-		this.storage = storage;
+		this.leftTrigger = leftTrigger;
 
-
-		addRequirements(intake,storage);
+		addRequirements(intake);
 	}
 
 
@@ -30,16 +26,9 @@ public class RunIntakeLooped extends Command {
 
 	@Override
 	public void execute() {
-		if(isReversed) {
-			intake.setSpeed(-INTAKE_SPEED);
-			storage.setSpeed(-STORAGE_SPEED);
-		}
-		if(!isReversed) {
+		if(leftTrigger.get() > 0.3) {
 			intake.setSpeed(INTAKE_SPEED);
-			storage.setSpeed(STORAGE_SPEED);
-
 		}
-
 	}
 
 
@@ -53,8 +42,6 @@ public class RunIntakeLooped extends Command {
 	@Override
 	public void end(boolean interrupted) {
 		intake.setSpeed(0);
-		storage.setSpeed(0);
-
 
 	}
 }

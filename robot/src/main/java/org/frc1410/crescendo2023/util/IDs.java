@@ -3,11 +3,6 @@ package org.frc1410.crescendo2023.util;
 public interface IDs {
 	int INTAKE_FRONT_MOTOR_ID = 9;
 	int INTAKE_BACK_MOTOR_ID = 10;
-	int STORAGE_FRONT_LEFT_MOTOR_ID = 2;
-	int STORAGE_FRONT_RIGHT_MOTOR_ID = 5;
-	int STORAGE_BACK_LEFT_MOTOR_ID = 1;
-	int STORAGE_BACK_RIGHT_MOTOR_ID = 0;
-	int INTAKE_LIMIT_SWITCH = 0;
 
 
 
