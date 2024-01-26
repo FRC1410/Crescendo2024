@@ -17,6 +17,7 @@ public class RunIntakeLooped extends Command {
 		this.isReversed = isReversed;
 		this.storage = storage;
 
+
 		addRequirements(intake,storage);
 	}
 
@@ -36,7 +37,9 @@ public class RunIntakeLooped extends Command {
 		if(!isReversed) {
 			intake.setSpeed(INTAKE_SPEED);
 			storage.setSpeed(STORAGE_SPEED);
+
 		}
+
 	}
 
 
@@ -51,6 +54,7 @@ public class RunIntakeLooped extends Command {
 	public void end(boolean interrupted) {
 		intake.setSpeed(0);
 		storage.setSpeed(0);
+
 
 	}
 }

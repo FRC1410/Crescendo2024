@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.CAN;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import static org.frc1410.crescendo2023.util.IDs.*;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -12,6 +13,8 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 public class Intake implements Subsystem {
 	private final CANSparkMax intakeMotorFront = new CANSparkMax(INTAKE_FRONT_MOTOR_ID, MotorType.kBrushless);
 	private final CANSparkMax intakeMotorBack = new CANSparkMax(INTAKE_BACK_MOTOR_ID, MotorType.kBrushless);
+	DigitalInput intakeLimitSwitch = new DigitalInput(INTAKE_LIMIT_SWITCH);
+
 	public Intake () {
 		intakeMotorFront.restoreFactoryDefaults();
 		intakeMotorBack.restoreFactoryDefaults();
@@ -22,7 +25,12 @@ public class Intake implements Subsystem {
 
 		intakeMotorFront.setIdleMode(CANSparkBase.IdleMode.kBrake);
 		intakeMotorBack.setIdleMode(CANSparkBase.IdleMode.kBrake);
+		if(intakeLimitSwitch.get()){
+			setSpeed(0);
+		}
 	}
+
+
 
 	public void setSpeed(double speed) {
 		intakeMotorFront.set(speed);

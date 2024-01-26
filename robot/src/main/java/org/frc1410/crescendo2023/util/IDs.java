@@ -7,6 +7,7 @@ public interface IDs {
 	int STORAGE_FRONT_RIGHT_MOTOR_ID = 5;
 	int STORAGE_BACK_LEFT_MOTOR_ID = 1;
 	int STORAGE_BACK_RIGHT_MOTOR_ID = 0;
+	int INTAKE_LIMIT_SWITCH = 0;
 
 
 
