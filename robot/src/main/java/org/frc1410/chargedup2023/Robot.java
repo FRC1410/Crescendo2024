@@ -2,12 +2,8 @@ package org.frc1410.chargedup2023;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import org.frc1410.chargedup2023.commands.RunIntakeLooped;
 import org.frc1410.chargedup2023.commands.RunShooterLooped;
-import org.frc1410.chargedup2023.commands.RunStorage;
-import org.frc1410.chargedup2023.subsystems.Intake;
 import org.frc1410.chargedup2023.subsystems.Shooter;
-import org.frc1410.chargedup2023.subsystems.Storage;
 import org.frc1410.chargedup2023.util.NetworkTables;
 import org.frc1410.framework.PhaseDrivenRobot;
 import org.frc1410.framework.control.Controller;
@@ -19,9 +15,7 @@ public final class Robot extends PhaseDrivenRobot {
 
 	private final Controller operatorController = new Controller(scheduler, OPERATOR_CONTROLLER,  0.1);
 
-	private final Shooter shooter = new Shooter();
-	private final Storage storage = new Storage();
-	private final Intake intake = new Intake();
+	private final Shooter shooter = subsystems.track(new Shooter());
 
 
 	//<editor-fold desc="Controllers">
@@ -90,34 +84,6 @@ public final class Robot extends PhaseDrivenRobot {
 				operatorController
 			),
 			TaskPersistence.GAMEPLAY
-		);
-
-		operatorController.LEFT_BUMPER.whileHeld(
-			new RunStorage(
-				storage,
-				false
-			), TaskPersistence.GAMEPLAY
-		);
-
-		operatorController.RIGHT_BUMPER.whileHeld(
-			new RunStorage(
-				storage,
-				true
-			), TaskPersistence.GAMEPLAY
-		);
-
-		operatorController.RIGHT_BUMPER.whileHeld(
-			new RunIntakeLooped(
-				intake,
-				false
-			), TaskPersistence.GAMEPLAY
-		);
-
-		operatorController.LEFT_BUMPER.whileHeld(
-			new RunIntakeLooped(
-				intake,
-				true
-			), TaskPersistence.GAMEPLAY
 		);
 	}
 

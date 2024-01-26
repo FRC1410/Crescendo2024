@@ -6,4 +6,5 @@ public interface Main {
   static void main(String[] args) {
 	  RobotBase.startRobot(Robot::new);
   }
+
 }

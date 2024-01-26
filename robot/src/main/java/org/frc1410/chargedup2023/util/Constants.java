@@ -6,6 +6,8 @@ public interface Constants {
 	double STORAGE_SPEED = .3;
 	double INTAKE_SPEED = 0.5;
 
+	double WHEEL_CIRCUMFERENCE_METERS = 1;
+	double DRIVING_GEAR_RATIO = 1;
 
 }
 

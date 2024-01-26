@@ -10,4 +10,9 @@ public interface IDs {
 	int SHOOTER_RIGHT_MOTOR_ID = 52;
 	int SHOOTER_LEFT_MOTOR_ID = 44;
 
+	int LIMIT_SWITCH_SHOOTER_ID = 0;
+
+	int BLINKIN_PORT = 0;
+
+
 }
