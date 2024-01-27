@@ -5,6 +5,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import org.frc1410.crescendo2024.util.NetworkTables;
 import org.frc1410.framework.PhaseDrivenRobot;
 
+import static org.frc1410.crescendo2024.util.Constants.*;
+
 public final class Robot extends PhaseDrivenRobot {
 
 	//<editor-fold desc="Controllers">
