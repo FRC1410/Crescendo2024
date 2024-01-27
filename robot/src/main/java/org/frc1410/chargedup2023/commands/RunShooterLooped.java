@@ -9,20 +9,21 @@ import org.frc1410.framework.control.Controller;
 public class RunShooterLooped extends Command {
 	private final Shooter shooter;
 	private final Controller operatorController;
-	private final Axis rightTrigger;
+
 
 
 	public RunShooterLooped(Shooter shooter, Controller OperatorController) {
 		this.shooter = shooter;
 		this.operatorController = OperatorController;
-		addRequirements();
-		rightTrigger = operatorController.RIGHT_TRIGGER;
+		addRequirements(shooter);
 	}
 	@Override
 	public void execute() {
-		shooter.setRPM(1);
-
+		if(operatorController.RIGHT_TRIGGER.get() > 1) {
+			shooter.setRPM(1);
+		}
 	}
+
 	@Override
 	public boolean isFinished() {return false;}
 	@Override

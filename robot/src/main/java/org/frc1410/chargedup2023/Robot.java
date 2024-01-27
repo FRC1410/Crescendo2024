@@ -14,7 +14,6 @@ import static org.frc1410.chargedup2023.util.Constants.*;
 public final class Robot extends PhaseDrivenRobot {
 
 	private final Controller operatorController = new Controller(scheduler, OPERATOR_CONTROLLER,  0.1);
-
 	private final Shooter shooter = subsystems.track(new Shooter());
 
 

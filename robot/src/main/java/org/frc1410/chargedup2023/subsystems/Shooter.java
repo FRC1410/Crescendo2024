@@ -26,18 +26,17 @@ public class Shooter implements TickedSubsystem {
 
 	private final NetworkTable table = NetworkTableInstance.getDefault().getTable("Shooter");
 
-	private final DoublePublisher LeftActualVel = NetworkTables.PublisherFactory(table, "Left Actual Vel", 0);
-	private final DoublePublisher RightActualVel = NetworkTables.PublisherFactory(table, "Right Actual Vel", 0);
+	private final DoublePublisher leftActualVel = NetworkTables.PublisherFactory(table, "Left Actual Vel", 0);
+	private final DoublePublisher rightActualVel = NetworkTables.PublisherFactory(table, "Right Actual Vel", 0);
 
 	private final CANSparkMax shooterMotorRight = new CANSparkMax(SHOOTER_RIGHT_MOTOR_ID, MotorType.kBrushless);
 	private final CANSparkMax shooterMotorLeft = new CANSparkMax(SHOOTER_LEFT_MOTOR_ID, MotorType.kBrushless);
+
 	private final SparkPIDController leftPIDController = shooterMotorLeft.getPIDController();
 	private final SparkPIDController rightPIDController = shooterMotorRight.getPIDController();
 
 	private final RelativeEncoder shooterLeftEncoder = shooterMotorLeft.getEncoder();
 	private final  RelativeEncoder shooterRightEncoder = shooterMotorRight.getEncoder();
-
-	DigitalInput limitSwitch = new DigitalInput(LIMIT_SWITCH_SHOOTER_ID);
 
 	public Shooter() {
 		shooterMotorLeft.restoreFactoryDefaults();
@@ -71,8 +70,8 @@ public class Shooter implements TickedSubsystem {
 
 	@Override
 	public void periodic() {
-		LeftActualVel.set(shooterLeftEncoder.getVelocity());
-		RightActualVel.set(shooterRightEncoder.getVelocity());
+		leftActualVel.set(shooterLeftEncoder.getVelocity());
+		rightActualVel.set(shooterRightEncoder.getVelocity());
 	}
 
 
