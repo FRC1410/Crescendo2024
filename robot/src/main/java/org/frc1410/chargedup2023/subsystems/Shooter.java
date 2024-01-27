@@ -38,13 +38,14 @@ public class Shooter implements TickedSubsystem {
 	private final RelativeEncoder shooterLeftEncoder = shooterMotorLeft.getEncoder();
 	private final  RelativeEncoder shooterRightEncoder = shooterMotorRight.getEncoder();
 
+	public double shooterSpeed;
+
 	public Shooter() {
 		shooterMotorLeft.restoreFactoryDefaults();
 		shooterMotorRight.restoreFactoryDefaults();
 
 		shooterMotorLeft.setIdleMode(CANSparkBase.IdleMode.kBrake);
 		shooterMotorRight.setIdleMode(CANSparkBase.IdleMode.kBrake);
-
 
 		shooterMotorLeft.setInverted(false);
 		shooterMotorRight.setInverted(true);
@@ -67,12 +68,9 @@ public class Shooter implements TickedSubsystem {
 		rightPIDController.setReference(Velocity, CANSparkBase.ControlType.kVelocity);
 	}
 
-
 	@Override
 	public void periodic() {
 		leftActualVel.set(shooterLeftEncoder.getVelocity());
 		rightActualVel.set(shooterRightEncoder.getVelocity());
 	}
-
-
 }

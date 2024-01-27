@@ -2,24 +2,19 @@ package org.frc1410.chargedup2023.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import org.frc1410.chargedup2023.subsystems.Shooter;
-import org.frc1410.framework.control.Axis;
-import org.frc1410.framework.control.Controller;
+import static  org.frc1410.chargedup2023.util.Constants.*;
 
 
-public class RunShooterLooped extends Command {
+public class ShooterManual extends Command {
 	private final Shooter shooter;
-	private final double poseRPM;
 
-	public RunShooterLooped(Shooter shooter, double poseRPM) {
+	public ShooterManual(Shooter shooter) {
 		this.shooter = shooter;
-		addRequirements(shooter);
-		this.poseRPM = poseRPM;
+		addRequirements(this.shooter);
 	}
 
 	@Override
-	public void execute() {
-		shooter.setRPM(poseRPM);
-	}
+	public void execute() {shooter.setRPM(shooter.shooterSpeed);}
 
 	@Override
 	public boolean isFinished() {return false;}
