@@ -18,8 +18,11 @@ public class LEDs implements Subsystem {
 	public enum Colors {
 		BLOOD_OF_ENEMY_DUE_TO_UNFORTUNATE_OCEAN_OIL_SPILL_TURNED_ARSON_FIRE_RED,
 		LIMELIGHT_GREEN,
-		OCEAN_BREEZE_BLUE,
-		RAINBOW_ANIMATION,
+		PINK,
+		FIRE_ANIMATION,
+		AUTO_PURPLE,
+		OCEAN_BREEZE_ANIMATION,
+		RAINBOW_ROAD_CRACKHEAD_CLIMBING_TRADEMARK_RAINBOW_ANIMATION,
 	}
 
 
@@ -32,20 +35,13 @@ public class LEDs implements Subsystem {
 		LEDs.configLOSBehavior(true);
 		LEDs.configAllSettings(config);
 
-		LEDs.clearAnimation()
 		LEDs.setLEDs(DEFAULT_LED_COLOR_RGB[0], DEFAULT_LED_COLOR_RGB[1], DEFAULT_LED_COLOR_RGB[2]);
 	}
 
 	public void changeLEDsColor(Colors Color) {
 		switch (Color) {
-			case BLOOD_OF_ENEMY_DUE_TO_UNFORTUNATE_OCEAN_OIL_SPILL_TURNED_ARSON_FIRE_RED ->
-				LEDs.setLEDs(255, 0 ,0);
-			case LIMELIGHT_GREEN ->
-				LEDs.setLEDs(0, 255, 0);
-			case OCEAN_BREEZE_BLUE ->
-				LEDs.setLEDs(0, 0, 255);
-			case RAINBOW_ANIMATION ->
-				LEDs.animate(new RainbowAnimation(LED_BRIGHTNESS, LED_ANIMATION_SPEED, NUM_LEDS));
+			case BLOOD_OF_ENEMY_DUE_TO_UNFORTUNATE_OCEAN_OIL_SPILL_TURNED_ARSON_FIRE_RED -> LEDs.setLEDs(255, 0, 0);
+			case LIMELIGHT_GREEN -> LEDs.setLEDs(0, 255, 0);
 		}
 	}
 
