@@ -47,6 +47,7 @@ public class LEDs implements Subsystem {
 			case AMP_ARM_FIRE_ANIMATION -> LEDs.animate(new FireAnimation());
 			case CLIMBING_RAINBOW_ANIMATION -> LEDs.animate(new RainbowAnimation());
 			case IDLE_OCEAN_BREEZE_ANIMATION -> LEDs.animate(new ColorFlowAnimation(30, 100, 250));
+			default -> LEDs.animate(new ColorFlowAnimation(30,100,250));
 		}
 	}
 
