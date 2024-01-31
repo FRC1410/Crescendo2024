@@ -1,4 +1,4 @@
-package org.frc1410.chargedup2023.commands;
+package org.frc1410.chargedup2023.commands.Shooter;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj2.command.Command;

@@ -28,7 +28,8 @@ public class Shooter implements TickedSubsystem {
 
 	private final DoublePublisher leftActualVel = NetworkTables.PublisherFactory(table, "Left Actual Vel", 0);
 	private final DoublePublisher rightActualVel = NetworkTables.PublisherFactory(table, "Right Actual Vel", 0);
-
+	private final DoublePublisher manualShootTargetLeftRPM = NetworkTables.PublisherFactory(table, "Manual Shoot Left Target RPM", 0);
+	private final DoublePublisher manualShootTargetRightRPM = NetworkTables.PublisherFactory(table, "Manual Shoot Right Target RPM", 0);
 	private final CANSparkMax shooterMotorRight = new CANSparkMax(SHOOTER_RIGHT_MOTOR_ID, MotorType.kBrushless);
 	private final CANSparkMax shooterMotorLeft = new CANSparkMax(SHOOTER_LEFT_MOTOR_ID, MotorType.kBrushless);
 
@@ -61,8 +62,6 @@ public class Shooter implements TickedSubsystem {
 		this.rightPIDController.setFF(SHOOTER_RIGHT_KFF);
 	}
 
-
-
 	public void setRPM(double Velocity) {
 		leftPIDController.setReference(Velocity, CANSparkBase.ControlType.kVelocity);
 		rightPIDController.setReference(Velocity, CANSparkBase.ControlType.kVelocity);
@@ -72,5 +71,8 @@ public class Shooter implements TickedSubsystem {
 	public void periodic() {
 		leftActualVel.set(shooterLeftEncoder.getVelocity());
 		rightActualVel.set(shooterRightEncoder.getVelocity());
+
+		manualShootTargetLeftRPM.set(shooterSpeed);
+		manualShootTargetRightRPM.set(shooterSpeed);
 	}
 }

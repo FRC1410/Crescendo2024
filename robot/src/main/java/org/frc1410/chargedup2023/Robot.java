@@ -2,9 +2,8 @@ package org.frc1410.chargedup2023;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import org.frc1410.chargedup2023.commands.IncrementShooterRPM;
-import org.frc1410.chargedup2023.commands.RunShooterLooped;
-import org.frc1410.chargedup2023.commands.ShooterManual;
+import org.frc1410.chargedup2023.commands.Shooter.IncrementShooterRPM;
+import org.frc1410.chargedup2023.commands.Shooter.ShooterManual;
 import org.frc1410.chargedup2023.subsystems.Shooter;
 import org.frc1410.chargedup2023.util.NetworkTables;
 import org.frc1410.framework.PhaseDrivenRobot;
