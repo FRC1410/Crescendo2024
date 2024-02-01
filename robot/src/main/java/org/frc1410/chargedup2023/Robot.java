@@ -2,8 +2,10 @@ package org.frc1410.chargedup2023;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import org.frc1410.chargedup2023.commands.ScoreAmp;
 import org.frc1410.chargedup2023.commands.Shooter.IncrementShooterRPM;
 import org.frc1410.chargedup2023.commands.Shooter.ShooterManual;
+import org.frc1410.chargedup2023.subsystems.AmpBar;
 import org.frc1410.chargedup2023.subsystems.Shooter;
 import org.frc1410.chargedup2023.util.NetworkTables;
 import org.frc1410.framework.PhaseDrivenRobot;
@@ -15,9 +17,11 @@ import static org.frc1410.chargedup2023.util.Constants.*;
 
 public final class Robot extends PhaseDrivenRobot {
 
+
 	private final Controller driverController = new Controller(scheduler, DRIVER_CONTROLLER, 0.1 );
 	private final Controller operatorController = new Controller(scheduler, OPERATOR_CONTROLLER,  0.1);
 	private final Shooter shooter = subsystems.track(new Shooter());
+	private final AmpBar ampBar = subsystems.track(new AmpBar());
 
 
 	//<editor-fold desc="Controllers">
@@ -79,11 +83,12 @@ public final class Robot extends PhaseDrivenRobot {
 
 	@Override
 	public void teleopSequence() {
-		driverController.RIGHT_BUMPER.whileHeld(
-			new ShooterManual(shooter), TaskPersistence.GAMEPLAY
-		);
+		driverController.LEFT_TRIGGER.button().whileHeld(new ScoreAmp(shooter), TaskPersistence.GAMEPLAY);
+		driverController.RIGHT_BUMPER.whileHeld(new ShooterManual(shooter), TaskPersistence.GAMEPLAY);
 		operatorController.A.whenPressed(new IncrementShooterRPM(shooter, SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);
 		operatorController.B.whenPressed(new IncrementShooterRPM(shooter, -SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);
+		//Operator Dpad down for amp back
+		//Operator Dpad Up for amp forward
 	}
 
 	@Override

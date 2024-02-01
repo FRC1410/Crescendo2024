@@ -12,6 +12,10 @@ public interface Constants {
 
 	double SHOOTER_RPM_INCREMENT = 0;
 
+	int AMP_HOME_POS = 0;
+
+	double AMP_SHOOT_SPEED = 0;
+
 
 }
 

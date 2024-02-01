@@ -16,4 +16,10 @@ public interface Tuning {
 	double SHOOTER_RIGHT_KD = 0;
 	double SHOOTER_RIGHT_KFF = 1;
 
+	double AMP_KP = 0;
+	double AMP_KI = 0;
+	double AMP_KD = 0;
+	double AMP_TOLERANCE = 0;
+
+
 }
