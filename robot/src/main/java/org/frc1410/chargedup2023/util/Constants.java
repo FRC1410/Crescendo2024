@@ -17,6 +17,7 @@ public interface Constants {
 	double AMP_SHOOT_SPEED = 0;
 
 
+    int OPERATOR_CONTROLLER = 1;
 }
 
 
