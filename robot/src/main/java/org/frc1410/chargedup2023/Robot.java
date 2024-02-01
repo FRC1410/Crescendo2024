@@ -2,6 +2,7 @@ package org.frc1410.chargedup2023;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DigitalInput;
 import org.frc1410.chargedup2023.commands.RunIntakeLooped;
 import org.frc1410.chargedup2023.commands.RunShooterLooped;
 import org.frc1410.chargedup2023.subsystems.Intake;
