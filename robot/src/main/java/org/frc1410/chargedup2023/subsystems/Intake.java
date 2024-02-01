@@ -17,7 +17,7 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 public class Intake implements Subsystem {
 	private final CANSparkMax intakeMotorFront = new CANSparkMax(INTAKE_FRONT_MOTOR_ID, MotorType.kBrushless);
 	private final CANSparkMax intakeMotorBack = new CANSparkMax(INTAKE_BACK_MOTOR_ID, MotorType.kBrushless);
-	DigitalInput intakeLimitSwitch = new DigitalInput(INTAKE_LIMIT_SWITCH_ID);
+	DigitalInput intakeLimitSwitch = new DigitalInput(STORAGE_LOWER_LIMIT_SWITCH_ID);
 
 
 	public Intake () {

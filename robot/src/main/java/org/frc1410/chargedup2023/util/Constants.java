@@ -13,6 +13,7 @@ public interface Constants {
 	double SHOOTER_RPM_INCREMENT = 0;
 
 
+    int OPERATOR_CONTROLLER = 1;
 }
 
 
