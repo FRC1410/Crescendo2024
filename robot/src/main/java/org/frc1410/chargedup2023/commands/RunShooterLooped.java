@@ -8,24 +8,22 @@ import org.frc1410.framework.control.Controller;
 
 public class RunShooterLooped extends Command {
 	private final Shooter shooter;
-	private final Controller operatorController;
+	private final double poseRPM;
 
-
-
-	public RunShooterLooped(Shooter shooter, Controller OperatorController) {
+	public RunShooterLooped(Shooter shooter, double poseRPM) {
 		this.shooter = shooter;
-		this.operatorController = OperatorController;
 		addRequirements(shooter);
+		this.poseRPM = poseRPM;
 	}
+
 	@Override
 	public void execute() {
-		if(operatorController.RIGHT_TRIGGER.get() > 1) {
-			shooter.setRPM(1);
-		}
+		shooter.setRPM(poseRPM);
 	}
 
 	@Override
 	public boolean isFinished() {return false;}
+
 	@Override
 	public void end(boolean interrupted) {shooter.setRPM(0);}
 }
