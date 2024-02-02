@@ -15,12 +15,10 @@ public class RunIntakeLooped extends Command {
 	private final Storage storage;
 	double intakeSpeed;
 	double storageSpeed;
-	int isReversed;
 
-	public RunIntakeLooped(Intake intake, Storage storage, double intakeSpeed, double storageSpeed, int isReveresed) {
+	public RunIntakeLooped(Intake intake, Storage storage, double intakeSpeed, double storageSpeed) {
 		this.intake = intake;
 		this.storage = storage;
-		this.isReversed = isReveresed;
 		this.intakeSpeed = intakeSpeed;
 		this.storageSpeed = storageSpeed;
 		addRequirements( intake, storage);
@@ -28,8 +26,8 @@ public class RunIntakeLooped extends Command {
 
 	@Override
 	public void execute() {
-		intake.setSpeed(intakeSpeed * isReversed);
-		storage.setSpeed(storageSpeed * isReversed);
+		intake.setSpeed(intakeSpeed);
+		storage.setSpeed(storageSpeed);
 	}
 
 	@Override

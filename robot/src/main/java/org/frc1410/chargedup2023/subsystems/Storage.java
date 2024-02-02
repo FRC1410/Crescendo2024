@@ -14,8 +14,6 @@ public class Storage implements Subsystem {
 	private final CANSparkMax storageFrontLeft = new CANSparkMax(SHOOTER_LEFT_MOTOR_ID, MotorType.kBrushless);
 	private final CANSparkMax storageFrontRight = new CANSparkMax(SHOOTER_RIGHT_MOTOR_ID, MotorType.kBrushless);
 
-
-
 	public Storage() {
 		storageFrontLeft.setInverted(true);
 		storageFrontRight.setInverted(false);
@@ -23,8 +21,6 @@ public class Storage implements Subsystem {
 		storageFrontLeft.restoreFactoryDefaults();
 		storageFrontRight.restoreFactoryDefaults();
 	}
-
-
 
 	public void setSpeed(double speed) {
 		storageFrontLeft.set(speed);

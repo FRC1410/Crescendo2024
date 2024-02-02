@@ -71,7 +71,6 @@ public class Shooter implements TickedSubsystem {
 		return shooterSpeed;
 	}
 
-
 	@Override
 	public void periodic() {
 		leftActualVel.set(shooterLeftEncoder.getVelocity());
