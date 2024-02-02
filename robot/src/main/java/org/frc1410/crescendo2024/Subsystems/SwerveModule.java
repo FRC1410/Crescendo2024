@@ -33,7 +33,7 @@ public class SwerveModule implements TickedSubsystem {
 	private final SparkPIDController drivePIDController;
 
 	// radians
-	private final PIDController turningPIDController = new PIDController(
+	private final PIDController steeringPIDController = new PIDController(
 		SWERVE_STEERING_KP,
 		SWERVE_STEERING_KI,
 		SWERVE_STEERING_KD
@@ -86,26 +86,13 @@ public class SwerveModule implements TickedSubsystem {
 		config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
 		configurator.apply(config);
 
-		this.turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
+		this.steeringPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
 		this.desiredVel = desiredVel;
 		this.desiredAngle = desiredAngle;
 
 		this.actualVel = actualVel;
 		this.actualAngle = actualAngle;
-	}
-
-	@Override
-	public void periodic() {
-		double steerPIDOutput = this.turningPIDController.calculate(this.getSteerPosition().getRadians(), MathUtil.angleModulus(this.desiredState.angle.getRadians()));
-
-		this.steerMotor.setVoltage(steerPIDOutput);
-
-		this.desiredVel.set(this.desiredState.speedMetersPerSecond);
-		this.actualVel.set(this.getDriveVelocityMetersPerSecond());
-		
-		this.desiredAngle.set(this.desiredState.angle.getDegrees());
-		this.actualAngle.set(this.getSteerPosition().getDegrees());
 	}
 
 	public void setDesiredState(SwerveModuleState desiredState) {
@@ -127,6 +114,19 @@ public class SwerveModule implements TickedSubsystem {
 		return new SwerveModulePosition(
 			this.getDrivePositionMeters(), this.getSteerPosition()
 		);
+	}
+
+	@Override
+	public void periodic() {
+		double steerPIDOutput = this.steeringPIDController.calculate(this.getSteerPosition().getRadians(), MathUtil.angleModulus(this.desiredState.angle.getRadians()));
+
+		this.steerMotor.setVoltage(steerPIDOutput);
+
+		this.desiredVel.set(this.desiredState.speedMetersPerSecond);
+		this.actualVel.set(this.getDriveVelocityMetersPerSecond());
+		
+		this.desiredAngle.set(this.desiredState.angle.getDegrees());
+		this.actualAngle.set(this.getSteerPosition().getDegrees());
 	}
 
 	private Rotation2d getSteerPosition() {

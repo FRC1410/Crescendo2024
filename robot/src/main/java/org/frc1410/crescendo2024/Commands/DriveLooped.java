@@ -2,6 +2,10 @@ package org.frc1410.crescendo2024.Commands;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
+
+import static org.frc1410.crescendo2024.util.Constants.SWERVE_DRIVE_MAX_ANGULAR_VELOCITY;
+import static org.frc1410.crescendo2024.util.Constants.SWERVE_DRIVE_MAX_SPEED;
+
 import org.frc1410.crescendo2024.Subsystems.Drivetrain;
 import org.frc1410.framework.control.Axis;
 
@@ -28,9 +32,9 @@ public class DriveLooped extends Command {
 
 	@Override
 	public void execute() {
-		var xVelocity = xAxis.get() * 4;
-		var yVelocity = yAxis.get() * 4;
-		var rotation = rotationAxis.get() * 4;
+		var xVelocity = xAxis.get() * SWERVE_DRIVE_MAX_SPEED;
+		var yVelocity = yAxis.get() * SWERVE_DRIVE_MAX_SPEED;
+		var rotation = rotationAxis.get() * SWERVE_DRIVE_MAX_ANGULAR_VELOCITY;
 		drivetrain.driveFieldRelative(new ChassisSpeeds(xVelocity, yVelocity, rotation));
 	}
 
