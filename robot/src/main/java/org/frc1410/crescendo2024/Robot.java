@@ -4,6 +4,8 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import org.frc1410.framework.PhaseDrivenRobot;
 
+import static org.frc1410.crescendo2024.util.Constants.*;
+
 public final class Robot extends PhaseDrivenRobot {
 
 	private final NetworkTableInstance nt = NetworkTableInstance.getDefault();
