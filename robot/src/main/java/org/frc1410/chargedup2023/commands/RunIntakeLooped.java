@@ -10,34 +10,27 @@ import static org.frc1410.chargedup2023.util.Constants.*;
 
 
 public class RunIntakeLooped extends Command {
+
 	private final Intake intake;
 	private final Storage storage;
-	boolean isReversed;
+	double intakeSpeed;
+	double storageSpeed;
+	int isReversed;
 
-
-	public RunIntakeLooped(Intake intake, Storage storage, boolean isReveresed) {
+	public RunIntakeLooped(Intake intake, Storage storage, double intakeSpeed, double storageSpeed, int isReveresed) {
 		this.intake = intake;
 		this.storage = storage;
 		this.isReversed = isReveresed;
+		this.intakeSpeed = intakeSpeed;
+		this.storageSpeed = storageSpeed;
 		addRequirements( intake, storage);
 	}
 
-
-	@Override
-	public void initialize() {
-
-
-	}
-
-
 	@Override
 	public void execute() {
-		if (isReversed) {
-			intake.setSpeed(INTAKE_SPEED);
-			storage.setSpeed(STORAGE_SPEED);
-		}
+		intake.setSpeed(intakeSpeed * isReversed);
+		storage.setSpeed(storageSpeed * isReversed);
 	}
-
 
 	@Override
 	public boolean isFinished() {

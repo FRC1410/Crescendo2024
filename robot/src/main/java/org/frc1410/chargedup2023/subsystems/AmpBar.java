@@ -42,6 +42,8 @@ public class AmpBar implements TickedSubsystem {
 
 	public void setDesiredPosition(int DesiredPos) {ampEncoder.setPosition(DesiredPos);}
 
+	public void setSpeed(double speed) {ampBarMotor.set(speed);}
+
 	@Override
 	public void periodic() {
 		ampEncoderPosition.set(getPosition());

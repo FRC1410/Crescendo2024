@@ -2,11 +2,15 @@ package org.frc1410.chargedup2023;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import org.frc1410.chargedup2023.commands.RunIntakeLooped;
 import org.frc1410.chargedup2023.commands.ScoreAmp;
 import org.frc1410.chargedup2023.commands.Shooter.IncrementShooterRPM;
 import org.frc1410.chargedup2023.commands.Shooter.ShooterManual;
 import org.frc1410.chargedup2023.subsystems.AmpBar;
+import org.frc1410.chargedup2023.subsystems.Intake;
 import org.frc1410.chargedup2023.subsystems.Shooter;
+import org.frc1410.chargedup2023.subsystems.Storage;
+import org.frc1410.chargedup2023.util.IDs;
 import org.frc1410.chargedup2023.util.NetworkTables;
 import org.frc1410.framework.PhaseDrivenRobot;
 import org.frc1410.framework.control.Controller;
@@ -22,7 +26,8 @@ public final class Robot extends PhaseDrivenRobot {
 	private final Controller operatorController = new Controller(scheduler, OPERATOR_CONTROLLER,  0.1);
 	private final Shooter shooter = subsystems.track(new Shooter());
 	private final AmpBar ampBar = subsystems.track(new AmpBar());
-
+	private final Storage storage = new Storage();
+	private final Intake intake = new Intake();
 
 	//<editor-fold desc="Controllers">
 	//</editor-fold>
@@ -83,10 +88,15 @@ public final class Robot extends PhaseDrivenRobot {
 
 	@Override
 	public void teleopSequence() {
-		driverController.LEFT_TRIGGER.button().whileHeld(new ScoreAmp(shooter), TaskPersistence.GAMEPLAY);
+		driverController.LEFT_TRIGGER.button().whileHeld(new ScoreAmp(shooter, storage), TaskPersistence.GAMEPLAY);
 		driverController.RIGHT_BUMPER.whileHeld(new ShooterManual(shooter), TaskPersistence.GAMEPLAY);
 		operatorController.A.whenPressed(new IncrementShooterRPM(shooter, SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);
 		operatorController.B.whenPressed(new IncrementShooterRPM(shooter, -SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);
+
+		operatorController.RIGHT_TRIGGER.button().whileHeld(new RunIntakeLooped(intake, storage, INTAKE_SPEED, STORAGE_SPEED, 1), TaskPersistence.GAMEPLAY);
+		operatorController.LEFT_TRIGGER.button().whileHeld(new RunIntakeLooped(intake, storage, OUTTAKE_SPEED, STORAGE_OUTTAKE_SPEED, -1), TaskPersistence.GAMEPLAY);
+
+
 		//Operator Dpad down for amp back
 		//Operator Dpad Up for amp forward
 	}

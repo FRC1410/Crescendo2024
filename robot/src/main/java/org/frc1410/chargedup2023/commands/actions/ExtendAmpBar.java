@@ -1,4 +1,4 @@
-package org.frc1410.chargedup2023.commands;
+package org.frc1410.chargedup2023.commands.actions;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -22,7 +22,6 @@ public class ExtendAmpBar extends Command {
 		this.pos = pos;
 		addRequirements(ampBar);
 	}
-
 
 	@Override
 	public void initialize() {

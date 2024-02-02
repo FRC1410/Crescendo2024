@@ -2,6 +2,8 @@ package org.frc1410.chargedup2023.subsystems;
 
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
@@ -9,20 +11,17 @@ import static org.frc1410.chargedup2023.util.IDs.*;
 
 
 public class Storage implements Subsystem {
-	private final WPI_TalonSRX storageFrontLeft = new WPI_TalonSRX(STORAGE_FRONT_LEFT_MOTOR_ID);
-	private final WPI_TalonSRX storageFrontRight = new WPI_TalonSRX(STORAGE_FRONT_RIGHT_MOTOR_ID);
-	private final  WPI_TalonSRX storageBackLeft = new WPI_TalonSRX(STORAGE_BACK_LEFT_MOTOR_ID);
-	private final WPI_TalonSRX storageBackRight = new WPI_TalonSRX(STORAGE_BACK_RIGHT_MOTOR_ID);
-	DigitalInput firstStorageLimitSwitch = new DigitalInput(STORAGE_UPPER_LIMIT_SWITCH_ID);
-	DigitalInput intakeLimitSwitch = new DigitalInput(STORAGE_LOWER_LIMIT_SWITCH_ID);
+	private final CANSparkMax storageFrontLeft = new CANSparkMax(SHOOTER_LEFT_MOTOR_ID, MotorType.kBrushless);
+	private final CANSparkMax storageFrontRight = new CANSparkMax(SHOOTER_RIGHT_MOTOR_ID, MotorType.kBrushless);
+
 
 
 	public Storage() {
 		storageFrontLeft.setInverted(true);
 		storageFrontRight.setInverted(false);
-		storageBackLeft.setInverted(true);
-		storageBackRight.setInverted(false);
 
+		storageFrontLeft.restoreFactoryDefaults();
+		storageFrontRight.restoreFactoryDefaults();
 	}
 
 
@@ -30,16 +29,10 @@ public class Storage implements Subsystem {
 	public void setSpeed(double speed) {
 		storageFrontLeft.set(speed);
 		storageFrontRight.set(speed);
-		storageBackLeft.set(speed);
-		storageBackRight.set(speed);
+
 	}
 
 
-	public boolean getLimitSwitch() {
-		return intakeLimitSwitch.get();
-	}
-	public boolean getStorageSwitch() {
-		return firstStorageLimitSwitch.get();
-	}
+
 }
 

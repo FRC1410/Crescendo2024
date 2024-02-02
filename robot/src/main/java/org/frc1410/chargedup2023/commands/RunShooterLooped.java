@@ -1,5 +1,6 @@
 package org.frc1410.chargedup2023.commands;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import org.frc1410.chargedup2023.subsystems.Shooter;
 import org.frc1410.framework.control.Axis;
@@ -19,6 +20,7 @@ public class RunShooterLooped extends Command {
 	@Override
 	public void execute() {
 		shooter.setRPM(poseRPM);
+
 	}
 
 	@Override
