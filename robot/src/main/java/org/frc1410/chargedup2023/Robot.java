@@ -12,9 +12,9 @@ import org.frc1410.framework.scheduler.task.TaskPersistence;
 import static org.frc1410.chargedup2023.util.IDs.*;
 
 public final class Robot extends PhaseDrivenRobot {
-	Climb climb = new Climb();
+	private final Climb climb = new Climb();
 
-	Controller operatorController = new Controller(scheduler, OPERATOR_CONTROLLER, .1);
+	private final Controller operatorController = new Controller(scheduler, OPERATOR_CONTROLLER, .1);
 
 	//<editor-fold desc="Controllers">
 	//</editor-fold>
