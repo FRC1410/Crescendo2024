@@ -130,6 +130,11 @@ public class Drivetrain implements TickedSubsystem {
         this.backRight.setDesiredState(swerveModuleStates[3]);
     }
 
+    public void driveFieldRelative(ChassisSpeeds chassisSpeeds) {
+        var robotRelativeChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, this.gyro.getRotation2d());
+        this.drive(robotRelativeChassisSpeeds);
+    }
+
     public ChassisSpeeds getChassisSpeeds() {
         return SWERVE_DRIVE_KINEMATICS.toChassisSpeeds(
         	this.frontLeft.getState(),
