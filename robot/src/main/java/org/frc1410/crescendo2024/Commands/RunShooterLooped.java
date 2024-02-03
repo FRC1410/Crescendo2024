@@ -1,7 +1,8 @@
-package org.frc1410.chargedup2023.commands;
+package org.frc1410.crescendo2024.commands;
+
+import org.frc1410.crescendo2024.subsystems.Shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import org.frc1410.chargedup2023.subsystems.Shooter;
 
 public class RunShooterLooped extends Command {
 	private final Shooter shooter;

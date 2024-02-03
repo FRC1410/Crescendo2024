@@ -1,10 +1,11 @@
-package org.frc1410.chargedup2023.commands;
+package org.frc1410.crescendo2024.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import org.frc1410.chargedup2023.subsystems.Shooter;
-import org.frc1410.chargedup2023.subsystems.Storage;
 
-import static  org.frc1410.chargedup2023.util.Constants.*;
+import static org.frc1410.crescendo2024.util.Constants.*;
+
+import org.frc1410.crescendo2024.subsystems.Shooter;
+import org.frc1410.crescendo2024.subsystems.Storage;
 
 public class ScoreAmp extends Command {
 

@@ -1,11 +1,11 @@
-package org.frc1410.chargedup2023.subsystems;
+package org.frc1410.crescendo2024.subsystems;
 
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
-import static org.frc1410.chargedup2023.util.IDs.*;
-import static org.frc1410.chargedup2023.util.Constants.*;
+import static org.frc1410.crescendo2024.util.IDs.*;
+import static org.frc1410.crescendo2024.util.Constants.*;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 public class Intake implements Subsystem {

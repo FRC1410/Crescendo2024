@@ -1,4 +1,4 @@
-package org.frc1410.crescendo2024.Commands;
+package org.frc1410.crescendo2024.commands;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import static org.frc1410.crescendo2024.util.Constants.SWERVE_DRIVE_MAX_ANGULAR_VELOCITY;
 import static org.frc1410.crescendo2024.util.Constants.SWERVE_DRIVE_MAX_SPEED;
 
-import org.frc1410.crescendo2024.Subsystems.Drivetrain;
+import org.frc1410.crescendo2024.subsystems.Drivetrain;
 import org.frc1410.framework.control.Axis;
 
 public class DriveLooped extends Command {

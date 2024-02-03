@@ -1,4 +1,4 @@
-package org.frc1410.chargedup2023.subsystems;
+package org.frc1410.crescendo2024.subsystems;
 
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -9,12 +9,12 @@ import com.revrobotics.SparkPIDController;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import org.frc1410.chargedup2023.util.NetworkTables;
+import org.frc1410.crescendo2024.util.NetworkTables;
 import org.frc1410.framework.scheduler.subsystem.TickedSubsystem;
 
-import static org.frc1410.chargedup2023.util.IDs.*;
-import static org.frc1410.chargedup2023.util.Tuning.*;
-import static org.frc1410.chargedup2023.util.Constants.*;
+import static org.frc1410.crescendo2024.util.IDs.*;
+import static org.frc1410.crescendo2024.util.Tuning.*;
+import static org.frc1410.crescendo2024.util.Constants.*;
 
 
 public class Shooter implements TickedSubsystem {

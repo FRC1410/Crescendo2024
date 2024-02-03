@@ -1,8 +1,10 @@
-package org.frc1410.chargedup2023.commands.Shooter;
+package org.frc1410.crescendo2024.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import org.frc1410.chargedup2023.subsystems.Shooter;
-import static  org.frc1410.chargedup2023.util.Constants.*;
+
+import static  org.frc1410.crescendo2024.util.Constants.*;
+
+import org.frc1410.crescendo2024.subsystems.Shooter;
 
 
 public class ShooterManual extends Command {

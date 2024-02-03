@@ -1,4 +1,4 @@
-package org.frc1410.crescendo2024.Subsystems;
+package org.frc1410.crescendo2024.subsystems;
 
 import com.ctre.phoenix.led.*;
 import edu.wpi.first.wpilibj2.command.Subsystem;
