@@ -4,6 +4,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -44,6 +45,10 @@ public class Drivetrain implements TickedSubsystem {
     private final DoublePublisher frontRightActualAngle = NetworkTables.PublisherFactory(this.table, "frontRight Actual angle", 0);
     private final DoublePublisher backLeftActualAngle = NetworkTables.PublisherFactory(this.table, "backLeft Actual angle", 0);
     private final DoublePublisher backRightActualAngle = NetworkTables.PublisherFactory(this.table, "backRight Actual angle", 0);
+
+    private final DoublePublisher yaw = NetworkTables.PublisherFactory(this.table, "yaw", 0);
+    private final DoublePublisher pitch = NetworkTables.PublisherFactory(this.table, "pitch", 0);
+    private final DoublePublisher roll = NetworkTables.PublisherFactory(this.table, "roll", 0);
 
     // Subsystems
     private final SwerveModule frontLeft;
@@ -111,7 +116,7 @@ public class Drivetrain implements TickedSubsystem {
 
         this.poseEstimator = new SwerveDrivePoseEstimator(
             SWERVE_DRIVE_KINEMATICS,
-            this.gyro.getRotation2d(),
+            this.getAngle().toRotation2d(),
             this.getSwerveModulePositions(),
             new Pose2d()
         );
@@ -131,7 +136,7 @@ public class Drivetrain implements TickedSubsystem {
     }
 
     public void driveFieldRelative(ChassisSpeeds chassisSpeeds) {
-        var robotRelativeChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, this.gyro.getRotation2d());
+        var robotRelativeChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, this.getAngle().toRotation2d());
         this.drive(robotRelativeChassisSpeeds);
     }
 
@@ -150,7 +155,7 @@ public class Drivetrain implements TickedSubsystem {
 
     public void resetPose(Pose2d pose) {
         this.poseEstimator.resetPosition(
-            this.gyro.getRotation2d(),
+            this.getAngle().toRotation2d(),
             this.getSwerveModulePositions(),
             pose
         );
@@ -158,15 +163,26 @@ public class Drivetrain implements TickedSubsystem {
 
     public void zeroYaw() {
         this.gyro.zeroYaw();
-		this.resetPose(new Pose2d(this.getEstimatedPosition().getTranslation(), this.gyro.getRotation2d()));
+		this.resetPose(new Pose2d(this.getEstimatedPosition().getTranslation(), this.getAngle().toRotation2d()));
     }
 
     @Override
     public void periodic() {
         this.poseEstimator.update(
-            this.gyro.getRotation2d(),
+            this.getAngle().toRotation2d(),
             this.getSwerveModulePositions()
         );
+
+        // var w = 60;
+        // var x
+
+        // // angle = 60
+
+
+
+        this.yaw.set(this.gyro.getYaw());
+        this.roll.set(this.gyro.getRoll());
+        this.pitch.set(this.gyro.getPitch());
     }
 
     private SwerveModulePosition[] getSwerveModulePositions() {
@@ -176,5 +192,9 @@ public class Drivetrain implements TickedSubsystem {
             this.backLeft.getPosition(),
             this.backRight.getPosition()
         };
+    }
+
+    private Rotation3d getAngle() {
+        return gyro.getRotation3d().rotateBy(NAVX_ANGLE);
     }
 }

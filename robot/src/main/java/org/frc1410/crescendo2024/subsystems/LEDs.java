@@ -1,6 +1,4 @@
-package org.frc1410.crescendo2024.subsystems;
-
-
+package org.frc1410.crescendo2024.Subsystems;
 
 import com.ctre.phoenix.led.*;
 import edu.wpi.first.wpilibj2.command.Subsystem;
@@ -31,7 +29,8 @@ public class LEDs implements Subsystem {
 		leds.configLOSBehavior(true);
 		leds.configAllSettings(config);
 
-		defaultLEDsState();
+		// defaultLEDsState();
+		changeLEDsColor(Colors.NO_APRIL_TAG_SHOOTING_RED);
 	}
 
 

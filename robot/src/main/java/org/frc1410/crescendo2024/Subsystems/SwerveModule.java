@@ -81,8 +81,9 @@ public class SwerveModule implements TickedSubsystem {
 
 		this.steerEncoder = new CANcoder(steeringEncoderID);
 		var configurator = this.steerEncoder.getConfigurator();
+
 		var config = new CANcoderConfiguration();
-		config.MagnetSensor.MagnetOffset = offset;
+		config.MagnetSensor.MagnetOffset = -Rotation2d.fromRadians(offset).getRotations();
 		config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
 		configurator.apply(config);
 
@@ -97,13 +98,15 @@ public class SwerveModule implements TickedSubsystem {
 
 	public void setDesiredState(SwerveModuleState desiredState) {
 		SwerveModuleState optimized = SwerveModuleState.optimize(
-			this.desiredState, 
+			desiredState, 
 			this.getSteerPosition()
 		);
 
 		this.desiredState = optimized;
-
-		this.drivePIDController.setReference(SwerveModule.metersPerSecondToEncoderRPM(optimized.speedMetersPerSecond), CANSparkMax.ControlType.kVelocity);
+		// System.out.println(optimized);
+		var a = SwerveModule.metersPerSecondToEncoderRPM(optimized.speedMetersPerSecond);
+		// System.out.println("aaa" + a);
+		this.drivePIDController.setReference(a, CANSparkMax.ControlType.kVelocity);
 	}
 
 	public SwerveModuleState getState() {
@@ -125,12 +128,15 @@ public class SwerveModule implements TickedSubsystem {
 		this.desiredVel.set(this.desiredState.speedMetersPerSecond);
 		this.actualVel.set(this.getDriveVelocityMetersPerSecond());
 		
-		this.desiredAngle.set(this.desiredState.angle.getDegrees());
-		this.actualAngle.set(this.getSteerPosition().getDegrees());
+		this.desiredAngle.set(this.desiredState.angle.getRadians());
+		this.actualAngle.set(this.getSteerPosition().getRadians());
 	}
 
 	private Rotation2d getSteerPosition() {
-		return Rotation2d.fromRotations(this.steerEncoder.getPosition().getValue());
+		var b = this.steerEncoder.getAbsolutePosition().getValue();
+		var a = Rotation2d.fromRotations(b);
+		// System.out.println(b);
+		return a;
 	}
 
 	private double getDriveVelocityMetersPerSecond() {
