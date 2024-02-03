@@ -23,8 +23,12 @@ public class ScoreAmp extends Command {
 	}
 
 	@Override
-	public boolean isFinished() {return false;}
+	public boolean isFinished() {
+		return false;
+	}
 
 	@Override
-	public void end(boolean interrupted) {shooter.setRPM(0);}
+	public void end(boolean interrupted) {
+		shooter.setRPM(0);
+	}
 }

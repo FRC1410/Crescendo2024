@@ -25,6 +25,8 @@ public interface Constants {
 
 	boolean SHOOTER_LEFT_MOTOR_INVERTED = false;
 	boolean SHOOTER_RIGHT_MOTOR_INVERTED = true;
+
+	double SHOOTER_MANUAL_RPM = 1000;
 }
 
 

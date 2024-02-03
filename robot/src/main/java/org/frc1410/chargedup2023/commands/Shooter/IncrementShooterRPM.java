@@ -18,8 +18,12 @@ public class IncrementShooterRPM extends Command {
 	}
 
 	@Override
-	public void initialize() {shooter.shooterSpeed += increment;}
+	public void initialize() {
+		shooter.rpmAdjustment += increment;
+	}
 
 	@Override
-	public boolean isFinished() {return true;}
+	public boolean isFinished() {
+		return true;
+	}
 }

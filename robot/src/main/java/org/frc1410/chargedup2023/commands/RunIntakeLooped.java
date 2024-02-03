@@ -13,8 +13,8 @@ public class RunIntakeLooped extends Command {
 
 	private final Intake intake;
 	private final Storage storage;
-	double intakeSpeed;
-	double storageSpeed;
+	private final double intakeSpeed;
+	private final double storageSpeed;
 
 	public RunIntakeLooped(Intake intake, Storage storage, double intakeSpeed, double storageSpeed) {
 		this.intake = intake;
@@ -31,8 +31,13 @@ public class RunIntakeLooped extends Command {
 	}
 
 	@Override
-	public boolean isFinished() {return false;}
+	public boolean isFinished() {
+		return false;
+	}
 
 	@Override
-	public void end(boolean interrupted) {intake.setSpeed(0); storage.setSpeed(0);}
+	public void end(boolean interrupted) {
+		intake.setSpeed(0); 
+		storage.setSpeed(0);
+	}
 }
