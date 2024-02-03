@@ -1,18 +1,14 @@
 package org.frc1410.chargedup2023.subsystems;
 
-
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
-
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.frc1410.chargedup2023.util.NetworkTables;
 import org.frc1410.framework.scheduler.subsystem.TickedSubsystem;
 
@@ -22,7 +18,6 @@ import static org.frc1410.chargedup2023.util.Constants.*;
 
 
 public class Shooter implements TickedSubsystem {
-
 
 	private final NetworkTable table = NetworkTableInstance.getDefault().getTable("Shooter");
 

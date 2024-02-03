@@ -10,7 +10,6 @@ import org.frc1410.chargedup2023.subsystems.AmpBar;
 import org.frc1410.chargedup2023.subsystems.Intake;
 import org.frc1410.chargedup2023.subsystems.Shooter;
 import org.frc1410.chargedup2023.subsystems.Storage;
-import org.frc1410.chargedup2023.util.IDs;
 import org.frc1410.chargedup2023.util.NetworkTables;
 import org.frc1410.framework.PhaseDrivenRobot;
 import org.frc1410.framework.control.Controller;
