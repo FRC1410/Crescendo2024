@@ -1,8 +1,5 @@
 package org.frc1410.crescendo2024.util;
 
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-
 public interface Constants {
 	double DRIVE_GEAR_RATIO = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
 
@@ -42,4 +39,8 @@ public interface Constants {
 	boolean BACK_LEFT_STEER_MOTOR_INVERTED = true;
 	boolean BACK_RIGHT_DRIVE_MOTOR_INVERTED = false;
 	boolean BACK_RIGHT_STEER_MOTOR_INVERTED = true;
+  
+  int LED_ID = 29;
+  double LED_BRIGHTNESS = 1.0;
+  int NUM_LEDS = 250;
 }
