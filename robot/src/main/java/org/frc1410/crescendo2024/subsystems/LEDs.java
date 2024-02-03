@@ -3,10 +3,11 @@ package org.frc1410.crescendo2024.subsystems;
 import com.ctre.phoenix.led.*;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
+import static org.frc1410.crescendo2024.util.IDs.*;
 import static org.frc1410.crescendo2024.util.Constants.*;
 
 public class LEDs implements Subsystem {
-	private CANdle leds;
+	private CANdle leds = new CANdle(LED_ID);
 
 	public enum Colors {
 		NO_APRIL_TAG_SHOOTING_RED, //Shooting trigger pressed no april tag seen (only speaker april tags)
@@ -20,7 +21,6 @@ public class LEDs implements Subsystem {
 
 
 	public LEDs () {
-		leds =  new CANdle(LED_ID);
 
 		CANdleConfiguration config = new CANdleConfiguration();
 		config.stripType = CANdle.LEDStripType.RGB;

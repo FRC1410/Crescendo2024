@@ -43,8 +43,6 @@ public interface Constants {
 	boolean BACK_LEFT_STEER_MOTOR_INVERTED = true;
 	boolean BACK_RIGHT_DRIVE_MOTOR_INVERTED = false;
 	boolean BACK_RIGHT_STEER_MOTOR_INVERTED = true;
-  
-  	int LED_ID = 29;
   	double LED_BRIGHTNESS = 1.0;
   	int NUM_LEDS = 250;
 
