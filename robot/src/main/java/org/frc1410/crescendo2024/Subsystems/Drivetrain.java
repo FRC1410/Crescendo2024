@@ -51,12 +51,16 @@ public class Drivetrain implements TickedSubsystem {
     private final SwerveModule backLeft;
     private final SwerveModule backRight;
 
+	private final Camera camera;
+
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
     
     // Misc
     private final SwerveDrivePoseEstimator poseEstimator;
 
-    public Drivetrain(SubsystemStore subsystems) {
+	private double previousPipelineTimestamp = 0;
+
+    public Drivetrain(SubsystemStore subsystems, Camera camera) {
         this.frontLeft = subsystems.track(new SwerveModule(
             FRONT_LEFT_DRIVE_MOTOR, 
             FRONT_LEFT_STEER_MOTOR,
@@ -117,6 +121,8 @@ public class Drivetrain implements TickedSubsystem {
         );
 
         this.gyro.reset();
+
+		this.camera = camera;
     }
 
     public void drive(ChassisSpeeds chassisSpeeds) {
@@ -167,6 +173,19 @@ public class Drivetrain implements TickedSubsystem {
             this.gyro.getRotation2d(),
             this.getSwerveModulePositions()
         );
+
+		var estimatedPose = camera.getEstimatedPose();
+
+		if(estimatedPose.isPresent()) {
+
+			// TODO: Possible bug where bad data is fed into pose estimator when no vision
+			var resultTimestamp = estimatedPose.get().timestampSeconds;
+
+			if(resultTimestamp != previousPipelineTimestamp) {
+				previousPipelineTimestamp = resultTimestamp;
+				poseEstimator.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), resultTimestamp);
+			}
+		}
     }
 
     private SwerveModulePosition[] getSwerveModulePositions() {

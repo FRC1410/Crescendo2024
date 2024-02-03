@@ -42,6 +42,8 @@ public interface Constants {
 	boolean BACK_LEFT_STEER_MOTOR_INVERTED = true;
 	boolean BACK_RIGHT_DRIVE_MOTOR_INVERTED = false;
 	boolean BACK_RIGHT_STEER_MOTOR_INVERTED = true;
+
+	String CAMERA_NAME = "Arducam_OV9281_USB_Camera";
   
   int LED_ID = 29;
   double LED_BRIGHTNESS = 1.0;
