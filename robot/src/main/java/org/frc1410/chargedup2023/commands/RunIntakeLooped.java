@@ -25,14 +25,14 @@ public class RunIntakeLooped extends Command {
 	}
 
 	@Override
-	public void execute() {
+	public void initialize() {
 		intake.setSpeed(intakeSpeed);
 		storage.setSpeed(storageSpeed);
 	}
 
 	@Override
-	public boolean isFinished() {
-		// TODO: Make this return true when this Command no longer needs to run execute()
-		return false;
-	}
+	public boolean isFinished() {return false;}
+
+	@Override
+	public void end(boolean interrupted) {intake.setSpeed(0); storage.setSpeed(0);}
 }

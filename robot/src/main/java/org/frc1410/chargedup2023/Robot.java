@@ -25,7 +25,7 @@ public final class Robot extends PhaseDrivenRobot {
 	private final Controller driverController = new Controller(scheduler, DRIVER_CONTROLLER, 0.1 );
 	private final Controller operatorController = new Controller(scheduler, OPERATOR_CONTROLLER,  0.1);
 	private final Shooter shooter = subsystems.track(new Shooter());
-	private final AmpBar ampBar = subsystems.track(new AmpBar());
+	private final AmpBar ampBar = new AmpBar();
 	private final Storage storage = new Storage();
 	private final Intake intake = new Intake();
 

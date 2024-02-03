@@ -14,6 +14,17 @@ public interface Constants {
 	int AMP_HOME_POS = 0;
 	double AMP_SHOOT_SPEED = 0;
 	double STORAGE_SPEED = 0;
+
+	boolean STORAGE_LEFT_MOTOR_INVERTED = false;
+	boolean STORAGE_RIGHT_MOTOR_INVERTED = true;
+
+	boolean AMP_BAR_MOTOR_INVERTED = false;
+
+	boolean INTAKE_FRONT_MOTOR_INVERTED = true;
+	boolean INTAKE_BACK_MOTOR_INVERTED = false;
+
+	boolean SHOOTER_LEFT_MOTOR_INVERTED = false;
+	boolean SHOOTER_RIGHT_MOTOR_INVERTED = true;
 }
 
 

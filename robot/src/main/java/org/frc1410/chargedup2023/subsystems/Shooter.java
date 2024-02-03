@@ -37,7 +37,7 @@ public class Shooter implements TickedSubsystem {
 	private final SparkPIDController rightPIDController = shooterMotorRight.getPIDController();
 
 	private final RelativeEncoder shooterLeftEncoder = shooterMotorLeft.getEncoder();
-	private final  RelativeEncoder shooterRightEncoder = shooterMotorRight.getEncoder();
+	private final RelativeEncoder shooterRightEncoder = shooterMotorRight.getEncoder();
 
 	public double shooterSpeed;
 
@@ -48,8 +48,8 @@ public class Shooter implements TickedSubsystem {
 		shooterMotorLeft.setIdleMode(CANSparkBase.IdleMode.kBrake);
 		shooterMotorRight.setIdleMode(CANSparkBase.IdleMode.kBrake);
 
-		shooterMotorLeft.setInverted(false);
-		shooterMotorRight.setInverted(true);
+		shooterMotorLeft.setInverted(SHOOTER_LEFT_MOTOR_INVERTED);
+		shooterMotorRight.setInverted(SHOOTER_RIGHT_MOTOR_INVERTED);
 
 		this.leftPIDController.setP(SHOOTER_LEFT_KP);
 		this.leftPIDController.setI(SHOOTER_LEFT_KI);

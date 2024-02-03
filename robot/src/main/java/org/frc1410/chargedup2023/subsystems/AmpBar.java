@@ -16,39 +16,24 @@ import static org.frc1410.chargedup2023.util.IDs.*;
 import static org.frc1410.chargedup2023.util.Tuning.*;
 import static org.frc1410.chargedup2023.util.Constants.*;
 
-public class AmpBar implements TickedSubsystem {
+public class AmpBar implements Subsystem {
 
 	private final NetworkTable table = NetworkTableInstance.getDefault().getTable("Amp");
 
-	private final CANSparkMax ampBarMotor = new CANSparkMax(AMP_BAR_MOTOR, MotorType.kBrushless);
+	private final CANSparkMax ampBarMotor = new CANSparkMax(AMP_BAR_MOTOR_ID, MotorType.kBrushless);
 
 	private final SparkPIDController ampPIDController = ampBarMotor.getPIDController();
 
-	private final RelativeEncoder ampEncoder = ampBarMotor.getEncoder();
-
-	private final DoublePublisher ampEncoderPosition = NetworkTables.PublisherFactory(table, "amp encoder pos", 0);
-
-	public double pos;
-	public boolean extended;
 
 	public AmpBar() {
+		ampBarMotor.setInverted(AMP_BAR_MOTOR_INVERTED);
 		ampBarMotor.restoreFactoryDefaults();
-		resetPosition();
 	}
 
-	public double getPosition() {return ampEncoder.getPosition();}
-
-	public void resetPosition() {ampEncoder.setPosition(AMP_HOME_POS);}
-
-	public void setDesiredPosition(int DesiredPos) {ampEncoder.setPosition(DesiredPos);}
-
-	public void setSpeed(double speed) {ampBarMotor.set(speed);}
-
-	@Override
-	public void periodic() {
-		ampEncoderPosition.set(getPosition());
-
+	public void setSpeed(double speed) {
+		ampBarMotor.set(speed);
 	}
+
 }
 
 

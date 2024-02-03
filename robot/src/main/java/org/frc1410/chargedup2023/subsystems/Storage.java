@@ -8,27 +8,25 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 import static org.frc1410.chargedup2023.util.IDs.*;
+import static org.frc1410.chargedup2023.util.Constants.*;
 
 
 public class Storage implements Subsystem {
-	private final CANSparkMax storageFrontLeft = new CANSparkMax(SHOOTER_LEFT_MOTOR_ID, MotorType.kBrushless);
-	private final CANSparkMax storageFrontRight = new CANSparkMax(SHOOTER_RIGHT_MOTOR_ID, MotorType.kBrushless);
+
+	private final CANSparkMax storageLeftMotor = new CANSparkMax(STORAGE_LEFT_MOTOR_ID, MotorType.kBrushless);
+	private final CANSparkMax storageRightMotor = new CANSparkMax(STORAGE_RIGHT_MOTOR_ID, MotorType.kBrushless);
 
 	public Storage() {
-		storageFrontLeft.setInverted(true);
-		storageFrontRight.setInverted(false);
+		storageLeftMotor.setInverted(STORAGE_LEFT_MOTOR_INVERTED);
+		storageRightMotor.setInverted(STORAGE_RIGHT_MOTOR_INVERTED);
 
-		storageFrontLeft.restoreFactoryDefaults();
-		storageFrontRight.restoreFactoryDefaults();
+		storageLeftMotor.restoreFactoryDefaults();
+		storageRightMotor.restoreFactoryDefaults();
 	}
 
 	public void setSpeed(double speed) {
-		storageFrontLeft.set(speed);
-		storageFrontRight.set(speed);
+		storageLeftMotor.set(speed);
+		storageRightMotor.set(speed);
 
 	}
-
-
-
 }
-

@@ -13,14 +13,13 @@ public class RunShooterLooped extends Command {
 
 	public RunShooterLooped(Shooter shooter, double poseRPM) {
 		this.shooter = shooter;
-		addRequirements(shooter);
 		this.poseRPM = poseRPM;
+		addRequirements(shooter);
 	}
 
 	@Override
-	public void execute() {
+	public void initialize() {
 		shooter.setRPM(poseRPM);
-
 	}
 
 	@Override
