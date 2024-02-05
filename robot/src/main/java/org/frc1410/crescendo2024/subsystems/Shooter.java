@@ -61,7 +61,7 @@ public class Shooter implements TickedSubsystem {
 //		leftPIDController.setReference(Velocity, CANSparkBase.ControlType.kVelocity);
 //		rightPIDController.setReference(Velocity, CANSparkBase.ControlType.kVelocity);
 
-		shooterMotorLeft.set(-Velocity);
+		shooterMotorLeft.set(Velocity);
 		shooterMotorRight.set(Velocity);
 	}
 

@@ -16,7 +16,13 @@ public class ShooterManual extends Command {
 	}
 
 	@Override
+	public void initialize() {
+
+	}
+
+	@Override
 	public void execute() {
+
 		shooter.setRPM(1);
 		// TODO: write a way to check if shooter is sped up before shooting
 

@@ -22,7 +22,7 @@ public class Storage implements Subsystem {
 	}
 
 	public void setSpeed(double speed) {
-		storageLeftMotor.set(speed);
+		storageLeftMotor.set(-speed);
 		storageRightMotor.set(speed);
 
 	}
