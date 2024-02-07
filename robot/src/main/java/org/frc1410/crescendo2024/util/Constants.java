@@ -13,6 +13,10 @@ import edu.wpi.first.math.util.Units;
 import java.util.Arrays;
 import java.util.List;
 
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+
 public interface Constants {
 	double DRIVE_GEAR_RATIO = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
 
@@ -26,16 +30,16 @@ public interface Constants {
 	double SWERVE_DRIVE_MAX_SPEED = 4.2;
 	double SWERVE_DRIVE_MAX_ANGULAR_VELOCITY = 4;
 
-	double FRONT_LEFT_STEER_ENCODER_OFFSET = 0.173340;
-	double FRONT_RIGHT_STEER_ENCODER_OFFSET = 0.497314;
-	double BACK_LEFT_STEER_ENCODER_OFFSET = -0.469482;
-	double BACK_RIGHT_STEER_ENCODER_OFFSET = -0.300049;
+	double FRONT_LEFT_STEER_ENCODER_OFFSET = -1.549321;
+	double FRONT_RIGHT_STEER_ENCODER_OFFSET = 2.293301;
+	double BACK_LEFT_STEER_ENCODER_OFFSET = 2.659923;
+	double BACK_RIGHT_STEER_ENCODER_OFFSET = -0.852893;
 
 	// TODO: Change to actual values
-	Translation2d FRONT_LEFT_SWERVE_MODULE_LOCATION = new Translation2d(0.263525, 0.263525);
-	Translation2d FRONT_RIGHT_SWERVE_MODULE_LOCATION = new Translation2d(0.263525, -0.263525);
-	Translation2d BACK_LEFT_SWERVE_MODULE_LOCATION = new Translation2d(-0.263525, 0.263525);
-	Translation2d BACK_RIGHT_SWERVE_MODULE_LOCATION = new Translation2d(-0.263525, -0.263525);
+	Translation2d FRONT_LEFT_SWERVE_MODULE_LOCATION = new Translation2d(0.301625, 0.301625);
+	Translation2d FRONT_RIGHT_SWERVE_MODULE_LOCATION = new Translation2d(0.301625, -0.301625);
+	Translation2d BACK_LEFT_SWERVE_MODULE_LOCATION = new Translation2d(-0.301625, 0.301625);
+	Translation2d BACK_RIGHT_SWERVE_MODULE_LOCATION = new Translation2d(-0.301625, -0.301625);
 
 	SwerveDriveKinematics SWERVE_DRIVE_KINEMATICS = new SwerveDriveKinematics(
 		FRONT_LEFT_SWERVE_MODULE_LOCATION,
@@ -75,4 +79,37 @@ public interface Constants {
 		0.37268062,
 		new ReplanningConfig()
 	);
+
+	Rotation3d NAVX_ANGLE = new Rotation3d(0, 0, 0);
+
+	double INTAKE_SPEED = 0.8;
+	double OUTTAKE_SPEED = -0.8;
+
+	double STORAGE_INTAKE_SPEED = 1;
+	double STORAGE_OUTTAKE_SPEED = -1;
+
+	double SHOOTER_MANUAL_SPEED = 0.2;
+	double SHOOTER_RPM_INCREMENT = 0;
+
+	int AMP_HOME_POS = 0;
+	double AMP_SHOOT_SPEED = 0;
+	double STORAGE_SPEED = 0;
+
+	boolean STORAGE_LEFT_MOTOR_INVERTED = false;
+	boolean STORAGE_RIGHT_MOTOR_INVERTED = true;
+
+	boolean AMP_BAR_MOTOR_INVERTED = false;
+
+	boolean INTAKE_FRONT_MOTOR_INVERTED = false;
+	boolean INTAKE_BACK_MOTOR_INVERTED = false;
+
+	boolean SHOOTER_LEFT_MOTOR_INVERTED = false;
+	boolean SHOOTER_RIGHT_MOTOR_INVERTED = true;
+
+	double SHOOTER_MANUAL_RPM = 1000;
+
+	double MAX_SHOOTER_RPM = 5800;
+
+	double DRIVE_MOTOR_KS = 0.42923;
+	double DRIVE_MOTOR_KV = 2.60073;
 }
