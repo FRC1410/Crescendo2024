@@ -1,8 +1,13 @@
 package org.frc1410.crescendo2024.util;
 
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+
+import static org.frc1410.crescendo2024.util.Tuning.*;
 
 public interface Constants {
 	double DRIVE_GEAR_RATIO = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
@@ -73,4 +78,12 @@ public interface Constants {
 	boolean SHOOTER_RIGHT_MOTOR_INVERTED = true;
 
 	double SHOOTER_MANUAL_RPM = 1000;
+
+	HolonomicPathFollowerConfig HOLONOMIC_AUTO_CONFIG = new HolonomicPathFollowerConfig(
+		new PIDConstants(AUTO_DRIVE_P, AUTO_DRIVE_I, AUTO_DRIVE_D),
+		new PIDConstants(AUTO_TURN_P, AUTO_TURN_I, AUTO_TURN_D),
+		4.2,
+		0.426562165692177,
+		new ReplanningConfig()
+	);
 }

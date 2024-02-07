@@ -46,15 +46,15 @@ public class Shooter implements TickedSubsystem {
 		shooterMotorLeft.setInverted(SHOOTER_LEFT_MOTOR_INVERTED);
 		shooterMotorRight.setInverted(SHOOTER_RIGHT_MOTOR_INVERTED);
 
-		this.leftPIDController.setP(SHOOTER_LEFT_KP);
-		this.leftPIDController.setI(SHOOTER_LEFT_KI);
-		this.leftPIDController.setD(SHOOTER_LEFT_KD);
-		this.leftPIDController.setFF(SHOOTER_LEFT_KFF);
+		this.leftPIDController.setP(SHOOTER_LEFT_P);
+		this.leftPIDController.setI(SHOOTER_LEFT_I);
+		this.leftPIDController.setD(SHOOTER_LEFT_D);
+		this.leftPIDController.setFF(SHOOTER_LEFT_FF);
 
-		this.rightPIDController.setP(SHOOTER_RIGHT_KP);
-		this.rightPIDController.setI(SHOOTER_RIGHT_KI);
-		this.rightPIDController.setD(SHOOTER_RIGHT_KD);
-		this.rightPIDController.setFF(SHOOTER_RIGHT_KFF);
+		this.rightPIDController.setP(SHOOTER_RIGHT_P);
+		this.rightPIDController.setI(SHOOTER_RIGHT_I);
+		this.rightPIDController.setD(SHOOTER_RIGHT_D);
+		this.rightPIDController.setFF(SHOOTER_RIGHT_FF);
 	}
 
 	public void setRPM(double Velocity) {

@@ -2,6 +2,7 @@ package org.frc1410.crescendo2024.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -11,10 +12,13 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 
 import org.frc1410.framework.scheduler.subsystem.SubsystemStore;
 import org.frc1410.framework.scheduler.subsystem.TickedSubsystem;
+
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import static org.frc1410.crescendo2024.util.IDs.*;
 
@@ -122,6 +126,23 @@ public class Drivetrain implements TickedSubsystem {
         );
 
         this.gyro.reset();
+
+		AutoBuilder.configureHolonomic(
+			this::getEstimatedPosition,
+			this::resetPose,
+			this::getChassisSpeeds,
+			this::drive,
+			HOLONOMIC_AUTO_CONFIG,
+			() -> {
+//				var alliance = DriverStation.getAlliance();
+//				if (alliance.isPresent()) {
+//					return alliance.get() == DriverStation.Alliance.Red;
+//				}
+				return false;
+			},
+			this
+		);
+
     }
 
     public void drive(ChassisSpeeds chassisSpeeds) {
@@ -133,6 +154,7 @@ public class Drivetrain implements TickedSubsystem {
         this.frontRight.setDesiredState(swerveModuleStates[1]);
         this.backLeft.setDesiredState(swerveModuleStates[2]);
         this.backRight.setDesiredState(swerveModuleStates[3]);
+
     }
 
     public void driveFieldRelative(ChassisSpeeds chassisSpeeds) {
@@ -172,17 +194,6 @@ public class Drivetrain implements TickedSubsystem {
             this.getAngle().toRotation2d(),
             this.getSwerveModulePositions()
         );
-
-        // var w = 60;
-        // var x
-
-        // // angle = 60
-
-
-
-        this.yaw.set(this.gyro.getYaw());
-        this.roll.set(this.gyro.getRoll());
-        this.pitch.set(this.gyro.getPitch());
     }
 
     private SwerveModulePosition[] getSwerveModulePositions() {
