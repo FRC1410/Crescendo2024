@@ -4,6 +4,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -55,7 +56,7 @@ public class Drivetrain implements TickedSubsystem {
     private final SwerveModule backLeft;
     private final SwerveModule backRight;
 
-	private final Camera camera;
+	private final Camera camera = new Camera();
 
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
     
@@ -63,7 +64,7 @@ public class Drivetrain implements TickedSubsystem {
     private final SwerveDrivePoseEstimator poseEstimator;
 
 	private double previousPipelineTimestamp = 0;
-    public Drivetrain(SubsystemStore subsystems, Camera camera) {
+    public Drivetrain(SubsystemStore subsystems) {
         this.frontLeft = subsystems.track(new SwerveModule(
             FRONT_LEFT_DRIVE_MOTOR, 
             FRONT_LEFT_STEER_MOTOR,
@@ -124,7 +125,6 @@ public class Drivetrain implements TickedSubsystem {
         );
 
         this.gyro.reset();
-		this.camera = camera;
     }
 
     public void drive(ChassisSpeeds chassisSpeeds) {

@@ -59,7 +59,6 @@ public interface Constants {
 
 	String CAMERA_NAME = "Arducam_OV9281_USB_Camera";
   
-	int LED_ID = 29;
 	double LED_BRIGHTNESS = 1.0;
 	int NUM_LEDS = 250;
 
