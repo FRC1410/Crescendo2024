@@ -1,5 +1,18 @@
 package org.frc1410.crescendo2024.util;
 
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.util.Units;
+
+import java.util.Arrays;
+import java.util.List;
+
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -43,8 +56,29 @@ public interface Constants {
 	boolean BACK_LEFT_STEER_MOTOR_INVERTED = true;
 	boolean BACK_RIGHT_DRIVE_MOTOR_INVERTED = false;
 	boolean BACK_RIGHT_STEER_MOTOR_INVERTED = true;
-  	double LED_BRIGHTNESS = 1.0;
-  	int NUM_LEDS = 250;
+
+	String CAMERA_NAME = "Arducam_OV9281_USB_Camera";
+  
+	int LED_ID = 29;
+	double LED_BRIGHTNESS = 1.0;
+	int NUM_LEDS = 250;
+
+	List<ShootingPosition> SHOOTING_POSITIONS = Arrays.asList(
+		new ShootingPosition(new Pose2d(2.26, 4.81, Rotation2d.fromDegrees(-22.6)), 0),
+		new ShootingPosition(new Pose2d(1.88, 5, Rotation2d.fromDegrees(-19.6)), 0)
+	);
+
+	PathConstraints PATH_FIND_CONSTRAINTS = new PathConstraints(
+		3.2, 4.0,
+		Units.degreesToRadians(150), Units.degreesToRadians(150));
+
+	HolonomicPathFollowerConfig PATH_FIND_FOLLOWER_CONFIG = new HolonomicPathFollowerConfig(
+		new PIDConstants(1.0,0.0, 0.5),
+		new PIDConstants(1, 0.0, 0),
+		3,
+		0.37268062,
+		new ReplanningConfig()
+	);
 
 	Rotation3d NAVX_ANGLE = new Rotation3d(0, 0, 0);
 
