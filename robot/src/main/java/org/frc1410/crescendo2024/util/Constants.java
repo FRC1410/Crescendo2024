@@ -55,14 +55,14 @@ public interface Constants {
 
 	String CAMERA_NAME = "Arducam_OV9281_USB_Camera";
   
-  int LED_ID = 29;
-  double LED_BRIGHTNESS = 1.0;
-  int NUM_LEDS = 250;
+	int LED_ID = 29;
+	double LED_BRIGHTNESS = 1.0;
+	int NUM_LEDS = 250;
 
-  List<ShootingPositions> SHOOTING_POSITIONS = Arrays.asList(
-	  new ShootingPositions(new Pose2d(2.26, 4.81, Rotation2d.fromDegrees(-22.6)), 0),
-	  new ShootingPositions(new Pose2d(1.88, 5, Rotation2d.fromDegrees(-19.6)), 0)
-  );
+	List<ShootingPosition> SHOOTING_POSITIONS = Arrays.asList(
+		new ShootingPosition(new Pose2d(2.26, 4.81, Rotation2d.fromDegrees(-22.6)), 0),
+		new ShootingPosition(new Pose2d(1.88, 5, Rotation2d.fromDegrees(-19.6)), 0)
+	);
 
 	PathConstraints PATH_FIND_CONSTRAINTS = new PathConstraints(
 		3.2, 4.0,

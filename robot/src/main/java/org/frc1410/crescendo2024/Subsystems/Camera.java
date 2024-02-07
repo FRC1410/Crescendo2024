@@ -1,4 +1,4 @@
-package org.frc1410.crescendo2024.Subsystems;
+package org.frc1410.crescendo2024.subsystems;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
@@ -32,14 +32,6 @@ public class Camera implements Subsystem {
 			DriverStation.reportError("Failed to load AprilTagFieldLayout", e.getStackTrace());
 			layout = null;
 		}
-	}
-
-	public PhotonPipelineResult getLatestResult() {
-		return camera.getLatestResult();
-	}
-
-	public AprilTagFieldLayout getAprilTagFieldLayout() {
-		return layout;
 	}
 
 	public Optional<EstimatedRobotPose> getEstimatedPose() {

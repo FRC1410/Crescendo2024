@@ -1,24 +1,22 @@
-package org.frc1410.crescendo2024.Commands;
+package org.frc1410.crescendo2024.commands;
 
 import com.pathplanner.lib.commands.PathfindHolonomic;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import org.frc1410.crescendo2024.Subsystems.Camera;
-import org.frc1410.crescendo2024.Subsystems.Drivetrain;
+import org.frc1410.crescendo2024.subsystems.Camera;
+import org.frc1410.crescendo2024.subsystems.Drivetrain;
 
 import static org.frc1410.crescendo2024.util.Constants.*;
 
 public class DriveToShootingPose extends Command {
 
 	private final Drivetrain drivetrain;
-	private final Camera camera;
 
 	private PathfindHolonomic pathfindHolonomic;
 
 	public DriveToShootingPose(Drivetrain drivetrain, Camera camera) {
 		this.drivetrain = drivetrain;
-		this.camera = camera;
-		addRequirements(drivetrain, camera);
+		addRequirements(drivetrain);
 	}
 
 	@Override

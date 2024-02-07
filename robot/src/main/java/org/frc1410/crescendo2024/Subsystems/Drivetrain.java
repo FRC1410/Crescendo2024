@@ -1,4 +1,4 @@
-package org.frc1410.crescendo2024.Subsystems;
+package org.frc1410.crescendo2024.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
