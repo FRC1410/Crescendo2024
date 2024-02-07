@@ -47,6 +47,8 @@ public class SwerveModule implements TickedSubsystem {
 	private final DoublePublisher actualVel;
 	private final DoublePublisher actualAngle;
 
+	private boolean isCharacterizing = false;
+
 	public SwerveModule(
 		int driveMotorID, 
 		int steeringMotorID, 
@@ -121,15 +123,17 @@ public class SwerveModule implements TickedSubsystem {
 
 	@Override
 	public void periodic() {
-		double steerPIDOutput = this.steeringPIDController.calculate(this.getSteerPosition().getRadians(), MathUtil.angleModulus(this.desiredState.angle.getRadians()));
+		if (!this.isCharacterizing) {
+			double steerPIDOutput = this.steeringPIDController.calculate(this.getSteerPosition().getRadians(), MathUtil.angleModulus(this.desiredState.angle.getRadians()));
 
-		this.steerMotor.setVoltage(steerPIDOutput);
+			this.steerMotor.setVoltage(steerPIDOutput);
 
-		this.desiredVel.set(this.desiredState.speedMetersPerSecond);
-		this.actualVel.set(this.getDriveVelocityMetersPerSecond());
-		
-		this.desiredAngle.set(this.desiredState.angle.getRadians());
-		this.actualAngle.set(this.getSteerPosition().getRadians());
+			this.desiredVel.set(this.desiredState.speedMetersPerSecond);
+			this.actualVel.set(this.getDriveVelocityMetersPerSecond());
+			
+			this.desiredAngle.set(this.desiredState.angle.getRadians());
+			this.actualAngle.set(this.getSteerPosition().getRadians());
+		}
 	}
 
 	private Rotation2d getSteerPosition() {
@@ -139,15 +143,28 @@ public class SwerveModule implements TickedSubsystem {
 		return a;
 	}
 
-	private double getDriveVelocityMetersPerSecond() {
+	public double getDriveVelocityMetersPerSecond() {
 		return ((driveEncoder.getVelocity() / 60) * WHEEL_CIRCUMFERENCE) / DRIVE_GEAR_RATIO;
 	}
 
-	private double getDrivePositionMeters() {
+	public double getDrivePositionMeters() {
 		return (driveEncoder.getPosition() * WHEEL_CIRCUMFERENCE) / DRIVE_GEAR_RATIO;
 	}
 
 	private static double metersPerSecondToEncoderRPM(double metersPerSecond) {
 		return ((metersPerSecond * 60) / WHEEL_CIRCUMFERENCE) * DRIVE_GEAR_RATIO;
+	}
+
+	public void driveVolts(double volts) {
+		this.isCharacterizing = true;
+		this.driveMotor.setVoltage(volts);
+
+
+		double steerPIDOutput = steeringPIDController.calculate(getSteerPosition().getRadians(), 0);
+		steerMotor.setVoltage(steerPIDOutput);
+	}
+
+	public double getDriveVelocityRotationsPerSecond() {
+		return driveEncoder.getVelocity() / 60;
 	}
 }

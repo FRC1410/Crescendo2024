@@ -4,6 +4,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 import org.frc1410.crescendo2024.commands.*;
+import org.frc1410.crescendo2024.commands.FeedForwardCharacterization.FeedForwardCharacterizationData;
 import org.frc1410.crescendo2024.subsystems.*;
 import org.frc1410.crescendo2024.util.NetworkTables;
 import org.frc1410.framework.PhaseDrivenRobot;
@@ -21,14 +22,25 @@ public final class Robot extends PhaseDrivenRobot {
 	private final Drivetrain drivetrain = subsystems.track(new Drivetrain(subsystems));
 	private final Shooter shooter = subsystems.track(new Shooter());
 	private final AmpBar ampBar = new AmpBar();
-	private final Storage storage = new Storage();
+	private final Storage storage = subsystems.track(new Storage());
 	private final Intake intake = new Intake();
+
+	private final LEDs leds = new LEDs();
 
 	private final NetworkTableInstance nt = NetworkTableInstance.getDefault();
 	private final NetworkTable table = nt.getTable("Auto");
 
 	@Override
-	public void autonomousSequence() {}
+	public void autonomousSequence() {
+		var command = new FeedForwardCharacterization(
+            drivetrain,
+            true,
+            new FeedForwardCharacterizationData("drive"),
+            drivetrain::characterize,
+            drivetrain::getCharacterizationVelocity);
+
+		scheduler.scheduleAutoCommand(command);
+	}
 
 	@Override
 	public void teleopSequence() {
@@ -44,11 +56,8 @@ public final class Robot extends PhaseDrivenRobot {
 		operatorController.A.whenPressed(new IncrementShooterRPM(shooter, SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);
 		operatorController.B.whenPressed(new IncrementShooterRPM(shooter, -SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);
 
-		operatorController.RIGHT_TRIGGER.button().whileHeld(new RunIntakeLooped(intake, storage, INTAKE_SPEED, -1), TaskPersistence.GAMEPLAY);
+		operatorController.RIGHT_TRIGGER.button().whileHeld(new RunIntakeLooped(intake, storage, INTAKE_SPEED, STORAGE_INTAKE_SPEED), TaskPersistence.GAMEPLAY);
 		operatorController.LEFT_TRIGGER.button().whileHeld(new RunIntakeLooped(intake, storage, OUTTAKE_SPEED, STORAGE_OUTTAKE_SPEED), TaskPersistence.GAMEPLAY);
-
-
-
 	}
 
 	@Override

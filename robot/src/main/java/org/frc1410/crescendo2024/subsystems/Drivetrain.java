@@ -50,6 +50,8 @@ public class Drivetrain implements TickedSubsystem {
     private final DoublePublisher pitch = NetworkTables.PublisherFactory(this.table, "pitch", 0);
     private final DoublePublisher roll = NetworkTables.PublisherFactory(this.table, "roll", 0);
 
+    private final DoublePublisher characterizationVolts = NetworkTables.PublisherFactory(this.table, "characterization volts", 0);
+
     // Subsystems
     private final SwerveModule frontLeft;
     private final SwerveModule frontRight;
@@ -197,4 +199,25 @@ public class Drivetrain implements TickedSubsystem {
     private Rotation3d getAngle() {
         return gyro.getRotation3d().rotateBy(NAVX_ANGLE);
     }
+
+    public void characterize(double volts) {
+		// System.out.println("characterize volts " + volts);
+		this.characterizationVolts.set(volts);
+		frontLeft.driveVolts(volts);
+		frontRight.driveVolts(volts);
+		backLeft.driveVolts(volts);
+		backRight.driveVolts(volts);
+	}
+
+    public double getCharacterizationVelocity() {
+		double driveVelocityAverage = 0.0;
+		// for (var module : modules) {
+		//   driveVelocityAverage += module.getCharacterizationVelocity();
+		// }
+		driveVelocityAverage += frontLeft.getDriveVelocityMetersPerSecond();
+		driveVelocityAverage += frontRight.getDriveVelocityMetersPerSecond();
+		driveVelocityAverage += backLeft.getDriveVelocityMetersPerSecond();
+		driveVelocityAverage += backRight.getDriveVelocityMetersPerSecond();
+		return driveVelocityAverage / 4.0;
+	  }
 }
