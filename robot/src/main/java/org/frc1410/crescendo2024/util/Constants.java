@@ -49,10 +49,10 @@ public interface Constants {
 	Rotation3d NAVX_ANGLE = new Rotation3d(0, 0, 0);
 
 	double INTAKE_SPEED = 0.8;
-	double OUTTAKE_SPEED = 0.4;
+	double OUTTAKE_SPEED = -0.8;
 
-	double STORAGE_INTAKE_SPEED = 0.4;
-	double STORAGE_OUTTAKE_SPEED = 0.4;
+	double STORAGE_INTAKE_SPEED = 1;
+	double STORAGE_OUTTAKE_SPEED = -1;
 
 	double SHOOTER_MANUAL_SPEED = 0.2;
 	double SHOOTER_RPM_INCREMENT = 0;
@@ -66,11 +66,16 @@ public interface Constants {
 
 	boolean AMP_BAR_MOTOR_INVERTED = false;
 
-	boolean INTAKE_FRONT_MOTOR_INVERTED = true;
+	boolean INTAKE_FRONT_MOTOR_INVERTED = false;
 	boolean INTAKE_BACK_MOTOR_INVERTED = false;
 
 	boolean SHOOTER_LEFT_MOTOR_INVERTED = false;
 	boolean SHOOTER_RIGHT_MOTOR_INVERTED = true;
 
 	double SHOOTER_MANUAL_RPM = 1000;
+
+	double MAX_SHOOTER_RPM = 5800;
+
+	double DRIVE_MOTOR_KS = 0.42923;
+	double DRIVE_MOTOR_KV = 2.60073;
 }

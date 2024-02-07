@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import org.frc1410.crescendo2024.util.NetworkTables;
@@ -23,8 +24,9 @@ public class Shooter implements TickedSubsystem {
 
 	private final DoublePublisher leftActualVel = NetworkTables.PublisherFactory(table, "Left Actual Vel", 0);
 	private final DoublePublisher rightActualVel = NetworkTables.PublisherFactory(table, "Right Actual Vel", 0);
-	private final DoublePublisher manualShootTargetLeftRPM = NetworkTables.PublisherFactory(table, "Manual Shoot Left Target RPM", 0);
-	private final DoublePublisher manualShootTargetRightRPM = NetworkTables.PublisherFactory(table, "Manual Shoot Right Target RPM", 0);
+	private final DoublePublisher shooterSpeedPub = NetworkTables.PublisherFactory(table, "Shooter Speed", 1);
+	private final DoubleSubscriber shooterSpeed = NetworkTables.SubscriberFactory(table, table.getDoubleTopic("Shooter Speed"));
+
 	private final CANSparkMax shooterMotorRight = new CANSparkMax(SHOOTER_RIGHT_MOTOR_ID, MotorType.kBrushless);
 	private final CANSparkMax shooterMotorLeft = new CANSparkMax(SHOOTER_LEFT_MOTOR_ID, MotorType.kBrushless);
 
@@ -46,6 +48,9 @@ public class Shooter implements TickedSubsystem {
 		shooterMotorLeft.setInverted(SHOOTER_LEFT_MOTOR_INVERTED);
 		shooterMotorRight.setInverted(SHOOTER_RIGHT_MOTOR_INVERTED);
 
+		shooterMotorLeft.setSmartCurrentLimit(40);
+		shooterMotorLeft.setSmartCurrentLimit(40);
+
 		this.leftPIDController.setP(SHOOTER_LEFT_KP);
 		this.leftPIDController.setI(SHOOTER_LEFT_KI);
 		this.leftPIDController.setD(SHOOTER_LEFT_KD);
@@ -57,12 +62,15 @@ public class Shooter implements TickedSubsystem {
 		this.rightPIDController.setFF(SHOOTER_RIGHT_KFF);
 	}
 
-	public void setRPM(double Velocity) {
-//		leftPIDController.setReference(Velocity, CANSparkBase.ControlType.kVelocity);
-//		rightPIDController.setReference(Velocity, CANSparkBase.ControlType.kVelocity);
+	public void setRPM(double velocity) {
+		// leftPIDController.setReference(velocity, CANSparkBase.ControlType.kVelocity);
+		// rightPIDController.setReference(velocity, CANSparkBase.ControlType.kVelocity);
+		shooterMotorLeft.set(velocity);
+		shooterMotorRight.set(velocity);
+	}
 
-		shooterMotorLeft.set(Velocity);
-		shooterMotorRight.set(Velocity);
+	public double getSpeed() {
+		return this.shooterSpeed.get();
 	}
 
 
@@ -73,6 +81,7 @@ public class Shooter implements TickedSubsystem {
 
 	@Override
 	public void periodic() {
+		
 		leftActualVel.set(shooterLeftEncoder.getVelocity());
 		rightActualVel.set(shooterRightEncoder.getVelocity());
 

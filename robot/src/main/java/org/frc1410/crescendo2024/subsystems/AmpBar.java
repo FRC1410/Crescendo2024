@@ -20,8 +20,9 @@ public class AmpBar implements Subsystem {
 
 
 	public AmpBar() {
-		ampBarMotor.setInverted(AMP_BAR_MOTOR_INVERTED);
 		ampBarMotor.restoreFactoryDefaults();
+		
+		ampBarMotor.setInverted(AMP_BAR_MOTOR_INVERTED);
 	}
 
 	public void setSpeed(double speed) {
