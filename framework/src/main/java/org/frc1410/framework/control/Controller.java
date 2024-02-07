@@ -49,6 +49,15 @@ public class Controller {
 	public final Axis LEFT_TRIGGER = new Axis(this, kLeftTrigger.value);
 	public final Axis RIGHT_TRIGGER = new Axis(this, kRightTrigger.value);
 
+	public final DPadButton DPAD_UP = new DPadButton(this, DPadButton.Direction.UP);
+    public final DPadButton DPAD_UP_RIGHT = new DPadButton(this, DPadButton.Direction.UP_RIGHT);
+    public final DPadButton DPAD_UP_LEFT = new DPadButton(this, DPadButton.Direction.UP_LEFT);
+    public final DPadButton DPAD_LEFT = new DPadButton(this, DPadButton.Direction.LEFT);
+    public final DPadButton DPAD_RIGHT = new DPadButton(this, DPadButton.Direction.RIGHT);
+    public final DPadButton DPAD_DOWN = new DPadButton(this, DPadButton.Direction.DOWN);
+    public final DPadButton DPAD_DOWN_LEFT = new DPadButton(this, DPadButton.Direction.DOWN_LEFT);
+    public final DPadButton DPAD_DOWN_RIGHT = new DPadButton(this, DPadButton.Direction.DOWN_RIGHT);
+
 	private int rumbleDepth = 0;
 	final double deadzone;
 
