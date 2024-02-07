@@ -6,6 +6,9 @@ import com.revrobotics.CANSparkMax;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
@@ -20,72 +23,100 @@ import static org.frc1410.crescendo2024.util.Constants.*;
 
 public class Shooter implements TickedSubsystem {
 
-	private final NetworkTable table = NetworkTableInstance.getDefault().getTable("Shooter");
+    private final NetworkTable table = NetworkTableInstance.getDefault().getTable("Shooter");
 
-	private final DoublePublisher leftActualVel = NetworkTables.PublisherFactory(table, "Left Actual Vel", 0);
-	private final DoublePublisher rightActualVel = NetworkTables.PublisherFactory(table, "Right Actual Vel", 0);
-	private final DoublePublisher shooterSpeedPub = NetworkTables.PublisherFactory(table, "Shooter Speed", 1);
-	private final DoubleSubscriber shooterSpeed = NetworkTables.SubscriberFactory(table, table.getDoubleTopic("Shooter Speed"));
+    private final DoublePublisher leftActualVel = NetworkTables.PublisherFactory(table, "Left Actual Vel", 0);
+    private final DoublePublisher rightActualVel = NetworkTables.PublisherFactory(table, "Right Actual Vel", 0);
+    private final DoublePublisher shooterSpeedPub = NetworkTables.PublisherFactory(table, "Shooter Speed", 1);
+    private final DoubleSubscriber shooterSpeed = NetworkTables.SubscriberFactory(table, table.getDoubleTopic("Shooter Speed"));
 
-	private final CANSparkMax shooterMotorRight = new CANSparkMax(SHOOTER_RIGHT_MOTOR_ID, MotorType.kBrushless);
-	private final CANSparkMax shooterMotorLeft = new CANSparkMax(SHOOTER_LEFT_MOTOR_ID, MotorType.kBrushless);
+    private final CANSparkMax shooterMotorRight = new CANSparkMax(SHOOTER_RIGHT_MOTOR_ID, MotorType.kBrushless);
+    private final CANSparkMax shooterMotorLeft = new CANSparkMax(SHOOTER_LEFT_MOTOR_ID, MotorType.kBrushless);
 
-	private final SparkPIDController leftPIDController = shooterMotorLeft.getPIDController();
-	private final SparkPIDController rightPIDController = shooterMotorRight.getPIDController();
+    // private final SparkPIDController leftPIDController = shooterMotorLeft.getPIDController();
+    // private final SparkPIDController rightPIDController = shooterMotorRight.getPIDController();
 
-	private final RelativeEncoder shooterLeftEncoder = shooterMotorLeft.getEncoder();
-	private final RelativeEncoder shooterRightEncoder = shooterMotorRight.getEncoder();
+    private final RelativeEncoder shooterLeftEncoder = shooterMotorLeft.getEncoder();
+    private final RelativeEncoder shooterRightEncoder = shooterMotorRight.getEncoder();
 
-	public double rpmAdjustment = 0;
+    private final PIDController pidController = new PIDController(SHOOTER_LEFT_KP, SHOOTER_LEFT_KI, SHOOTER_LEFT_KD);
+    private final SimpleMotorFeedforward feedforwardController = new SimpleMotorFeedforward(SHOOTER_LEFT_S, SHOOTER_LEFT_V);
 
-	public Shooter() {
-		shooterMotorLeft.restoreFactoryDefaults();
-		shooterMotorRight.restoreFactoryDefaults();
+    public double rpmAdjustment = 0;
 
-		shooterMotorLeft.setIdleMode(CANSparkBase.IdleMode.kBrake);
-		shooterMotorRight.setIdleMode(CANSparkBase.IdleMode.kBrake);
+    public Shooter() {
+        shooterMotorLeft.restoreFactoryDefaults();
+        shooterMotorRight.restoreFactoryDefaults();
 
-		shooterMotorLeft.setInverted(SHOOTER_LEFT_MOTOR_INVERTED);
-		shooterMotorRight.setInverted(SHOOTER_RIGHT_MOTOR_INVERTED);
+        shooterMotorLeft.setIdleMode(CANSparkBase.IdleMode.kBrake);
+        shooterMotorRight.setIdleMode(CANSparkBase.IdleMode.kBrake);
 
-		shooterMotorLeft.setSmartCurrentLimit(40);
-		shooterMotorLeft.setSmartCurrentLimit(40);
+        shooterMotorLeft.setInverted(SHOOTER_LEFT_MOTOR_INVERTED);
+        shooterMotorRight.setInverted(SHOOTER_RIGHT_MOTOR_INVERTED);
 
-		this.leftPIDController.setP(SHOOTER_LEFT_KP);
-		this.leftPIDController.setI(SHOOTER_LEFT_KI);
-		this.leftPIDController.setD(SHOOTER_LEFT_KD);
-		this.leftPIDController.setFF(SHOOTER_LEFT_KFF);
+        shooterMotorLeft.setSmartCurrentLimit(40);
+        shooterMotorLeft.setSmartCurrentLimit(40);
 
-		this.rightPIDController.setP(SHOOTER_RIGHT_KP);
-		this.rightPIDController.setI(SHOOTER_RIGHT_KI);
-		this.rightPIDController.setD(SHOOTER_RIGHT_KD);
-		this.rightPIDController.setFF(SHOOTER_RIGHT_KFF);
-	}
+        // this.leftPIDController.setP(SHOOTER_LEFT_KP);
+        // this.leftPIDController.setI(SHOOTER_LEFT_KI);
+        // this.leftPIDController.setD(SHOOTER_LEFT_KD);
+        // this.leftPIDController.setFF(SHOOTER_LEFT_KFF);
 
-	public void setRPM(double velocity) {
-		// leftPIDController.setReference(velocity, CANSparkBase.ControlType.kVelocity);
-		// rightPIDController.setReference(velocity, CANSparkBase.ControlType.kVelocity);
-		shooterMotorLeft.set(velocity);
-		shooterMotorRight.set(velocity);
-	}
+        // this.rightPIDController.setP(SHOOTER_RIGHT_KP);
+        // this.rightPIDController.setI(SHOOTER_RIGHT_KI);
+        // this.rightPIDController.setD(SHOOTER_RIGHT_KD);
+        // this.rightPIDController.setFF(SHOOTER_RIGHT_KFF);
+    }
 
-	public double getSpeed() {
-		return this.shooterSpeed.get();
-	}
+    public void setRPM(double rpm) {
+        // leftPIDController.setReference(velocity, CANSparkBase.ControlType.kVelocity);
+        // rightPIDController.setReference(velocity, CANSparkBase.ControlType.kVelocity);
+
+        var feedforwardOutput = this.feedforwardController.calculate(rpm);
+        var pidOutputLeft = this.pidController.calculate(this.shooterLeftEncoder.getVelocity(), rpm);
+        var pidOutputRight = this.pidController.calculate(this.shooterRightEncoder.getVelocity(), rpm);
+
+        shooterMotorLeft.setVoltage(feedforwardOutput + pidOutputLeft);
+        shooterMotorRight.setVoltage(feedforwardOutput + pidOutputRight);
 
 
+        // shooterMotorLeft.set(velocity);
+        // shooterMotorRight.set(velocity);
 
-	// public double getTargetRPM() {
-	// 	return shooterSpeed;
-	// }
 
-	@Override
-	public void periodic() {
-		
-		leftActualVel.set(shooterLeftEncoder.getVelocity());
-		rightActualVel.set(shooterRightEncoder.getVelocity());
+    }
 
-		// manualShootTargetLeftRPM.set(shooterSpeed);
-		// manualShootTargetRightRPM.set(shooterSpeed);
-	}
+    public double getSpeed() {
+        return this.shooterSpeed.get();
+    }
+
+
+    public void setVoltsLeft(double volts) {
+        shooterMotorLeft.setVoltage(volts);
+    }
+
+    public void setVoltsRight(double volts) {
+        shooterMotorRight.setVoltage(volts);
+    }
+
+    public double getRPMLeft() {
+        return shooterLeftEncoder.getVelocity();
+    }
+
+    public double getRPMRight() {
+        return shooterRightEncoder.getVelocity();
+    }
+    // public double getTargetRPM() {
+    //     return shooterSpeed;
+    // }
+
+    @Override
+    public void periodic() {
+        
+        leftActualVel.set(shooterLeftEncoder.getVelocity());
+        rightActualVel.set(shooterRightEncoder.getVelocity());
+
+        // manualShootTargetLeftRPM.set(shooterSpeed);
+        // manualShootTargetRightRPM.set(shooterSpeed);
+    }
 }

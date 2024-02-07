@@ -111,4 +111,10 @@ public interface Constants {
 
 	double DRIVE_MOTOR_KS = 0.42923;
 	double DRIVE_MOTOR_KV = 2.60073;
+
+	double SHOOTER_LEFT_S = 0.07484;
+	double SHOOTER_LEFT_V = 0.00207;
+
+	double SHOOTER_RIGHT_S = 0.05369;
+	double SHOOTER_RIGHT_V = 0.00210;
 }
