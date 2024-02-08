@@ -1,11 +1,13 @@
 package org.frc1410.crescendo2024;
 
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 import edu.wpi.first.networktables.StringPublisher;
 import edu.wpi.first.networktables.StringSubscriber;
+import edu.wpi.first.wpilibj2.command.Command;
 import org.frc1410.crescendo2024.commands.*;
 import org.frc1410.crescendo2024.subsystems.*;
 import org.frc1410.crescendo2024.util.NetworkTables;
@@ -19,6 +21,14 @@ import static org.frc1410.crescendo2024.util.Constants.*;
 
 public final class Robot extends PhaseDrivenRobot {
 
+	public Robot() {
+		NamedCommands.registerCommand("Run intake", new RunIntakeLooped(
+			intake,
+			storage,
+			1,
+			1
+		));
+	}
 
 	private final Controller driverController = new Controller(scheduler, DRIVER_CONTROLLER, 0.1 );
 	private final Controller operatorController = new Controller(scheduler, OPERATOR_CONTROLLER,  0.1);
@@ -52,6 +62,7 @@ public final class Robot extends PhaseDrivenRobot {
 
 	@Override
 	public void autonomousSequence() {
+
 		NetworkTables.SetPersistence(autoPublisher.getTopic(), true);
 		String autoProfile = autoSubscriber.get();
 		var autoCommand = autoSelector.select(autoProfile);
