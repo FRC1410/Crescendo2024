@@ -4,8 +4,11 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 import org.frc1410.crescendo2024.commands.*;
+import org.frc1410.crescendo2024.commands.ampBarCommands.ScoreAmp;
+import org.frc1410.crescendo2024.commands.drivetrainCommands.DriveLooped;
+import org.frc1410.crescendo2024.commands.shooterCommands.IncrementShooterRPM;
+import org.frc1410.crescendo2024.commands.shooterCommands.ShooterManual;
 import org.frc1410.crescendo2024.subsystems.*;
-import org.frc1410.crescendo2024.util.NetworkTables;
 import org.frc1410.framework.PhaseDrivenRobot;
 import org.frc1410.framework.control.Controller;
 import org.frc1410.framework.scheduler.task.TaskPersistence;
