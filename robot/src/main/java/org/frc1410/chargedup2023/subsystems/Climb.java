@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import static org.frc1410.chargedup2023.util.IDs.*;
+
 import static org.frc1410.chargedup2023.util.Tuning.*;
 
 public class Climb implements Subsystem{
@@ -15,6 +16,7 @@ public class Climb implements Subsystem{
 	//lol
 	private final SparkPIDController leftPIDController = climbLeft.getPIDController();
 	private final SparkPIDController rightPIDController = climbLeft.getPIDController();
+
 	public Climb() {
 
 		climbLeft.restoreFactoryDefaults();
@@ -25,31 +27,23 @@ public class Climb implements Subsystem{
 
 		climbRight.setInverted(true);
 
-//		this.leftPIDController.setP(CLIMB_LEFT_KP);
-//		this.leftPIDController.setP(CLIMB_LEFT_KI);
-//		this.leftPIDController.setP(CLIMB_LEFT_KD);
-//		this.leftPIDController.setP(CLIMB_LEFT_KFF);
-//		this.rightPIDController.setP(CLIMB_RIGHT_KP);
-//		this.rightPIDController.setP(CLIMB_RIGHT_KI);
-//		this.rightPIDController.setP(CLIMB_RIGHT_KD);
-//		this.rightPIDController.setP(CLIMB_RIGHT_KFF);
+		this.climbLeft.getPIDController().setP(CLIMB_LEFT_P);
+		this.climbLeft.getPIDController().setI(CLIMB_LEFT_I);
+		this.climbLeft.getPIDController().setD(CLIMB_LEFT_D);
+		this.climbLeft.getPIDController().setFF(CLIMB_LEFT_FF);
 
-//		this.leftPIDController.setP(CLIMB_LEFT_KP);
-//		this.rightPIDController.setP(CLIMB_RIGHT_KP);
-//
-//		this.leftPIDController.setFF(CLIMB_LEFT_KFF);
-//		this.leftPIDController.setFF(CLIMB_RIGHT_KFF);
+		this.climbRight.getPIDController().setP(CLIMB_RIGHT_P);
+		this.climbRight.getPIDController().setI(CLIMB_RIGHT_I);
+		this.climbRight.getPIDController().setD(CLIMB_RIGHT_D);
+		this.climbRight.getPIDController().setFF(CLIMB_RIGHT_FF);
 
 
 	}
 
-	//I hate my life
-
 	public void setSpeed(double speed) {
-//		leftPIDController.setReference(speed, CANSparkBase.ControlType.kPosition);
-//		rightPIDController.setReference(speed, CANSparkBase.ControlType.kPosition); //Soren Bad at Programming
 
-		climbLeft.set(speed);
-		climbRight.set(speed);
+		leftPIDController.setReference(speed, CANSparkBase.ControlType.kPosition);
+		rightPIDController.setReference(speed, CANSparkBase.ControlType.kPosition);
+
 	}
 }
