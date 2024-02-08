@@ -76,7 +76,11 @@ public final class Robot extends PhaseDrivenRobot {
 	@Override
 	public void teleopSequence() {
 		operatorController.A.whileHeld(
-			new ClimbLooped(climb), TaskPersistence.GAMEPLAY
+			new ClimbLooped(climb, false), TaskPersistence.GAMEPLAY
+		);
+
+		operatorController.B.whileHeld(
+			new ClimbLooped(climb, true), TaskPersistence.GAMEPLAY
 		);
 	}
 

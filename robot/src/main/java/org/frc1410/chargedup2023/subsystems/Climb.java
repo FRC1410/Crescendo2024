@@ -16,6 +16,7 @@ public class Climb implements Subsystem{
 	private final SparkPIDController leftPIDController = climbLeft.getPIDController();
 	private final SparkPIDController rightPIDController = climbLeft.getPIDController();
 	public Climb() {
+
 		climbLeft.restoreFactoryDefaults();
 		climbRight.restoreFactoryDefaults();
 
@@ -24,14 +25,20 @@ public class Climb implements Subsystem{
 
 		climbRight.setInverted(true);
 
-		this.leftPIDController.setP(CLIMB_LEFT_KP);
-		this.leftPIDController.setP(CLIMB_LEFT_KI);
-		this.leftPIDController.setP(CLIMB_LEFT_KD);
-		this.leftPIDController.setP(CLIMB_LEFT_KFF);
-		this.rightPIDController.setP(CLIMB_RIGHT_KP);
-		this.rightPIDController.setP(CLIMB_RIGHT_KI);
-		this.rightPIDController.setP(CLIMB_RIGHT_KD);
-		this.rightPIDController.setP(CLIMB_RIGHT_KFF);
+//		this.leftPIDController.setP(CLIMB_LEFT_KP);
+//		this.leftPIDController.setP(CLIMB_LEFT_KI);
+//		this.leftPIDController.setP(CLIMB_LEFT_KD);
+//		this.leftPIDController.setP(CLIMB_LEFT_KFF);
+//		this.rightPIDController.setP(CLIMB_RIGHT_KP);
+//		this.rightPIDController.setP(CLIMB_RIGHT_KI);
+//		this.rightPIDController.setP(CLIMB_RIGHT_KD);
+//		this.rightPIDController.setP(CLIMB_RIGHT_KFF);
+
+//		this.leftPIDController.setP(CLIMB_LEFT_KP);
+//		this.rightPIDController.setP(CLIMB_RIGHT_KP);
+//
+//		this.leftPIDController.setFF(CLIMB_LEFT_KFF);
+//		this.leftPIDController.setFF(CLIMB_RIGHT_KFF);
 
 
 	}
@@ -39,7 +46,10 @@ public class Climb implements Subsystem{
 	//I hate my life
 
 	public void setSpeed(double speed) {
-		leftPIDController.setReference(speed, CANSparkBase.ControlType.kPosition);
-		rightPIDController.setReference(speed, CANSparkBase.ControlType.kPosition); //Soren Bad at Programming
+//		leftPIDController.setReference(speed, CANSparkBase.ControlType.kPosition);
+//		rightPIDController.setReference(speed, CANSparkBase.ControlType.kPosition); //Soren Bad at Programming
+
+		climbLeft.set(speed);
+		climbRight.set(speed);
 	}
 }
