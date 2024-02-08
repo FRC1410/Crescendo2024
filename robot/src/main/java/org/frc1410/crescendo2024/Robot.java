@@ -21,7 +21,7 @@ public final class Robot extends PhaseDrivenRobot {
 	private final Drivetrain drivetrain = subsystems.track(new Drivetrain(subsystems));
 	private final Shooter shooter = subsystems.track(new Shooter());
 	private final AmpBar ampBar = new AmpBar();
-	private final Storage storage = new Storage();
+	private final Storage storage = subsystems.track(new Storage());
 	private final Intake intake = new Intake();
 
 	private final NetworkTableInstance nt = NetworkTableInstance.getDefault();

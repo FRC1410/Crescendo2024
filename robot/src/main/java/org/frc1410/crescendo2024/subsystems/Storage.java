@@ -2,6 +2,7 @@ package org.frc1410.crescendo2024.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -29,19 +30,23 @@ public class Storage implements TickedSubsystem {
 	private final RelativeEncoder storageRightEncoder;
 
 	private final NetworkTable table = NetworkTableInstance.getDefault().getTable("Shooter");
-	private final DoublePublisher storageSpeedPub = NetworkTables.PublisherFactory(table, "Storage Speed", 1);
-	private final DoubleSubscriber storageSpeed = NetworkTables.SubscriberFactory(table, table.getDoubleTopic("Storage Speed"));
+	private final DoublePublisher storageSpeedPub = NetworkTables.PublisherFactory(table, "Desired Storage RPM", 1);
+	private final DoubleSubscriber desiredStorageRPM = NetworkTables.SubscriberFactory(table, table.getDoubleTopic("Desired Storage RPM"));
 
-	private final DoublePublisher storageSpeedRPM = NetworkTables.PublisherFactory(table, "Storage RPM", 1);
+	private final DoublePublisher storageSpeedRPMLeft = NetworkTables.PublisherFactory(table, "Storage RPM Left", 1);
+	private final DoublePublisher storageSpeedRPMRight = NetworkTables.PublisherFactory(table, "Storage RPM Right", 1);
 
 	private final PIDController pidControllerLeft = new PIDController(0, 0, 0);
 	private final PIDController pidControllerRight = new PIDController(0, 0, 0);
-	private final SimpleMotorFeedforward feedforwardControllerLeft = new SimpleMotorFeedforward(0, 0);
-	private final SimpleMotorFeedforward feedforwardControllerRight = new SimpleMotorFeedforward(0, 0);
+	private final SimpleMotorFeedforward feedforwardControllerLeft = new SimpleMotorFeedforward(STORAGE_LEFT_S, STORAGE_LEFT_V);
+	private final SimpleMotorFeedforward feedforwardControllerRight = new SimpleMotorFeedforward(STORAGE_RIGHT_S, STORAGE_RIGHT_V);
 
 	public Storage() {
 		storageLeftMotor.restoreFactoryDefaults();
 		storageRightMotor.restoreFactoryDefaults();
+
+		storageLeftMotor.setIdleMode(IdleMode.kBrake);
+		storageRightMotor.setIdleMode(IdleMode.kBrake);
 
 		storageLeftMotor.setInverted(STORAGE_LEFT_MOTOR_INVERTED);
 		storageRightMotor.setInverted(STORAGE_RIGHT_MOTOR_INVERTED);
@@ -56,23 +61,26 @@ public class Storage implements TickedSubsystem {
 	}
 
 	public void setRPM(double rpm) {
-		var feedforwardOutputLeft = this.feedforwardControllerLeft.calculate(rpm);
-		var pidOutputLeft = this.pidControllerLeft.calculate(this.storageLeftEncoder.getVelocity(), rpm);
+		var adjustedRPM = rpm * 12;
+
+		var feedforwardOutputLeft = this.feedforwardControllerLeft.calculate(adjustedRPM);
+		var pidOutputLeft = this.pidControllerLeft.calculate(this.storageLeftEncoder.getVelocity(), adjustedRPM);
 		this.storageLeftMotor.setVoltage(feedforwardOutputLeft + pidOutputLeft);
 
-		var feedforwardOutputRight = this.feedforwardControllerRight.calculate(rpm);
-		var pidOutputRight = this.pidControllerRight.calculate(this.storageRightEncoder.getVelocity(), rpm);
-		this.storageLeftMotor.setVoltage(feedforwardOutputRight + pidOutputRight);
+		var feedforwardOutputRight = this.feedforwardControllerRight.calculate(adjustedRPM);
+		var pidOutputRight = this.pidControllerRight.calculate(this.storageRightEncoder.getVelocity(), adjustedRPM);
+		this.storageRightMotor.setVoltage(feedforwardOutputRight + pidOutputRight);
 	}
 
 	public double getStorageSpeed() {
-		return this.storageSpeed.get();
+		return this.desiredStorageRPM.get();
 	}
 
 	@Override
 	public void periodic() {
 		
-		storageSpeedRPM.set(storageLeftEncoder.getVelocity());
+		storageSpeedRPMLeft.set(storageLeftEncoder.getVelocity() / 12);
+		storageSpeedRPMRight.set(storageRightEncoder.getVelocity() / 12);
 
 		// manualShootTargetLeftRPM.set(shooterSpeed);
 		// manualShootTargetRightRPM.set(shooterSpeed);

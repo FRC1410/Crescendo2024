@@ -81,8 +81,8 @@ public interface Constants {
 
 	Rotation3d NAVX_ANGLE = new Rotation3d(0, 0, 0);
 
-	double INTAKE_SPEED = 0.8;
-	double OUTTAKE_SPEED = -0.8;
+	double INTAKE_SPEED = 0.75;
+	double OUTTAKE_SPEED = -0.75;
 
 	double STORAGE_INTAKE_SPEED = 1;
 	double STORAGE_OUTTAKE_SPEED = -1;
@@ -117,4 +117,10 @@ public interface Constants {
 
 	double SHOOTER_RIGHT_S = 0.05369;
 	double SHOOTER_RIGHT_V = 0.00210;
+
+	double STORAGE_RIGHT_S = 0.15910;
+	double STORAGE_RIGHT_V = 0.00110;
+
+	double STORAGE_LEFT_S = 0.15384;
+	double STORAGE_LEFT_V = 0.00107;
 }

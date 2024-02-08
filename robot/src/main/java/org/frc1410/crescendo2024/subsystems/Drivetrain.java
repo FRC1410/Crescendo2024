@@ -56,7 +56,7 @@ public class Drivetrain implements TickedSubsystem {
     private final SwerveModule backLeft;
     private final SwerveModule backRight;
 
-	private final Camera camera = new Camera();
+	// private final Camera camera = new Camera();
 
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
     
@@ -176,18 +176,18 @@ public class Drivetrain implements TickedSubsystem {
             this.getSwerveModulePositions()
         );
 
-		var estimatedPose = camera.getEstimatedPose();
+		// var estimatedPose = camera.getEstimatedPose();
 
-		if(estimatedPose.isPresent()) {
+		// if(estimatedPose.isPresent()) {
 
-			// TODO: Possible bug where bad data is fed into pose estimator when no vision
-			var resultTimestamp = estimatedPose.get().timestampSeconds;
+		// 	// TODO: Possible bug where bad data is fed into pose estimator when no vision
+		// 	var resultTimestamp = estimatedPose.get().timestampSeconds;
 
-			if(resultTimestamp != previousPipelineTimestamp) {
-				previousPipelineTimestamp = resultTimestamp;
-				poseEstimator.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), resultTimestamp);
-			}
-		}
+		// 	if(resultTimestamp != previousPipelineTimestamp) {
+		// 		previousPipelineTimestamp = resultTimestamp;
+		// 		poseEstimator.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), resultTimestamp);
+		// 	}
+		// }
 
         this.yaw.set(this.gyro.getYaw());
         this.roll.set(this.gyro.getRoll());

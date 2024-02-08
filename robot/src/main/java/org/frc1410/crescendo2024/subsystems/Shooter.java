@@ -27,8 +27,8 @@ public class Shooter implements TickedSubsystem {
 
     private final DoublePublisher leftActualVel = NetworkTables.PublisherFactory(table, "Left Actual Vel", 0);
     private final DoublePublisher rightActualVel = NetworkTables.PublisherFactory(table, "Right Actual Vel", 0);
-    private final DoublePublisher shooterSpeedPub = NetworkTables.PublisherFactory(table, "Shooter Speed", 1);
-    private final DoubleSubscriber shooterSpeed = NetworkTables.SubscriberFactory(table, table.getDoubleTopic("Shooter Speed"));
+    private final DoublePublisher shooterSpeedPub = NetworkTables.PublisherFactory(table, "Desired Shooter RPM", 1);
+    private final DoubleSubscriber desiredShooterRPM = NetworkTables.SubscriberFactory(table, table.getDoubleTopic("Desired Shooter RPM"));
 
     private final CANSparkMax shooterMotorRight = new CANSparkMax(SHOOTER_RIGHT_MOTOR_ID, MotorType.kBrushless);
     private final CANSparkMax shooterMotorLeft = new CANSparkMax(SHOOTER_LEFT_MOTOR_ID, MotorType.kBrushless);
@@ -87,7 +87,7 @@ public class Shooter implements TickedSubsystem {
     }
 
     public double getSpeed() {
-        return this.shooterSpeed.get();
+        return this.desiredShooterRPM.get();
     }
 
 
