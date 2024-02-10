@@ -2,7 +2,6 @@ package org.frc1410.crescendo2024.subsystems;
 
 import com.kauailabs.navx.frc.AHRS;
 
-import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -14,13 +13,10 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 
 import org.frc1410.framework.scheduler.subsystem.SubsystemStore;
 import org.frc1410.framework.scheduler.subsystem.TickedSubsystem;
-
-import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import static org.frc1410.crescendo2024.util.IDs.*;
 
@@ -137,23 +133,6 @@ public class Drivetrain implements TickedSubsystem {
         );
 
         this.gyro.reset();
-
-		AutoBuilder.configureHolonomic(
-			this::getEstimatedPosition,
-			this::resetPose,
-			this::getChassisSpeeds,
-			this::drive,
-			HOLONOMIC_AUTO_CONFIG,
-			() -> {
-//				var alliance = DriverStation.getAlliance();
-//				if (alliance.isPresent()) {
-//					return alliance.get() == DriverStation.Alliance.Red;
-//				}
-				return false;
-			},
-			this
-		);
-
     }
 
     public void drive(ChassisSpeeds chassisSpeeds) {
@@ -165,7 +144,6 @@ public class Drivetrain implements TickedSubsystem {
         this.frontRight.setDesiredState(swerveModuleStates[1]);
         this.backLeft.setDesiredState(swerveModuleStates[2]);
         this.backRight.setDesiredState(swerveModuleStates[3]);
-
     }
 
     public void driveFieldRelative(ChassisSpeeds chassisSpeeds) {
@@ -205,20 +183,47 @@ public class Drivetrain implements TickedSubsystem {
             this.getAngle().toRotation2d(),
             this.getSwerveModulePositions()
         );
-PathPlanner
 
-		 var estimatedPose = camera.getEstimatedPose();
+//		 var estimatedPose = camera.getEstimatedPose();
+//
+//		 if(estimatedPose.isPresent()) {
+//
+//		 	// TODO: Possible bug where bad data is fed into pose estimator when no vision
+//		 	var resultTimestamp = estimatedPose.get().timestampSeconds;
+//
+//		 	if(resultTimestamp != previousPipelineTimestamp) {
+//		 		previousPipelineTimestamp = resultTimestamp;
+//		 		poseEstimator.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), resultTimestamp);
+//		 	}
+//
+//		 }
 
-		 if(estimatedPose.isPresent()) {
+		var pipelineResult = camera.getLatestResult();
+		var resultTimestamp = pipelineResult.getTimestampSeconds();
 
-		 	// TODO: Possible bug where bad data is fed into pose estimator when no vision
-		 	var resultTimestamp = estimatedPose.get().timestampSeconds;
+		if(resultTimestamp != previousPipelineTimestamp && pipelineResult.hasTargets()) {
+			previousPipelineTimestamp = resultTimestamp;
+			var target = pipelineResult.getBestTarget();
 
-		 	if(resultTimestamp != previousPipelineTimestamp) {
-		 		previousPipelineTimestamp = resultTimestamp;
-		 		poseEstimator.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), resultTimestamp);
-		 	}
-		 }
+			var fiducialId = target.getFiducialId();
+
+			Optional<Pose3d> tagPose =
+				camera.aprilTagFieldLayout() == null
+					? Optional.empty()
+					: camera.aprilTagFieldLayout().getTagPose(fiducialId);
+
+			if (target.getPoseAmbiguity() <= 0.2 && fiducialId >= 0 && tagPose.isPresent()) {
+				var targetPose = tagPose.get();
+				Transform3d camToTarget = target.getBestCameraToTarget();
+
+				System.out.println(camToTarget);
+
+				Pose3d camPose = targetPose.transformBy(camToTarget.inverse());
+
+				var visionMesurement = camPose.transformBy(CAMERAPOSE);
+				poseEstimator.addVisionMeasurement(visionMesurement.toPose2d(), resultTimestamp);
+			}
+		}
 
 //        this.yaw.set(this.gyro.getYaw());
 //        this.roll.set(this.gyro.getRoll());
@@ -229,7 +234,6 @@ PathPlanner
 		heading.set(this.getEstimatedPosition().getRotation().getDegrees());
 
 
-main
     }
 
     private SwerveModulePosition[] getSwerveModulePositions() {

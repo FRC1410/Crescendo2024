@@ -34,9 +34,9 @@ public class SwerveModule implements TickedSubsystem {
 
 	// radians
 	private final PIDController steeringPIDController = new PIDController(
-		SWERVE_STEERING_P,
-		SWERVE_STEERING_I,
-		SWERVE_STEERING_D
+		SWERVE_STEERING_KP,
+		SWERVE_STEERING_KI,
+		SWERVE_STEERING_KD
 	);
 
 	public SwerveModuleState desiredState = new SwerveModuleState();
@@ -66,10 +66,10 @@ public class SwerveModule implements TickedSubsystem {
 		this.driveMotor.setSmartCurrentLimit(40);
 
 		this.drivePIDController = driveMotor.getPIDController();
-		this.drivePIDController.setP(SWERVE_DRIVE_P);
-		this.drivePIDController.setI(SWERVE_DRIVE_I);
-		this.drivePIDController.setD(SWERVE_DRIVE_D);
-		this.drivePIDController.setFF(SWERVE_DRIVE_FF);
+		this.drivePIDController.setP(SWERVE_DRIVE_KP);
+		this.drivePIDController.setI(SWERVE_DRIVE_KI);
+		this.drivePIDController.setD(SWERVE_DRIVE_KD);
+		this.drivePIDController.setFF(SWERVE_DRIVE_KFF);
 
 		this.steerMotor = new CANSparkMax(steeringMotorID, CANSparkLowLevel.MotorType.kBrushless);
 		this.steerMotor.restoreFactoryDefaults();
