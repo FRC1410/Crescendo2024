@@ -1,9 +1,23 @@
 package org.frc1410.crescendo2024.util;
 
+PathPlanner
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Rotation3d;
+
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
+import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.util.Units;
+
+import java.util.Arrays;
+import java.util.List;
+
+main
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
@@ -48,16 +62,36 @@ public interface Constants {
 	boolean BACK_LEFT_STEER_MOTOR_INVERTED = true;
 	boolean BACK_RIGHT_DRIVE_MOTOR_INVERTED = false;
 	boolean BACK_RIGHT_STEER_MOTOR_INVERTED = true;
-  	double LED_BRIGHTNESS = 1.0;
-  	int NUM_LEDS = 250;
+
+	String CAMERA_NAME = "Arducam_OV9281_USB_Camera";
+  
+	double LED_BRIGHTNESS = 1.0;
+	int NUM_LEDS = 250;
+
+	List<ShootingPosition> SHOOTING_POSITIONS = Arrays.asList(
+		new ShootingPosition(new Pose2d(2.26, 4.81, Rotation2d.fromDegrees(-22.6)), 0),
+		new ShootingPosition(new Pose2d(1.88, 5, Rotation2d.fromDegrees(-19.6)), 0)
+	);
+
+	PathConstraints PATH_FIND_CONSTRAINTS = new PathConstraints(
+		3.2, 4.0,
+		Units.degreesToRadians(150), Units.degreesToRadians(150));
+
+	HolonomicPathFollowerConfig PATH_FIND_FOLLOWER_CONFIG = new HolonomicPathFollowerConfig(
+		new PIDConstants(1.0,0.0, 0.5),
+		new PIDConstants(1, 0.0, 0),
+		3,
+		0.37268062,
+		new ReplanningConfig()
+	);
 
 	Rotation3d NAVX_ANGLE = new Rotation3d(0, 0, 0);
 
-	double INTAKE_SPEED = 0.8;
-	double OUTTAKE_SPEED = 0.4;
+	double INTAKE_SPEED = 0.75;
+	double OUTTAKE_SPEED = -0.75;
 
-	double STORAGE_INTAKE_SPEED = 0.4;
-	double STORAGE_OUTTAKE_SPEED = 0.4;
+	double STORAGE_INTAKE_SPEED = 1;
+	double STORAGE_OUTTAKE_SPEED = -1;
 
 	double SHOOTER_MANUAL_SPEED = 0.2;
 	double SHOOTER_RPM_INCREMENT = 0;
@@ -71,7 +105,7 @@ public interface Constants {
 
 	boolean AMP_BAR_MOTOR_INVERTED = false;
 
-	boolean INTAKE_FRONT_MOTOR_INVERTED = true;
+	boolean INTAKE_FRONT_MOTOR_INVERTED = false;
 	boolean INTAKE_BACK_MOTOR_INVERTED = false;
 
 	boolean SHOOTER_LEFT_MOTOR_INVERTED = false;
@@ -79,6 +113,7 @@ public interface Constants {
 
 	double SHOOTER_MANUAL_RPM = 1000;
 
+PathPlanner
 	HolonomicPathFollowerConfig HOLONOMIC_AUTO_CONFIG = new HolonomicPathFollowerConfig(
 		new PIDConstants(AUTO_DRIVE_P, AUTO_DRIVE_I, AUTO_DRIVE_D),
 		new PIDConstants(AUTO_TURN_P, AUTO_TURN_I, AUTO_TURN_D),
@@ -86,4 +121,24 @@ public interface Constants {
 		0.426562165692177,
 		new ReplanningConfig()
 	);
+
+	double MAX_SHOOTER_RPM = 5800;
+
+	double DRIVE_MOTOR_KS = 0.42923;
+	double DRIVE_MOTOR_KV = 2.60073;
+
+	double SHOOTER_LEFT_S = 0.07484;
+	double SHOOTER_LEFT_V = 0.00207;
+
+	double SHOOTER_RIGHT_S = 0.05369;
+	double SHOOTER_RIGHT_V = 0.00210;
+
+	double STORAGE_RIGHT_S = 0.15910;
+	double STORAGE_RIGHT_V = 0.00110;
+
+	double STORAGE_LEFT_S = 0.15384;
+	double STORAGE_LEFT_V = 0.00107;
+
+	Transform3d CAMERAPOSE = new Transform3d(new Translation3d(), new Rotation3d());
+ main
 }

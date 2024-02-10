@@ -5,7 +5,9 @@ import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -23,6 +25,8 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import static org.frc1410.crescendo2024.util.IDs.*;
 
 import org.frc1410.crescendo2024.util.NetworkTables;
+
+import java.util.Optional;
 
 import static org.frc1410.crescendo2024.util.Constants.*;
 
@@ -50,6 +54,10 @@ public class Drivetrain implements TickedSubsystem {
     private final DoublePublisher backLeftActualAngle = NetworkTables.PublisherFactory(this.table, "backLeft Actual angle", 0);
     private final DoublePublisher backRightActualAngle = NetworkTables.PublisherFactory(this.table, "backRight Actual angle", 0);
 
+	private final DoublePublisher poseX = NetworkTables.PublisherFactory(this.table, "X position", 0);
+	private final DoublePublisher poseY = NetworkTables.PublisherFactory(this.table, "y position", 0);
+	private final DoublePublisher heading = NetworkTables.PublisherFactory(this.table, "Heading", 0);
+
     private final DoublePublisher yaw = NetworkTables.PublisherFactory(this.table, "yaw", 0);
     private final DoublePublisher pitch = NetworkTables.PublisherFactory(this.table, "pitch", 0);
     private final DoublePublisher roll = NetworkTables.PublisherFactory(this.table, "roll", 0);
@@ -60,61 +68,64 @@ public class Drivetrain implements TickedSubsystem {
     private final SwerveModule backLeft;
     private final SwerveModule backRight;
 
+	 private final Camera camera = new Camera();
+
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
-    
+
     // Misc
     private final SwerveDrivePoseEstimator poseEstimator;
 
+	private double previousPipelineTimestamp = 0;
     public Drivetrain(SubsystemStore subsystems) {
         this.frontLeft = subsystems.track(new SwerveModule(
-            FRONT_LEFT_DRIVE_MOTOR, 
+            FRONT_LEFT_DRIVE_MOTOR,
             FRONT_LEFT_STEER_MOTOR,
-            FRONT_LEFT_STEER_ENCODER, 
-            FRONT_LEFT_DRIVE_MOTOR_INVERTED, 
-            FRONT_LEFT_STEER_MOTOR_INVERTED, 
-            FRONT_LEFT_STEER_ENCODER_OFFSET, 
-            this.frontLeftDesiredVel, 
-            this.frontLeftDesiredAngle, 
-            this.frontLeftActualVel, 
+            FRONT_LEFT_STEER_ENCODER,
+            FRONT_LEFT_DRIVE_MOTOR_INVERTED,
+            FRONT_LEFT_STEER_MOTOR_INVERTED,
+            FRONT_LEFT_STEER_ENCODER_OFFSET,
+            this.frontLeftDesiredVel,
+            this.frontLeftDesiredAngle,
+            this.frontLeftActualVel,
             this.frontLeftActualAngle
         ));
 
         this.frontRight = subsystems.track(new SwerveModule(
-            FRONT_RIGHT_DRIVE_MOTOR, 
+            FRONT_RIGHT_DRIVE_MOTOR,
             FRONT_RIGHT_STEER_MOTOR,
-            FRONT_RIGHT_STEER_ENCODER, 
-            FRONT_RIGHT_DRIVE_MOTOR_INVERTED, 
-            FRONT_RIGHT_STEER_MOTOR_INVERTED, 
-            FRONT_RIGHT_STEER_ENCODER_OFFSET, 
-            this.frontRightDesiredVel, 
-            this.frontRightDesiredAngle, 
-            this.frontRightActualVel, 
+            FRONT_RIGHT_STEER_ENCODER,
+            FRONT_RIGHT_DRIVE_MOTOR_INVERTED,
+            FRONT_RIGHT_STEER_MOTOR_INVERTED,
+            FRONT_RIGHT_STEER_ENCODER_OFFSET,
+            this.frontRightDesiredVel,
+            this.frontRightDesiredAngle,
+            this.frontRightActualVel,
             this.frontRightActualAngle
         ));
 
         this.backLeft = subsystems.track(new SwerveModule(
-            BACK_LEFT_DRIVE_MOTOR, 
+            BACK_LEFT_DRIVE_MOTOR,
             BACK_LEFT_STEER_MOTOR,
-            BACK_LEFT_STEER_ENCODER, 
-            BACK_LEFT_DRIVE_MOTOR_INVERTED, 
-            BACK_LEFT_STEER_MOTOR_INVERTED, 
-            BACK_LEFT_STEER_ENCODER_OFFSET, 
-            this.backLeftDesiredVel, 
-            this.backLeftDesiredAngle, 
-            this.backLeftActualVel, 
+            BACK_LEFT_STEER_ENCODER,
+            BACK_LEFT_DRIVE_MOTOR_INVERTED,
+            BACK_LEFT_STEER_MOTOR_INVERTED,
+            BACK_LEFT_STEER_ENCODER_OFFSET,
+            this.backLeftDesiredVel,
+            this.backLeftDesiredAngle,
+            this.backLeftActualVel,
             this.backLeftActualAngle
         ));
 
         this.backRight = subsystems.track(new SwerveModule(
-            BACK_RIGHT_DRIVE_MOTOR, 
+            BACK_RIGHT_DRIVE_MOTOR,
             BACK_RIGHT_STEER_MOTOR,
-            BACK_RIGHT_STEER_ENCODER, 
-            BACK_RIGHT_DRIVE_MOTOR_INVERTED, 
-            BACK_RIGHT_STEER_MOTOR_INVERTED, 
-            BACK_RIGHT_STEER_ENCODER_OFFSET, 
-            this.backRightDesiredVel, 
-            this.backRightDesiredAngle, 
-            this.backRightActualVel, 
+            BACK_RIGHT_STEER_ENCODER,
+            BACK_RIGHT_DRIVE_MOTOR_INVERTED,
+            BACK_RIGHT_STEER_MOTOR_INVERTED,
+            BACK_RIGHT_STEER_ENCODER_OFFSET,
+            this.backRightDesiredVel,
+            this.backRightDesiredAngle,
+            this.backRightActualVel,
             this.backRightActualAngle
         ));
 
@@ -194,6 +205,31 @@ public class Drivetrain implements TickedSubsystem {
             this.getAngle().toRotation2d(),
             this.getSwerveModulePositions()
         );
+PathPlanner
+
+		 var estimatedPose = camera.getEstimatedPose();
+
+		 if(estimatedPose.isPresent()) {
+
+		 	// TODO: Possible bug where bad data is fed into pose estimator when no vision
+		 	var resultTimestamp = estimatedPose.get().timestampSeconds;
+
+		 	if(resultTimestamp != previousPipelineTimestamp) {
+		 		previousPipelineTimestamp = resultTimestamp;
+		 		poseEstimator.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), resultTimestamp);
+		 	}
+		 }
+
+//        this.yaw.set(this.gyro.getYaw());
+//        this.roll.set(this.gyro.getRoll());
+//        this.pitch.set(this.gyro.getPitch());
+
+		poseX.set(this.getEstimatedPosition().getX());
+		poseY.set(this.getEstimatedPosition().getY());
+		heading.set(this.getEstimatedPosition().getRotation().getDegrees());
+
+
+main
     }
 
     private SwerveModulePosition[] getSwerveModulePositions() {

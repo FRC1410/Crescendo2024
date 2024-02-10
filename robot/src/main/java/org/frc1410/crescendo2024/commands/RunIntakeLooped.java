@@ -17,13 +17,13 @@ public class RunIntakeLooped extends Command {
 		this.storage = storage;
 		this.intakeSpeed = intakeSpeed;
 		this.storageSpeed = storageSpeed;
-		addRequirements( intake, storage);
+		addRequirements(intake, storage);
 	}
 
 	@Override
 	public void initialize() {
 		intake.setSpeed(intakeSpeed);
-		storage.setSpeed(storageSpeed);
+		storage.setRPM(storage.getStorageSpeed());
 	}
 
 	@Override

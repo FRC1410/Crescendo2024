@@ -84,6 +84,7 @@ public class SwerveModule implements TickedSubsystem {
 
 		var config = new CANcoderConfiguration();
 		config.MagnetSensor.MagnetOffset = -Rotation2d.fromRadians(offset).getRotations();
+
 		config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
 		configurator.apply(config);
 
@@ -103,10 +104,12 @@ public class SwerveModule implements TickedSubsystem {
 		);
 
 		this.desiredState = optimized;
+
 		// System.out.println(optimized);
 		var a = SwerveModule.metersPerSecondToEncoderRPM(optimized.speedMetersPerSecond);
 		// System.out.println("aaa" + a);
 		this.drivePIDController.setReference(a, CANSparkMax.ControlType.kVelocity);
+
 	}
 
 	public SwerveModuleState getState() {

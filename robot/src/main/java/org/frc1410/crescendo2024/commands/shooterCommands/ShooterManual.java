@@ -1,8 +1,6 @@
-package org.frc1410.crescendo2024.commands;
+package org.frc1410.crescendo2024.commands.shooterCommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-
-import static  org.frc1410.crescendo2024.util.Constants.*;
 
 import org.frc1410.crescendo2024.subsystems.Shooter;
 
@@ -23,7 +21,7 @@ public class ShooterManual extends Command {
 	@Override
 	public void execute() {
 
-		shooter.setRPM(1);
+		shooter.setRPM(shooter.getSpeed());
 		// TODO: write a way to check if shooter is sped up before shooting
 
 	}

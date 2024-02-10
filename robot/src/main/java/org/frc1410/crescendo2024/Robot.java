@@ -9,9 +9,16 @@ import edu.wpi.first.networktables.StringPublisher;
 import edu.wpi.first.networktables.StringSubscriber;
 import edu.wpi.first.wpilibj2.command.Command;
 import org.frc1410.crescendo2024.commands.*;
+import org.frc1410.crescendo2024.commands.ampBarCommands.ScoreAmp;
+import org.frc1410.crescendo2024.commands.drivetrainCommands.DriveLooped;
+import org.frc1410.crescendo2024.commands.shooterCommands.IncrementShooterRPM;
+import org.frc1410.crescendo2024.commands.shooterCommands.ShooterManual;
 import org.frc1410.crescendo2024.subsystems.*;
+PathPlanner
 import org.frc1410.crescendo2024.util.NetworkTables;
 import org.frc1410.framework.AutoSelector;
+
+main
 import org.frc1410.framework.PhaseDrivenRobot;
 import org.frc1410.framework.control.Controller;
 import org.frc1410.framework.scheduler.task.TaskPersistence;
@@ -35,7 +42,7 @@ public final class Robot extends PhaseDrivenRobot {
 	private final Drivetrain drivetrain = subsystems.track(new Drivetrain(subsystems));
 	private final Shooter shooter = subsystems.track(new Shooter());
 	private final AmpBar ampBar = new AmpBar();
-	private final Storage storage = new Storage();
+	private final Storage storage = subsystems.track(new Storage());
 	private final Intake intake = new Intake();
 
 	private final NetworkTableInstance nt = NetworkTableInstance.getDefault();
@@ -76,7 +83,7 @@ public final class Robot extends PhaseDrivenRobot {
 		scheduler.scheduleDefaultCommand(new DriveLooped(drivetrain, driverController.LEFT_Y_AXIS, driverController.LEFT_X_AXIS, driverController.RIGHT_X_AXIS), TaskPersistence.EPHEMERAL);
 
 
-		driverController.LEFT_TRIGGER.button().whileHeld(new ScoreAmp(shooter, storage), TaskPersistence.GAMEPLAY);
+		driverController.LEFT_TRIGGER.button().whileHeld(new ScoreAmp(shooter, storage, false), TaskPersistence.GAMEPLAY);
 
 		// TODO: switch command to be on the driver controller.
 		operatorController.RIGHT_BUMPER.whileHeld(new ShooterManual(shooter), TaskPersistence.GAMEPLAY);
