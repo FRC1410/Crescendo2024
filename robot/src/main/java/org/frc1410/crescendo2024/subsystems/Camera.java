@@ -2,6 +2,7 @@ package org.frc1410.crescendo2024.subsystems;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.photonvision.EstimatedRobotPose;
@@ -23,6 +24,7 @@ public class Camera implements Subsystem {
 	private PhotonPoseEstimator photonPoseEstimator;
 
 	public Camera() {
+
 		try {
 			layout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
 			var alliance = DriverStation.getAlliance();
@@ -32,9 +34,20 @@ public class Camera implements Subsystem {
 			DriverStation.reportError("Failed to load AprilTagFieldLayout", e.getStackTrace());
 			layout = null;
 		}
+
+		photonPoseEstimator = new PhotonPoseEstimator(
+			layout,
+			PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+			camera,
+			new Transform3d()
+		);
 	}
 
 	public Optional<EstimatedRobotPose> getEstimatedPose() {
 		return photonPoseEstimator.update();
+	}
+
+	public PhotonPipelineResult getLatestResult() {
+		return camera.getLatestResult();
 	}
 }
