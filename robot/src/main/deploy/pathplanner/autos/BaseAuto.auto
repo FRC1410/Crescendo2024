@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "startingPose": null,
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Mid left-sub to B"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "B to Mid left-sub"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

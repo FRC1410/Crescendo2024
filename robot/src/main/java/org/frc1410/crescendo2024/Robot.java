@@ -1,14 +1,24 @@
 package org.frc1410.crescendo2024;
 
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
+import edu.wpi.first.networktables.StringPublisher;
+import edu.wpi.first.networktables.StringSubscriber;
+import edu.wpi.first.wpilibj2.command.Command;
 import org.frc1410.crescendo2024.commands.*;
 import org.frc1410.crescendo2024.commands.ampBarCommands.ScoreAmp;
 import org.frc1410.crescendo2024.commands.drivetrainCommands.DriveLooped;
 import org.frc1410.crescendo2024.commands.shooterCommands.IncrementShooterRPM;
 import org.frc1410.crescendo2024.commands.shooterCommands.ShooterManual;
 import org.frc1410.crescendo2024.subsystems.*;
+PathPlanner
+import org.frc1410.crescendo2024.util.NetworkTables;
+import org.frc1410.framework.AutoSelector;
+
+main
 import org.frc1410.framework.PhaseDrivenRobot;
 import org.frc1410.framework.control.Controller;
 import org.frc1410.framework.scheduler.task.TaskPersistence;
@@ -18,6 +28,14 @@ import static org.frc1410.crescendo2024.util.Constants.*;
 
 public final class Robot extends PhaseDrivenRobot {
 
+	public Robot() {
+		NamedCommands.registerCommand("Run intake", new RunIntakeLooped(
+			intake,
+			storage,
+			1,
+			1
+		));
+	}
 
 	private final Controller driverController = new Controller(scheduler, DRIVER_CONTROLLER, 0.1 );
 	private final Controller operatorController = new Controller(scheduler, OPERATOR_CONTROLLER,  0.1);
@@ -30,8 +48,34 @@ public final class Robot extends PhaseDrivenRobot {
 	private final NetworkTableInstance nt = NetworkTableInstance.getDefault();
 	private final NetworkTable table = nt.getTable("Auto");
 
+	private final AutoSelector autoSelector = new AutoSelector()
+		.add("BaseAuto", () -> new PathPlannerAuto("BaseAuto"));
+
+	{
+		var profiles = new String[autoSelector.getProfiles().size()];
+		for (var i = 0; i < profiles.length; i++) {
+			profiles[i] = autoSelector.getProfiles().get(i).name();
+		}
+
+		var pub = NetworkTables.PublisherFactory(table, "Choices", profiles);
+		pub.accept(profiles);
+	}
+
+
+	private final StringPublisher autoPublisher = NetworkTables.PublisherFactory(table, "Profile",
+		autoSelector.getProfiles().isEmpty() ? "" : autoSelector.getProfiles().get(0).name());
+
+	private final StringSubscriber autoSubscriber = NetworkTables.SubscriberFactory(table, autoPublisher.getTopic());
+
 	@Override
-	public void autonomousSequence() {}
+	public void autonomousSequence() {
+
+		NetworkTables.SetPersistence(autoPublisher.getTopic(), true);
+		String autoProfile = autoSubscriber.get();
+		var autoCommand = autoSelector.select(autoProfile);
+
+		scheduler.scheduleAutoCommand(autoCommand);
+	}
 
 	@Override
 	public void teleopSequence() {
@@ -49,8 +93,6 @@ public final class Robot extends PhaseDrivenRobot {
 
 		operatorController.RIGHT_TRIGGER.button().whileHeld(new RunIntakeLooped(intake, storage, INTAKE_SPEED, -1), TaskPersistence.GAMEPLAY);
 		operatorController.LEFT_TRIGGER.button().whileHeld(new RunIntakeLooped(intake, storage, OUTTAKE_SPEED, STORAGE_OUTTAKE_SPEED), TaskPersistence.GAMEPLAY);
-
-
 
 	}
 
