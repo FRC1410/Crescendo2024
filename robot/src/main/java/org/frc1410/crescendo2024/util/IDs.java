@@ -33,6 +33,9 @@ public interface IDs {
 	int STORAGE_LEFT_MOTOR_ID = 11;
 	int STORAGE_RIGHT_MOTOR_ID = 12;
 
+	int CLIMB_LEFT_MOTOR_ID = 14;
+	int CLIMB_RIGHT_MOTOR_ID = 15;
+
 	int AMP_BAR_MOTOR_ID = 0;
 
 	int LED_ID = 29;

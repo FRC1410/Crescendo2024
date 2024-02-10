@@ -26,6 +26,7 @@ public final class Robot extends PhaseDrivenRobot {
 	private final AmpBar ampBar = new AmpBar();
 	private final Storage storage = subsystems.track(new Storage());
 	private final Intake intake = new Intake();
+	private final Climb climb = new Climb();
 
 	private final NetworkTableInstance nt = NetworkTableInstance.getDefault();
 	private final NetworkTable table = nt.getTable("Auto");
@@ -38,20 +39,18 @@ public final class Robot extends PhaseDrivenRobot {
 
 		scheduler.scheduleDefaultCommand(new DriveLooped(drivetrain, driverController.LEFT_Y_AXIS, driverController.LEFT_X_AXIS, driverController.RIGHT_X_AXIS), TaskPersistence.EPHEMERAL);
 
-
 		driverController.LEFT_TRIGGER.button().whileHeld(new ScoreAmp(shooter, storage, false), TaskPersistence.GAMEPLAY);
 
 		// TODO: switch command to be on the driver controller.
 		operatorController.RIGHT_BUMPER.whileHeld(new ShooterManual(shooter), TaskPersistence.GAMEPLAY);
+
+		scheduler.scheduleDefaultCommand(new ClimbLooped(climb, operatorController.LEFT_Y_AXIS, driverController.RIGHT_Y_AXIS), TaskPersistence.EPHEMERAL);
 
 		operatorController.A.whenPressed(new IncrementShooterRPM(shooter, SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);
 		operatorController.B.whenPressed(new IncrementShooterRPM(shooter, -SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);
 
 		operatorController.RIGHT_TRIGGER.button().whileHeld(new RunIntakeLooped(intake, storage, INTAKE_SPEED, -1), TaskPersistence.GAMEPLAY);
 		operatorController.LEFT_TRIGGER.button().whileHeld(new RunIntakeLooped(intake, storage, OUTTAKE_SPEED, STORAGE_OUTTAKE_SPEED), TaskPersistence.GAMEPLAY);
-
-
-
 	}
 
 	@Override
