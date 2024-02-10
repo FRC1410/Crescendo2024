@@ -12,9 +12,12 @@ public class ScoreAmp extends Command {
 	private final Shooter shooter;
 	private final Storage storage;
 
-	public ScoreAmp(Shooter shooter, Storage storage) {
+	private final boolean isReversed;
+
+	public ScoreAmp(Shooter shooter, Storage storage, boolean isReversed) {
 		this.shooter = shooter;
 		this.storage = storage;
+		this.isReversed = isReversed;
 		addRequirements(this.shooter);
 	}
 

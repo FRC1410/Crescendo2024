@@ -39,7 +39,7 @@ public final class Robot extends PhaseDrivenRobot {
 		scheduler.scheduleDefaultCommand(new DriveLooped(drivetrain, driverController.LEFT_Y_AXIS, driverController.LEFT_X_AXIS, driverController.RIGHT_X_AXIS), TaskPersistence.EPHEMERAL);
 
 
-		driverController.LEFT_TRIGGER.button().whileHeld(new ScoreAmp(shooter, storage), TaskPersistence.GAMEPLAY);
+		driverController.LEFT_TRIGGER.button().whileHeld(new ScoreAmp(shooter, storage, false), TaskPersistence.GAMEPLAY);
 
 		// TODO: switch command to be on the driver controller.
 		operatorController.RIGHT_BUMPER.whileHeld(new ShooterManual(shooter), TaskPersistence.GAMEPLAY);

@@ -4,7 +4,9 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -19,6 +21,8 @@ import org.frc1410.framework.scheduler.subsystem.TickedSubsystem;
 import static org.frc1410.crescendo2024.util.IDs.*;
 
 import org.frc1410.crescendo2024.util.NetworkTables;
+
+import java.util.Optional;
 
 import static org.frc1410.crescendo2024.util.Constants.*;
 
@@ -180,27 +184,56 @@ public class Drivetrain implements TickedSubsystem {
             this.getSwerveModulePositions()
         );
 
-		 var estimatedPose = camera.getEstimatedPose();
+//		 var estimatedPose = camera.getEstimatedPose();
+//
+//		 if(estimatedPose.isPresent()) {
+//
+//		 	// TODO: Possible bug where bad data is fed into pose estimator when no vision
+//		 	var resultTimestamp = estimatedPose.get().timestampSeconds;
+//
+//		 	if(resultTimestamp != previousPipelineTimestamp) {
+//		 		previousPipelineTimestamp = resultTimestamp;
+//		 		poseEstimator.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), resultTimestamp);
+//		 	}
+//
+//		 }
 
-		 if(estimatedPose.isPresent()) {
+		var pipelineResult = camera.getLatestResult();
+		var resultTimestamp = pipelineResult.getTimestampSeconds();
 
-		 	// TODO: Possible bug where bad data is fed into pose estimator when no vision
-		 	var resultTimestamp = estimatedPose.get().timestampSeconds;
+		if(resultTimestamp != previousPipelineTimestamp && pipelineResult.hasTargets()) {
+			previousPipelineTimestamp = resultTimestamp;
+			var target = pipelineResult.getBestTarget();
 
-		 	if(resultTimestamp != previousPipelineTimestamp) {
-		 		previousPipelineTimestamp = resultTimestamp;
-		 		poseEstimator.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), resultTimestamp);
-		 	}
+			var fiducialId = target.getFiducialId();
 
-		 }
+			Optional<Pose3d> tagPose =
+				camera.aprilTagFieldLayout() == null
+					? Optional.empty()
+					: camera.aprilTagFieldLayout().getTagPose(fiducialId);
 
-        this.yaw.set(this.gyro.getYaw());
-        this.roll.set(this.gyro.getRoll());
-        this.pitch.set(this.gyro.getPitch());
+			if (target.getPoseAmbiguity() <= 0.2 && fiducialId >= 0 && tagPose.isPresent()) {
+				var targetPose = tagPose.get();
+				Transform3d camToTarget = target.getBestCameraToTarget();
+
+				System.out.println(camToTarget);
+
+				Pose3d camPose = targetPose.transformBy(camToTarget.inverse());
+
+				var visionMesurement = camPose.transformBy(CAMERAPOSE);
+				poseEstimator.addVisionMeasurement(visionMesurement.toPose2d(), resultTimestamp);
+			}
+		}
+
+//        this.yaw.set(this.gyro.getYaw());
+//        this.roll.set(this.gyro.getRoll());
+//        this.pitch.set(this.gyro.getPitch());
 
 		poseX.set(this.getEstimatedPosition().getX());
 		poseY.set(this.getEstimatedPosition().getY());
 		heading.set(this.getEstimatedPosition().getRotation().getDegrees());
+
+
     }
 
     private SwerveModulePosition[] getSwerveModulePositions() {

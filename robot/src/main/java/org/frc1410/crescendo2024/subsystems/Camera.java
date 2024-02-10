@@ -17,7 +17,7 @@ import static org.frc1410.crescendo2024.util.Constants.*;
 
 public class Camera implements Subsystem {
 
-	private final PhotonCamera camera = new PhotonCamera(CAMERA_NAME);
+	private final PhotonCamera camera = new PhotonCamera("Arducam_OV9281_USB_Camera");
 
 	private AprilTagFieldLayout layout;
 
@@ -49,5 +49,9 @@ public class Camera implements Subsystem {
 
 	public PhotonPipelineResult getLatestResult() {
 		return camera.getLatestResult();
+	}
+
+	public AprilTagFieldLayout aprilTagFieldLayout() {
+		return layout;
 	}
 }
