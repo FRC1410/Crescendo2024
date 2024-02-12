@@ -8,17 +8,16 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StringPublisher;
 import edu.wpi.first.networktables.StringSubscriber;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import org.frc1410.crescendo2024.commands.*;
 import org.frc1410.crescendo2024.commands.ampBarCommands.ScoreAmp;
 import org.frc1410.crescendo2024.commands.drivetrainCommands.DriveLooped;
 import org.frc1410.crescendo2024.commands.shooterCommands.IncrementShooterRPM;
 import org.frc1410.crescendo2024.commands.shooterCommands.ShooterManual;
 import org.frc1410.crescendo2024.subsystems.*;
-PathPlanner
 import org.frc1410.crescendo2024.util.NetworkTables;
 import org.frc1410.framework.AutoSelector;
 
-main
 import org.frc1410.framework.PhaseDrivenRobot;
 import org.frc1410.framework.control.Controller;
 import org.frc1410.framework.scheduler.task.TaskPersistence;
@@ -29,11 +28,13 @@ import static org.frc1410.crescendo2024.util.Constants.*;
 public final class Robot extends PhaseDrivenRobot {
 
 	public Robot() {
-		NamedCommands.registerCommand("Run intake", new RunIntakeLooped(
+		NamedCommands.registerCommand("ShooterManual", new ShooterManual(shooter));
+
+		NamedCommands.registerCommand("RunIntakeLooped", new RunIntakeLooped(
 			intake,
 			storage,
-			1,
-			1
+			1000,
+			1000
 		));
 	}
 
@@ -49,7 +50,8 @@ public final class Robot extends PhaseDrivenRobot {
 	private final NetworkTable table = nt.getTable("Auto");
 
 	private final AutoSelector autoSelector = new AutoSelector()
-		.add("BaseAuto", () -> new PathPlannerAuto("BaseAuto"));
+		.add("New Auto", () -> new PathPlannerAuto("New Auto"))
+		.add("Test", () -> new PathPlannerAuto("Test"));
 
 	{
 		var profiles = new String[autoSelector.getProfiles().size()];
@@ -82,6 +84,9 @@ public final class Robot extends PhaseDrivenRobot {
 
 		scheduler.scheduleDefaultCommand(new DriveLooped(drivetrain, driverController.LEFT_Y_AXIS, driverController.LEFT_X_AXIS, driverController.RIGHT_X_AXIS), TaskPersistence.EPHEMERAL);
 
+		driverController.Y.whenPressed(new InstantCommand(
+			() -> drivetrain.zeroYaw()
+		), TaskPersistence.GAMEPLAY);
 
 		driverController.LEFT_TRIGGER.button().whileHeld(new ScoreAmp(shooter, storage, false), TaskPersistence.GAMEPLAY);
 

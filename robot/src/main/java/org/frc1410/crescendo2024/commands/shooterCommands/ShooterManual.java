@@ -15,13 +15,14 @@ public class ShooterManual extends Command {
 
 	@Override
 	public void initialize() {
-
+		shooter.setRPM(4200);
 	}
 
 	@Override
 	public void execute() {
 
-		shooter.setRPM(shooter.getSpeed());
+//		shooter.setRPM(shooter.getSpeed());
+//		System.out.println("BALLING");
 		// TODO: write a way to check if shooter is sped up before shooting
 
 	}

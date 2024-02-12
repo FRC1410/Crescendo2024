@@ -30,11 +30,11 @@ public interface Tuning {
 	double AMP_TOLERANCE = 0;
 
 	// Auto PID Constants
-	double AUTO_DRIVE_P = 0;
+	double AUTO_DRIVE_P = 1;
 	double AUTO_DRIVE_I = 0;
 	double AUTO_DRIVE_D = 0;
 
-	double AUTO_TURN_P = 0;
+	double AUTO_TURN_P = 1;
 	double AUTO_TURN_I = 0;
 	double AUTO_TURN_D = 0;
 

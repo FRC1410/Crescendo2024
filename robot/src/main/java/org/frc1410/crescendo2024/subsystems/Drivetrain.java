@@ -4,10 +4,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -17,6 +14,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 
+import edu.wpi.first.wpilibj.SerialPort;
 import org.frc1410.framework.scheduler.subsystem.SubsystemStore;
 import org.frc1410.framework.scheduler.subsystem.TickedSubsystem;
 
@@ -70,13 +68,30 @@ public class Drivetrain implements TickedSubsystem {
 
 	 private final Camera camera = new Camera();
 
-    private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+    private final AHRS gyro = new AHRS(SerialPort.Port.kUSB);
 
     // Misc
     private final SwerveDrivePoseEstimator poseEstimator;
 
 	private double previousPipelineTimestamp = 0;
     public Drivetrain(SubsystemStore subsystems) {
+
+		AutoBuilder.configureHolonomic(
+			this::getEstimatedPosition,
+			this::resetPose,
+			this::getChassisSpeeds,
+			this::drive,
+			HOLONOMIC_AUTO_CONFIG,
+			() -> {
+//				var alliance = DriverStation.getAlliance();
+//				if (alliance.isPresent()) {
+//					return alliance.get() == DriverStation.Alliance.Red;
+//				}
+				return false;
+			},
+			this
+		);
+
         this.frontLeft = subsystems.track(new SwerveModule(
             FRONT_LEFT_DRIVE_MOTOR,
             FRONT_LEFT_STEER_MOTOR,
@@ -138,22 +153,6 @@ public class Drivetrain implements TickedSubsystem {
 
         this.gyro.reset();
 
-		AutoBuilder.configureHolonomic(
-			this::getEstimatedPosition,
-			this::resetPose,
-			this::getChassisSpeeds,
-			this::drive,
-			HOLONOMIC_AUTO_CONFIG,
-			() -> {
-//				var alliance = DriverStation.getAlliance();
-//				if (alliance.isPresent()) {
-//					return alliance.get() == DriverStation.Alliance.Red;
-//				}
-				return false;
-			},
-			this
-		);
-
     }
 
     public void drive(ChassisSpeeds chassisSpeeds) {
@@ -165,6 +164,8 @@ public class Drivetrain implements TickedSubsystem {
         this.frontRight.setDesiredState(swerveModuleStates[1]);
         this.backLeft.setDesiredState(swerveModuleStates[2]);
         this.backRight.setDesiredState(swerveModuleStates[3]);
+
+//		System.out.println(chassisSpeeds);
 
     }
 
@@ -183,6 +184,7 @@ public class Drivetrain implements TickedSubsystem {
     }
 
     public Pose2d getEstimatedPosition() {
+//		System.out.println(this.poseEstimator.getEstimatedPosition());
         return this.poseEstimator.getEstimatedPosition();
     }
 
@@ -201,11 +203,11 @@ public class Drivetrain implements TickedSubsystem {
 
     @Override
     public void periodic() {
+//		System.out.println(this.getChassisSpeeds());
         this.poseEstimator.update(
             this.getAngle().toRotation2d(),
             this.getSwerveModulePositions()
         );
-PathPlanner
 
 		 var estimatedPose = camera.getEstimatedPose();
 
@@ -228,8 +230,9 @@ PathPlanner
 		poseY.set(this.getEstimatedPosition().getY());
 		heading.set(this.getEstimatedPosition().getRotation().getDegrees());
 
-
-main
+		yaw.set(this.gyro.getYaw());
+		pitch.set(this.gyro.getPitch());
+		roll.set(this.gyro.getRoll());
     }
 
     private SwerveModulePosition[] getSwerveModulePositions() {

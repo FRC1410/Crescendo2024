@@ -39,19 +39,11 @@ public class Camera implements Subsystem {
 			layout,
 			PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
 			camera,
-			new Transform3d()
+			CAMERA_POSE
 		);
 	}
 
 	public Optional<EstimatedRobotPose> getEstimatedPose() {
 		return photonPoseEstimator.update();
-	}
-
-	public PhotonPipelineResult getLatestResult() {
-		return camera.getLatestResult();
-	}
-
-	public AprilTagFieldLayout aprilTagFieldLayout() {
-		return layout;
 	}
 }

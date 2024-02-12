@@ -1,15 +1,11 @@
 package org.frc1410.crescendo2024.util;
 
-PathPlanner
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.Rotation3d;
 
 import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
@@ -17,7 +13,6 @@ import edu.wpi.first.math.util.Units;
 import java.util.Arrays;
 import java.util.List;
 
-main
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
@@ -113,11 +108,10 @@ public interface Constants {
 
 	double SHOOTER_MANUAL_RPM = 1000;
 
-PathPlanner
 	HolonomicPathFollowerConfig HOLONOMIC_AUTO_CONFIG = new HolonomicPathFollowerConfig(
 		new PIDConstants(AUTO_DRIVE_P, AUTO_DRIVE_I, AUTO_DRIVE_D),
 		new PIDConstants(AUTO_TURN_P, AUTO_TURN_I, AUTO_TURN_D),
-		4.2,
+		3,
 		0.426562165692177,
 		new ReplanningConfig()
 	);
@@ -139,6 +133,5 @@ PathPlanner
 	double STORAGE_LEFT_S = 0.15384;
 	double STORAGE_LEFT_V = 0.00107;
 
-	Transform3d CAMERAPOSE = new Transform3d(new Translation3d(), new Rotation3d());
- main
+	Transform3d CAMERA_POSE = new Transform3d(new Translation3d(0.3683,0,0.559), new Rotation3d(0,Math.toRadians(16),0));
 }
