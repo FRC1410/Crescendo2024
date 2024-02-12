@@ -28,7 +28,7 @@ import static org.frc1410.crescendo2024.util.Constants.*;
 public final class Robot extends PhaseDrivenRobot {
 
 	public Robot() {
-		NamedCommands.registerCommand("ShooterManual", new ShooterManual(shooter));
+		NamedCommands.registerCommand("ShooterManual", new ShooterManual(shooter, 0));
 
 		NamedCommands.registerCommand("RunIntakeLooped", new RunIntakeLooped(
 			intake,
@@ -91,7 +91,7 @@ public final class Robot extends PhaseDrivenRobot {
 		driverController.LEFT_TRIGGER.button().whileHeld(new ScoreAmp(shooter, storage, false), TaskPersistence.GAMEPLAY);
 
 		// TODO: switch command to be on the driver controller.
-		operatorController.RIGHT_BUMPER.whileHeld(new ShooterManual(shooter), TaskPersistence.GAMEPLAY);
+		operatorController.RIGHT_BUMPER.whileHeld(new ShooterManual(shooter, 0), TaskPersistence.GAMEPLAY);
 
 		operatorController.A.whenPressed(new IncrementShooterRPM(shooter, SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);
 		operatorController.B.whenPressed(new IncrementShooterRPM(shooter, -SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);

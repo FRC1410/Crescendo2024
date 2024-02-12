@@ -6,17 +6,17 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class RunShooterLooped extends Command {
 	private final Shooter shooter;
-	private final double baseRpm;
+	private final double RPM;
 
-	public RunShooterLooped(Shooter shooter, double baseRpm) {
+	public RunShooterLooped(Shooter shooter, double RPM) {
 		this.shooter = shooter;
-		this.baseRpm = baseRpm;
+		this.RPM = RPM;
 		addRequirements(shooter);
 	}
 
 	@Override
 	public void initialize() {
-		shooter.setRPM(this.baseRpm + this.shooter.rpmAdjustment);
+		shooter.setRPM(RPM);
 	}
 
 	@Override
