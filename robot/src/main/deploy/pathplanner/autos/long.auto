@@ -139,6 +139,25 @@
               }
             ]
           }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunIntakeLooped"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "shooting to B"
+                }
+              }
+            ]
+          }
         }
       ]
     }
