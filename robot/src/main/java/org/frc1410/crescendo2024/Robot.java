@@ -13,6 +13,7 @@ import org.frc1410.crescendo2024.commands.*;
 import org.frc1410.crescendo2024.commands.ampBarCommands.ScoreAmp;
 import org.frc1410.crescendo2024.commands.drivetrainCommands.DriveLooped;
 import org.frc1410.crescendo2024.commands.shooterCommands.IncrementShooterRPM;
+import org.frc1410.crescendo2024.commands.shooterCommands.RunShooterLooped;
 import org.frc1410.crescendo2024.commands.shooterCommands.ShooterManual;
 import org.frc1410.crescendo2024.subsystems.*;
 import org.frc1410.crescendo2024.util.NetworkTables;
@@ -28,7 +29,7 @@ import static org.frc1410.crescendo2024.util.Constants.*;
 public final class Robot extends PhaseDrivenRobot {
 
 	public Robot() {
-		NamedCommands.registerCommand("ShooterManual", new ShooterManual(shooter, 0));
+		NamedCommands.registerCommand("ShooterManual", new RunShooterLooped(shooter, storage, 0, 0));
 
 		NamedCommands.registerCommand("RunIntakeLooped", new RunIntakeLooped(
 			intake,
@@ -36,6 +37,9 @@ public final class Robot extends PhaseDrivenRobot {
 			1000,
 			1000
 		));
+
+		NamedCommands.registerCommand("RunStorage", new RunStorage(storage, 1200));
+		NamedCommands.registerCommand("RunIntakeOnly", new RunIntake(intake, 0.5));
 	}
 
 	private final Controller driverController = new Controller(scheduler, DRIVER_CONTROLLER, 0.1 );
@@ -91,7 +95,7 @@ public final class Robot extends PhaseDrivenRobot {
 		driverController.LEFT_TRIGGER.button().whileHeld(new ScoreAmp(shooter, storage, false), TaskPersistence.GAMEPLAY);
 
 		// TODO: switch command to be on the driver controller.
-		operatorController.RIGHT_BUMPER.whileHeld(new ShooterManual(shooter, 0), TaskPersistence.GAMEPLAY);
+		operatorController.RIGHT_BUMPER.whileHeld(new ShooterManual(shooter), TaskPersistence.GAMEPLAY);
 
 		operatorController.A.whenPressed(new IncrementShooterRPM(shooter, SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);
 		operatorController.B.whenPressed(new IncrementShooterRPM(shooter, -SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);

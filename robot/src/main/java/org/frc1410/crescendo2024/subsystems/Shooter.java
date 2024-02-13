@@ -83,6 +83,8 @@ public class Shooter implements TickedSubsystem {
 	}
 
 
+
+
 	public void setVoltsLeft(double volts) {
 		shooterMotorLeft.setVoltage(volts);
 	}
