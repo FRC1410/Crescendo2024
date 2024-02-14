@@ -7,14 +7,12 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 import edu.wpi.first.networktables.StringPublisher;
 import edu.wpi.first.networktables.StringSubscriber;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import org.frc1410.crescendo2024.commands.*;
 import org.frc1410.crescendo2024.commands.ampBarCommands.ScoreAmp;
 import org.frc1410.crescendo2024.commands.drivetrainCommands.DriveLooped;
-import org.frc1410.crescendo2024.commands.shooterCommands.AutomaticShoot;
+import org.frc1410.crescendo2024.commands.shooterCommands.Shoot;
 import org.frc1410.crescendo2024.commands.shooterCommands.IncrementShooterRPM;
-import org.frc1410.crescendo2024.commands.shooterCommands.RunShooterLooped;
 import org.frc1410.crescendo2024.commands.shooterCommands.ShooterManual;
 import org.frc1410.crescendo2024.subsystems.*;
 import org.frc1410.crescendo2024.util.NetworkTables;
@@ -100,7 +98,7 @@ public final class Robot extends PhaseDrivenRobot {
 		// TODO: switch command to be on the driver controller.
 		operatorController.RIGHT_BUMPER.whileHeld(new ShooterManual(shooter), TaskPersistence.GAMEPLAY);
 
-		operatorController.RIGHT_TRIGGER.button().whileHeldOnce(new AutomaticShoot(shooter, storage, 0,0), TaskPersistence.EPHEMERAL);
+		operatorController.RIGHT_TRIGGER.button().whileHeldOnce(new Shoot(shooter, storage, 0,0), TaskPersistence.EPHEMERAL);
 
 		operatorController.RIGHT_TRIGGER.button().whileHeldOnce(new RunIntakeLooped(intake, storage, INTAKE_SPEED, STORAGE_INTAKE_SPEED), TaskPersistence.GAMEPLAY);
 		operatorController.LEFT_TRIGGER.button().whileHeld(new Outtake(intake, storage, shooter, OUTTAKE_SPEED, STORAGE_OUTTAKE_SPEED, SHOOTER_OUTTAKE_SPEED), TaskPersistence.GAMEPLAY);

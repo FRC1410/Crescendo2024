@@ -18,25 +18,18 @@ import static org.frc1410.crescendo2024.util.Constants.*;
 public class DriveToShootingPose extends Command {
 
 	private final Drivetrain drivetrain;
-	private final Shooter shooter;
+	private final Pose2d nearestPose;
 
 	private PathfindHolonomic pathfindHolonomic;
 
-	public DriveToShootingPose(Drivetrain drivetrain, Shooter shooter) {
+	public DriveToShootingPose(Drivetrain drivetrain, Pose2d nearestPose) {
 		this.drivetrain = drivetrain;
-		this.shooter = shooter;
+		this.nearestPose = nearestPose;
 		addRequirements(drivetrain);
 	}
 
 	@Override
 	public void initialize() {
-
-		Pose2d currentRobotPose = drivetrain.getEstimatedPosition();
-		Pose2d nearestPose = currentRobotPose.nearest(SHOOTING_POSITIONS.stream().map(shootingPositions -> shootingPositions.pose).toList());
-
-		int nearestPoseIndex = SHOOTING_POSITIONS.indexOf(nearestPose);
-		ShootingPosition shootingPose = SHOOTING_POSITIONS.get(nearestPoseIndex);
-		double shooterRPM = shootingPose.shooterRPM;
 
 		pathfindHolonomic = new PathfindHolonomic(
 			nearestPose,

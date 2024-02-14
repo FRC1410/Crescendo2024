@@ -17,7 +17,7 @@ public class RunShooterLooped extends Command {
 
 	@Override
 	public void initialize() {
-		shooter.setRPM(shooterRPM);
+		shooter.setRPM(shooterRPM + shooter.rpmAdjustment);
 	}
 
 	@Override

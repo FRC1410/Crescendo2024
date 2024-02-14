@@ -7,9 +7,9 @@ import org.frc1410.crescendo2024.commands.RunStorage;
 import org.frc1410.crescendo2024.subsystems.Shooter;
 import org.frc1410.crescendo2024.subsystems.Storage;
 
-public class AutomaticShoot extends ParallelRaceGroup {
+public class Shoot extends ParallelRaceGroup {
 
-	public AutomaticShoot(Shooter shooter, Storage storage, double desiredShooterRPM, double desiredStorageRPM) {
+	public Shoot(Shooter shooter, Storage storage, double desiredShooterRPM, double desiredStorageRPM) {
 		addCommands(
 			new RunShooterLooped(shooter, desiredShooterRPM),
 
