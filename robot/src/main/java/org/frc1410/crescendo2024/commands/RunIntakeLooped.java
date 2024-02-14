@@ -23,7 +23,8 @@ public class RunIntakeLooped extends Command {
 	@Override
 	public void initialize() {
 		intake.setSpeed(intakeSpeed);
-		storage.setRPM(700);
+		storage.setSpeed(storageSpeed);
+//		storage.setRPM(storage.getStorageSpeed());
 	}
 
 	@Override

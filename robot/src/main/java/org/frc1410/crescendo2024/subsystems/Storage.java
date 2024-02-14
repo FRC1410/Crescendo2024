@@ -30,7 +30,7 @@ public class Storage implements TickedSubsystem {
 	private final RelativeEncoder storageRightEncoder;
 
 	private final NetworkTable table = NetworkTableInstance.getDefault().getTable("Shooter");
-	private final DoublePublisher storageSpeedPub = NetworkTables.PublisherFactory(table, "Desired Storage RPM", 500);
+	private final DoublePublisher storageSpeedPub = NetworkTables.PublisherFactory(table, "Desired Storage RPM", 0);
 	private final DoubleSubscriber desiredStorageRPM = NetworkTables.SubscriberFactory(table, table.getDoubleTopic("Desired Storage RPM"));
 
 	private final DoublePublisher storageSpeedRPMLeft = NetworkTables.PublisherFactory(table, "Storage RPM Left", 1);

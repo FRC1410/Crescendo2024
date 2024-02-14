@@ -67,7 +67,7 @@
                     {
                       "type": "wait",
                       "data": {
-                        "waitTime": 1.63
+                        "waitTime": 1.58
                       }
                     },
                     {
@@ -93,26 +93,128 @@
                 }
               },
               {
+                "type": "named",
+                "data": {
+                  "name": "ShooterManual"
+                }
+              },
+              {
                 "type": "sequential",
                 "data": {
                   "commands": [
                     {
-                      "type": "race",
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.46
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "RunIntakeLooped"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunIntakeLooped"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "shooting to B"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "B to shooting line"
+                }
+              },
+              {
+                "type": "race",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ShooterManual"
+                      }
+                    },
+                    {
+                      "type": "sequential",
                       "data": {
                         "commands": [
                           {
                             "type": "wait",
                             "data": {
-                              "waitTime": 1.4
+                              "waitTime": 1.0
                             }
                           },
                           {
-                            "type": "named",
+                            "type": "race",
                             "data": {
-                              "name": "ShooterManual"
+                              "commands": [
+                                {
+                                  "type": "wait",
+                                  "data": {
+                                    "waitTime": 0.5
+                                  }
+                                },
+                                {
+                                  "type": "named",
+                                  "data": {
+                                    "name": "RunIntakeLooped"
+                                  }
+                                }
+                              ]
                             }
                           }
                         ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "shooting from B to A"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.4
                       }
                     },
                     {
@@ -141,19 +243,57 @@
           }
         },
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "A to shooting pose"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ShooterManual"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 1.37
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "RunIntakeLooped"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "race",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "path",
                 "data": {
-                  "name": "RunIntakeLooped"
+                  "pathName": "Book it"
                 }
               },
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "shooting to B"
+                  "name": "RunIntakeLooped"
                 }
               }
             ]
