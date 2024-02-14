@@ -85,7 +85,7 @@ public interface Constants {
 	double INTAKE_SPEED = 0.75;
 	double OUTTAKE_SPEED = -0.75;
 
-	double STORAGE_INTAKE_SPEED = -1;
+	double STORAGE_INTAKE_SPEED = 1;
 	double STORAGE_OUTTAKE_SPEED = 1;
 
 	double SHOOTER_MANUAL_SPEED = 0.2;
