@@ -7,17 +7,17 @@ import org.frc1410.crescendo2024.subsystems.Storage;
 
 public class RunShooterLooped extends Command {
 	private final Shooter shooter;
-	private final double RPM;
+	private final double shooterRPM;
 
-	public RunShooterLooped(Shooter shooter, double RPM) {
+	public RunShooterLooped(Shooter shooter, double shooterRPM) {
 		this.shooter = shooter;
-		this.RPM = RPM;
+		this.shooterRPM = shooterRPM;
 		addRequirements(shooter);
 	}
 
 	@Override
 	public void initialize() {
-		shooter.setRPM(RPM);
+		shooter.setRPM(shooterRPM);
 	}
 
 	@Override

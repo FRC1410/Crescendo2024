@@ -14,6 +14,7 @@ public class AutomaticShoot extends ParallelRaceGroup {
 			new RunShooterLooped(shooter, desiredShooterRPM),
 
 			new SequentialCommandGroup(
+				//Shooter length
 				new WaitCommand(1),
 
 				new ParallelRaceGroup(

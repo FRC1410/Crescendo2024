@@ -64,8 +64,8 @@ public interface Constants {
 	int NUM_LEDS = 250;
 
 	List<ShootingPosition> SHOOTING_POSITIONS = Arrays.asList(
-		new ShootingPosition(new Pose2d(2.26, 4.81, Rotation2d.fromDegrees(-22.6)), 0),
-		new ShootingPosition(new Pose2d(1.88, 5, Rotation2d.fromDegrees(-19.6)), 0)
+		new ShootingPosition(new Pose2d(2.26, 4.81, Rotation2d.fromDegrees(-22.6)), 0, 0),
+		new ShootingPosition(new Pose2d(1.88, 5, Rotation2d.fromDegrees(-19.6)), 0, 0)
 	);
 
 	PathConstraints PATH_FIND_CONSTRAINTS = new PathConstraints(
