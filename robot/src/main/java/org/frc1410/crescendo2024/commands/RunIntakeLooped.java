@@ -17,8 +17,6 @@ public class RunIntakeLooped extends Command {
 
 	private boolean limitSwitchHit;
 
-
-
 	public RunIntakeLooped(Intake intake, Storage storage, double intakeSpeed, double storageSpeed) {
 		this.intake = intake;
 		this.storage = storage;
@@ -36,7 +34,7 @@ public class RunIntakeLooped extends Command {
 	@Override
 	public void execute() {
 		intake.setSpeed(intakeSpeed);
-		storage.setRPM(200);
+		storage.setRPM(storageSpeed);
 
 		if(intake.getLimitSwitch()) {
 			intake.setSpeed(0);

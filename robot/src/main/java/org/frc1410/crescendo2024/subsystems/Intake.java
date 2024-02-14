@@ -41,7 +41,5 @@ public class Intake implements Subsystem {
 	public boolean getLimitSwitch() {
 		return !lowerLimitSwitch.get();
 	}
-
-
 }
 

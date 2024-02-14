@@ -82,9 +82,6 @@ public class Shooter implements TickedSubsystem {
 		return this.desiredShooterRPM.get();
 	}
 
-
-
-
 	public void setVoltsLeft(double volts) {
 		shooterMotorLeft.setVoltage(volts);
 	}
@@ -103,7 +100,6 @@ public class Shooter implements TickedSubsystem {
 
 	@Override
 	public void periodic() {
-
 		leftActualVel.set(shooterLeftEncoder.getVelocity());
 		rightActualVel.set(shooterRightEncoder.getVelocity());
 	}
