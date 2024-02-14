@@ -15,7 +15,7 @@ public class ShooterManual extends Command {
 
 	@Override
 	public void initialize() {
-		shooter.setRPM(4200);
+		shooter.setRPM(shooter.getSpeed());
 	}
 
 	@Override

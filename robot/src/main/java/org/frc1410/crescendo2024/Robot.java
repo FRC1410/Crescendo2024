@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import org.frc1410.crescendo2024.commands.*;
 import org.frc1410.crescendo2024.commands.ampBarCommands.ScoreAmp;
 import org.frc1410.crescendo2024.commands.drivetrainCommands.DriveLooped;
+import org.frc1410.crescendo2024.commands.shooterCommands.AutomaticShoot;
 import org.frc1410.crescendo2024.commands.shooterCommands.IncrementShooterRPM;
 import org.frc1410.crescendo2024.commands.shooterCommands.RunShooterLooped;
 import org.frc1410.crescendo2024.commands.shooterCommands.ShooterManual;
@@ -29,13 +30,13 @@ import static org.frc1410.crescendo2024.util.Constants.*;
 public final class Robot extends PhaseDrivenRobot {
 
 	public Robot() {
-		NamedCommands.registerCommand("ShooterManual", new RunShooterLooped(shooter, storage, 0, 0));
+//		NamedCommands.registerCommand("ShooterManual", new RunShooterLooped(shooter, storage, 0, 0));
 
 		NamedCommands.registerCommand("RunIntakeLooped", new RunIntakeLooped(
 			intake,
 			storage,
-			1000,
-			1000
+			0,
+			0
 		));
 
 		NamedCommands.registerCommand("RunStorage", new RunStorage(storage, 1200));
@@ -86,23 +87,26 @@ public final class Robot extends PhaseDrivenRobot {
 	@Override
 	public void teleopSequence() {
 
+		// Drivetrain
 		scheduler.scheduleDefaultCommand(new DriveLooped(drivetrain, driverController.LEFT_Y_AXIS, driverController.LEFT_X_AXIS, driverController.RIGHT_X_AXIS), TaskPersistence.EPHEMERAL);
 
 		driverController.Y.whenPressed(new InstantCommand(
 			() -> drivetrain.zeroYaw()
 		), TaskPersistence.GAMEPLAY);
 
+		// Shooter
 		driverController.LEFT_TRIGGER.button().whileHeld(new ScoreAmp(shooter, storage, false), TaskPersistence.GAMEPLAY);
 
 		// TODO: switch command to be on the driver controller.
 		operatorController.RIGHT_BUMPER.whileHeld(new ShooterManual(shooter), TaskPersistence.GAMEPLAY);
 
+		operatorController.RIGHT_TRIGGER.button().whileHeldOnce(new AutomaticShoot(shooter, storage, 0,0), TaskPersistence.EPHEMERAL);
+
+//		operatorController.RIGHT_TRIGGER.button().whileHeld(new RunIntakeLooped(intake, storage, INTAKE_SPEED, STORAGE_INTAKE_SPEED), TaskPersistence.GAMEPLAY);
+//		operatorController.LEFT_TRIGGER.button().whileHeld(new RunIntakeLooped(intake, storage, OUTTAKE_SPEED, STORAGE_OUTTAKE_SPEED), TaskPersistence.GAMEPLAY);
+
 		operatorController.A.whenPressed(new IncrementShooterRPM(shooter, SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);
 		operatorController.B.whenPressed(new IncrementShooterRPM(shooter, -SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);
-
-		operatorController.RIGHT_TRIGGER.button().whileHeldOnce(new RunIntakeLooped(intake, storage, INTAKE_SPEED, -1), TaskPersistence.GAMEPLAY);
-		operatorController.LEFT_TRIGGER.button().whileHeld(new RunIntakeLooped(intake, storage, OUTTAKE_SPEED, STORAGE_OUTTAKE_SPEED), TaskPersistence.GAMEPLAY);
-
 	}
 
 	@Override
