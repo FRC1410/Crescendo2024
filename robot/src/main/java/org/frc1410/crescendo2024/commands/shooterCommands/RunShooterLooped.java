@@ -11,6 +11,8 @@ public class RunShooterLooped extends Command {
 	private final double RPM;
 	private final double storageRPM;
 
+
+
 	public RunShooterLooped(Shooter shooter, Storage storage,double RPM, double storageRPM) {
 		this.shooter = shooter;
 		this.storage = storage;
@@ -22,12 +24,6 @@ public class RunShooterLooped extends Command {
 	@Override
 	public void initialize() {
 		shooter.setRPM(RPM);
-
-		if(shooter.getSpeed() > 3200) {
-			storage.setRPM(1200);
-		} else {
-			storage.setRPM(0);
-		}
 	}
 
 	@Override

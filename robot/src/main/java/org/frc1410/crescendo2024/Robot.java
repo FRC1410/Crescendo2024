@@ -100,7 +100,7 @@ public final class Robot extends PhaseDrivenRobot {
 		operatorController.A.whenPressed(new IncrementShooterRPM(shooter, SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);
 		operatorController.B.whenPressed(new IncrementShooterRPM(shooter, -SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);
 
-		operatorController.RIGHT_TRIGGER.button().whileHeld(new RunIntakeLooped(intake, storage, INTAKE_SPEED, -1), TaskPersistence.GAMEPLAY);
+		operatorController.RIGHT_TRIGGER.button().whileHeldOnce(new RunIntakeLooped(intake, storage, INTAKE_SPEED, -1), TaskPersistence.GAMEPLAY);
 		operatorController.LEFT_TRIGGER.button().whileHeld(new RunIntakeLooped(intake, storage, OUTTAKE_SPEED, STORAGE_OUTTAKE_SPEED), TaskPersistence.GAMEPLAY);
 
 	}

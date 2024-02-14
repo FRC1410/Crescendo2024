@@ -2,6 +2,9 @@ package org.frc1410.crescendo2024.subsystems;
 
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 import static org.frc1410.crescendo2024.util.IDs.*;
@@ -13,6 +16,10 @@ public class Intake implements Subsystem {
 	private final CANSparkMax intakeMotorFront = new CANSparkMax(INTAKE_FRONT_MOTOR_ID, MotorType.kBrushless);
 
 	private final CANSparkMax intakeMotorBack = new CANSparkMax(INTAKE_BACK_MOTOR_ID, MotorType.kBrushless);
+
+	private final NetworkTable table = NetworkTableInstance.getDefault().getTable("Drivetrain");
+
+	private final DigitalInput lowerLimitSwitch = new DigitalInput(1);
 
 	public Intake () {
 		intakeMotorFront.restoreFactoryDefaults();
@@ -30,5 +37,11 @@ public class Intake implements Subsystem {
 		intakeMotorFront.set(speed);
 		intakeMotorBack.set(speed);
 	}
+
+	public boolean getLimitSwitch() {
+		return !lowerLimitSwitch.get();
+	}
+
+
 }
 
