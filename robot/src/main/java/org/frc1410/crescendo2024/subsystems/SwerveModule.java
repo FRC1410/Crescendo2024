@@ -11,6 +11,7 @@ import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -29,8 +30,9 @@ public class SwerveModule implements TickedSubsystem {
 	private final RelativeEncoder driveEncoder;
 	private final CANcoder steerEncoder;
 
-	// RPM
-	private final SparkPIDController drivePIDController;
+	private final PIDController drivePIDController = new PIDController(SWERVE_DRIVE_P, SWERVE_DRIVE_I, SWERVE_DRIVE_D);
+
+	private final SimpleMotorFeedforward driveFeedForwardController = new SimpleMotorFeedforward(DRIVE_MOTOR_KS, DRIVE_MOTOR_KV);
 
 	// radians
 	private final PIDController steeringPIDController = new PIDController(
@@ -65,12 +67,6 @@ public class SwerveModule implements TickedSubsystem {
 		this.driveMotor.setInverted(driveMotorInverted);
 		this.driveMotor.setSmartCurrentLimit(40);
 
-		this.drivePIDController = driveMotor.getPIDController();
-		this.drivePIDController.setP(SWERVE_DRIVE_P);
-		this.drivePIDController.setI(SWERVE_DRIVE_I);
-		this.drivePIDController.setD(SWERVE_DRIVE_D);
-		this.drivePIDController.setFF(SWERVE_DRIVE_FF);
-
 		this.steerMotor = new CANSparkMax(steeringMotorID, CANSparkLowLevel.MotorType.kBrushless);
 		this.steerMotor.restoreFactoryDefaults();
 		this.steerMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
@@ -104,12 +100,6 @@ public class SwerveModule implements TickedSubsystem {
 		);
 
 		this.desiredState = optimized;
-
-		// System.out.println(optimized);
-		var a = SwerveModule.metersPerSecondToEncoderRPM(optimized.speedMetersPerSecond);
-		// System.out.println("aaa" + a);
-		this.drivePIDController.setReference(a, CANSparkMax.ControlType.kVelocity);
-
 	}
 
 	public SwerveModuleState getState() {
@@ -124,6 +114,11 @@ public class SwerveModule implements TickedSubsystem {
 
 	@Override
 	public void periodic() {
+		double drivePIDOutput = this.drivePIDController.calculate(this.getDriveVelocityMetersPerSecond(), desiredState.speedMetersPerSecond);
+		double driveForwardOutput = this.driveFeedForwardController.calculate(desiredState.speedMetersPerSecond);
+		System.out.println(drivePIDOutput);
+		this.driveMotor.setVoltage(drivePIDOutput + driveForwardOutput);
+
 		double steerPIDOutput = this.steeringPIDController.calculate(this.getSteerPosition().getRadians(), MathUtil.angleModulus(this.desiredState.angle.getRadians()));
 
 		this.steerMotor.setVoltage(steerPIDOutput);

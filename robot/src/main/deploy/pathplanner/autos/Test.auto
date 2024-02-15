@@ -2,25 +2,19 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.75,
-      "y": 4.39
+      "x": 1.28,
+      "y": 5.42
     },
-    "rotation": -60.0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "left Sub to C"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "C to left side sub"
+            "name": "PreloadShoot"
           }
         }
       ]

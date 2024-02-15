@@ -119,8 +119,13 @@ public interface Constants {
 
 	double MAX_SHOOTER_RPM = 5800;
 
-	double DRIVE_MOTOR_KS = 0.42923;
-	double DRIVE_MOTOR_KV = 2.60073;
+	//	Count=392
+	//	R2=0.99966
+	// 	kS=0.45245
+	// 	kV=2.61455
+
+	double DRIVE_MOTOR_KS = 0.45245;
+	double DRIVE_MOTOR_KV = 2.51455;
 
 	double SHOOTER_LEFT_S = 0.07484;
 	double SHOOTER_LEFT_V = 0.00207;

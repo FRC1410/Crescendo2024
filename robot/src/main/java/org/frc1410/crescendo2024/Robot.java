@@ -28,17 +28,8 @@ import static org.frc1410.crescendo2024.util.Constants.*;
 public final class Robot extends PhaseDrivenRobot {
 
 	public Robot() {
-//		NamedCommands.registerCommand("ShooterManual", new RunShooterLooped(shooter, storage, 0, 0));
-
-		NamedCommands.registerCommand("RunIntakeLooped", new RunIntakeLooped(
-			intake,
-			storage,
-			0,
-			0
-		));
-
-		NamedCommands.registerCommand("RunStorage", new RunStorage(storage, 1200));
-		NamedCommands.registerCommand("RunIntakeOnly", new RunIntake(intake, 0.5));
+		NamedCommands.registerCommand("PreloadShoot", new Shoot(shooter, storage, 3300, 400));
+		NamedCommands.registerCommand("Shoot", new ShooterManual(shooter));
 	}
 
 	private final Controller driverController = new Controller(scheduler, DRIVER_CONTROLLER, 0.1 );
@@ -53,7 +44,6 @@ public final class Robot extends PhaseDrivenRobot {
 	private final NetworkTable table = nt.getTable("Auto");
 
 	private final AutoSelector autoSelector = new AutoSelector()
-		.add("New Auto", () -> new PathPlannerAuto("New Auto"))
 		.add("Test", () -> new PathPlannerAuto("Test"));
 
 	{
@@ -96,9 +86,9 @@ public final class Robot extends PhaseDrivenRobot {
 		driverController.LEFT_TRIGGER.button().whileHeld(new ScoreAmp(shooter, storage, false), TaskPersistence.GAMEPLAY);
 
 		// TODO: switch command to be on the driver controller.
-		operatorController.RIGHT_BUMPER.whileHeld(new ShooterManual(shooter), TaskPersistence.GAMEPLAY);
+//		operatorController.RIGHT_BUMPER.whileHeld(new ShooterManual(shooter), TaskPersistence.GAMEPLAY);
 
-		operatorController.RIGHT_TRIGGER.button().whileHeldOnce(new Shoot(shooter, storage, 0,0), TaskPersistence.EPHEMERAL);
+		operatorController.RIGHT_BUMPER.whileHeldOnce(new Shoot(shooter, storage, 0,0), TaskPersistence.EPHEMERAL);
 
 		operatorController.RIGHT_TRIGGER.button().whileHeldOnce(new RunIntakeLooped(intake, storage, INTAKE_SPEED, STORAGE_INTAKE_SPEED), TaskPersistence.GAMEPLAY);
 		operatorController.LEFT_TRIGGER.button().whileHeld(new Outtake(intake, storage, shooter, OUTTAKE_SPEED, STORAGE_OUTTAKE_SPEED, SHOOTER_OUTTAKE_SPEED), TaskPersistence.GAMEPLAY);
