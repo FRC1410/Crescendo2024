@@ -43,12 +43,12 @@ public class LEDs implements Subsystem {
 			case AMP_ARM_FIRE_ANIMATION -> leds.animate(new FireAnimation());
 			case CLIMBING_RAINBOW_ANIMATION -> leds.animate(new RainbowAnimation());
 			case OCEAN_BREEZE -> leds.animate(new ColorFlowAnimation(30, 100, 250));
-			default -> leds.animate(new ColorFlowAnimation(30,100,250));
+//			default -> leds.animate(new ColorFlowAnimation(30,100,250));
 		}
 	}
 
 	public void defaultLEDsState() {
-		leds.animate(new ColorFlowAnimation(30, 100, 250));
+		leds.animate(new TwinkleAnimation(30, 100, 250, 0, 0.05, 150, TwinkleAnimation.TwinklePercent.Percent64));
 	}
 
 	private void oceanBreezeAnimation() {

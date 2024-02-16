@@ -4,14 +4,19 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import org.frc1410.crescendo2024.subsystems.Intake;
+import org.frc1410.crescendo2024.subsystems.LEDs;
 import org.frc1410.crescendo2024.subsystems.Storage;
 
 import edu.wpi.first.wpilibj2.command.Command;
+
+import static org.frc1410.crescendo2024.subsystems.LEDs.Colors.PRANCING_PONY_PINK;
 
 public class RunIntakeLooped extends Command {
 
 	private final Intake intake;
 	private final Storage storage;
+	private LEDs leds = new LEDs();
+
 	private final double intakeSpeed;
 	private final double storageSpeed;
 
@@ -23,7 +28,7 @@ public class RunIntakeLooped extends Command {
 		this.intakeSpeed = intakeSpeed;
 		this.storageSpeed = storageSpeed;
 
-		addRequirements(intake, storage);
+		addRequirements(intake, storage, leds);
 	}
 
 	@Override
@@ -40,8 +45,11 @@ public class RunIntakeLooped extends Command {
 			intake.setSpeed(0);
 			storage.setRPM(0);
 
+			leds.changeLEDsColor(PRANCING_PONY_PINK);
+
 			limitSwitchHit = true;
 		} else {
+			leds.defaultLEDsState();
 			limitSwitchHit = false;
 		}
 //		if(!intake.getLimitSwitch()) {

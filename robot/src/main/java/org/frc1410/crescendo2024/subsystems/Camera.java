@@ -19,6 +19,8 @@ public class Camera implements Subsystem {
 
 	private final PhotonCamera camera = new PhotonCamera("Arducam_OV9281_USB_Camera");
 
+	private LEDs leds = new LEDs();
+
 	private AprilTagFieldLayout layout;
 
 	private PhotonPoseEstimator photonPoseEstimator;
@@ -44,6 +46,10 @@ public class Camera implements Subsystem {
 	}
 
 	public Optional<EstimatedRobotPose> getEstimatedPose() {
-		return photonPoseEstimator.update();
+		if(camera.getLatestResult().hasTargets()) {
+			return photonPoseEstimator.update();
+		} else {
+			return Optional.empty();
+		}
 	}
 }

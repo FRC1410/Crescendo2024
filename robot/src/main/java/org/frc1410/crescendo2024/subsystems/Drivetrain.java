@@ -70,6 +70,8 @@ public class Drivetrain implements TickedSubsystem {
 
     private final AHRS gyro = new AHRS(SerialPort.Port.kUSB);
 
+	private LEDs leds = new LEDs();
+
     // Misc
     private final SwerveDrivePoseEstimator poseEstimator;
 
@@ -170,7 +172,7 @@ public class Drivetrain implements TickedSubsystem {
     }
 
     public void driveFieldRelative(ChassisSpeeds chassisSpeeds) {
-        var robotRelativeChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, this.getAngle().toRotation2d());
+        var robotRelativeChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, this.gyro.getRotation2d());
         this.drive(robotRelativeChassisSpeeds);
     }
 
@@ -214,13 +216,17 @@ public class Drivetrain implements TickedSubsystem {
 
 		 if(estimatedPose.isPresent()) {
 
+
+
 		 	// TODO: Possible bug where bad data is fed into pose estimator when no vision
 		 	var resultTimestamp = estimatedPose.get().timestampSeconds;
 
 		 	if(resultTimestamp != previousPipelineTimestamp) {
-		 		previousPipelineTimestamp = resultTimestamp;
-		 		poseEstimator.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), resultTimestamp);
+				 previousPipelineTimestamp = resultTimestamp;
+				 poseEstimator.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), resultTimestamp);
 		 	}
+		 } else {
+
 		 }
 
 //        this.yaw.set(this.gyro.getYaw());
@@ -246,6 +252,6 @@ public class Drivetrain implements TickedSubsystem {
     }
 
     private Rotation3d getAngle() {
-        return gyro.getRotation3d().rotateBy(NAVX_ANGLE);
+        return gyro.getRotation3d();
     }
 }

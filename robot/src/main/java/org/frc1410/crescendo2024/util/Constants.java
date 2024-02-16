@@ -63,8 +63,18 @@ public interface Constants {
 	int NUM_LEDS = 250;
 
 	List<ShootingPosition> SHOOTING_POSITIONS = Arrays.asList(
-//		new ShootingPosition(new Pose2d(2.26, 4.81, Rotation2d.fromDegrees(-22.6)), 0, 0),
-		new ShootingPosition(new Pose2d(1.43, 6.53, Rotation2d.fromDegrees(-155.7)), 2700, 625)
+
+		new ShootingPosition(new Pose2d(1.43, 6.53, Rotation2d.fromDegrees(-155.7)), 1575, 575),
+//
+		new ShootingPosition(new Pose2d(1.25, 5.55, Rotation2d.fromDegrees(180)), 1550, 575),
+//
+		new ShootingPosition(new Pose2d(1.43, 4.57, Rotation2d.fromDegrees(155.7)), 1575, 575),
+
+		// close apm wall
+		new ShootingPosition(new Pose2d(0.69, 6.82, Rotation2d.fromDegrees(-127)), 2700, 625),
+		// 24`` from sub
+		new ShootingPosition(new Pose2d(1.5,5.55, Rotation2d.fromDegrees(180)), 1550, 575),
+		new ShootingPosition(new Pose2d(1.5,4.28, Rotation2d.fromDegrees(127)), 2700, 625)
 	);
 
 	PathConstraints PATH_FIND_CONSTRAINTS = new PathConstraints(
@@ -72,14 +82,12 @@ public interface Constants {
 		Units.degreesToRadians(150), Units.degreesToRadians(150));
 
 	HolonomicPathFollowerConfig PATH_FIND_FOLLOWER_CONFIG = new HolonomicPathFollowerConfig(
-		new PIDConstants(5.0,0.0, 0),
+		new PIDConstants(7,0.0, 0),
 		new PIDConstants(1, 0.0, 0),
 		3,
 		0.37268062,
 		new ReplanningConfig()
 	);
-
-	Rotation3d NAVX_ANGLE = new Rotation3d(0, 0, 0);
 
 	double INTAKE_SPEED = 0.75;
 	double OUTTAKE_SPEED = -0.75;
@@ -138,5 +146,5 @@ public interface Constants {
 	double STORAGE_LEFT_S = 0.15384;
 	double STORAGE_LEFT_V = 0.00107;
 
-	Transform3d CAMERA_POSE = new Transform3d(new Translation3d(0.3683,0,0.559), new Rotation3d(0,Math.toRadians(16),0));
+	Transform3d CAMERA_POSE = new Transform3d(new Translation3d(0.3683,0,0.559), new Rotation3d(0,Math.toRadians(15),0));
 }

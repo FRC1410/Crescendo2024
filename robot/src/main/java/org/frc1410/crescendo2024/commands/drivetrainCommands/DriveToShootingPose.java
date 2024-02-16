@@ -55,7 +55,8 @@ public class DriveToShootingPose extends Command {
 	@Override
 	public boolean isFinished() {
 		if(pathfindHolonomic != null) {
-			pathfindHolonomic.isFinished();
+			boolean var = pathfindHolonomic.isFinished();
+			return var;
 		}
 		return false;
     }

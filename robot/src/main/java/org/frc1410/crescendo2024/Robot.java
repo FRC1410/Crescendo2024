@@ -13,6 +13,7 @@ import org.frc1410.crescendo2024.commands.*;
 import org.frc1410.crescendo2024.commands.ampBarCommands.ScoreAmp;
 import org.frc1410.crescendo2024.commands.drivetrainCommands.AutomaticShooting;
 import org.frc1410.crescendo2024.commands.drivetrainCommands.DriveLooped;
+import org.frc1410.crescendo2024.commands.drivetrainCommands.ShootAtNearestPosition;
 import org.frc1410.crescendo2024.commands.shooterCommands.Shoot;
 import org.frc1410.crescendo2024.commands.shooterCommands.IncrementShooterRPM;
 import org.frc1410.crescendo2024.commands.shooterCommands.ShooterManual;
@@ -44,6 +45,7 @@ public final class Robot extends PhaseDrivenRobot {
 	private final AmpBar ampBar = new AmpBar();
 	private final Storage storage = subsystems.track(new Storage());
 	private final Intake intake = subsystems.track(new Intake());
+	private final LEDs leds = new LEDs();
 
 	private final NetworkTableInstance nt = NetworkTableInstance.getDefault();
 	private final NetworkTable table = nt.getTable("Auto");
@@ -70,6 +72,8 @@ public final class Robot extends PhaseDrivenRobot {
 	@Override
 	public void autonomousSequence() {
 
+		leds.changeLEDsColor(LEDs.Colors.VIVACIOUS_VIOLENT_VIOLET);
+
 		NetworkTables.SetPersistence(autoPublisher.getTopic(), true);
 		String autoProfile = autoSubscriber.get();
 		var autoCommand = autoSelector.select(autoProfile);
@@ -80,6 +84,8 @@ public final class Robot extends PhaseDrivenRobot {
 	@Override
 	public void teleopSequence() {
 
+		leds.defaultLEDsState();
+
 		// Drivetrain
 		scheduler.scheduleDefaultCommand(new DriveLooped(drivetrain, driverController.LEFT_Y_AXIS, driverController.LEFT_X_AXIS, driverController.RIGHT_X_AXIS), TaskPersistence.EPHEMERAL);
 
@@ -89,10 +95,11 @@ public final class Robot extends PhaseDrivenRobot {
 
 		// Shooter
 		driverController.LEFT_TRIGGER.button().whileHeld(new ScoreAmp(shooter, storage, false), TaskPersistence.GAMEPLAY);
-		driverController.RIGHT_TRIGGER.button().whileHeld(new AutomaticShooting(drivetrain, shooter, storage), TaskPersistence.GAMEPLAY);
+		driverController.RIGHT_TRIGGER.button().whileHeldOnce(new ShootAtNearestPosition(drivetrain, shooter, storage), TaskPersistence.GAMEPLAY);
+		driverController.RIGHT_BUMPER.whileHeld(new ShooterManual(shooter), TaskPersistence.GAMEPLAY);
+		driverController.LEFT_BUMPER.whileHeld(new RunStorage(storage, 575), TaskPersistence.GAMEPLAY);
 
-		// TODO: switch command to be on the driver controller.
-//		operatorController.RIGHT_BUMPER.whileHeld(new ShooterManual(shooter), TaskPersistence.GAMEPLAY);
+		operatorController.RIGHT_BUMPER.whileHeld(new ShooterManual(shooter), TaskPersistence.GAMEPLAY);
 
 		operatorController.RIGHT_BUMPER.whileHeldOnce(new Shoot(shooter, storage, intake,3350,550), TaskPersistence.EPHEMERAL);
 

@@ -8,12 +8,12 @@ public class ShootingPosition {
 
 	public final Pose2d pose;
 	public final double shooterRPM;
-	public final double storageRpm;
+	public final double storageRPM;
 
 	public ShootingPosition(Pose2d pose, double shooterRPM, double storageRPM) {
 		this.pose = pose;
 		this.shooterRPM = shooterRPM;
-		this.storageRpm = storageRPM;
+		this.storageRPM = storageRPM;
 	}
 
 	private final double findRPM() {
