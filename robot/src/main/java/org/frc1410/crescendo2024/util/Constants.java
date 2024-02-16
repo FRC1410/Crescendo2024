@@ -97,7 +97,7 @@ public interface Constants {
 
 	double SHOOTER_OUTTAKE_SPEED = -500;
 
-	double SHOOTER_RPM_INCREMENT = 0;
+	double SHOOTER_RPM_INCREMENT = 150;
 
 	int AMP_HOME_POS = 0;
 	double AMP_SHOOT_SPEED = 0;
