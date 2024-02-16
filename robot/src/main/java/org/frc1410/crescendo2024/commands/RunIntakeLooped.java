@@ -40,10 +40,6 @@ public class RunIntakeLooped extends Command {
 			intake.setSpeed(0);
 			storage.setRPM(0);
 
-			new ParallelRaceGroup(
-				new RunStorage(storage, 500),
-				new WaitCommand(0)
-			);
 			limitSwitchHit = true;
 		} else {
 			limitSwitchHit = false;

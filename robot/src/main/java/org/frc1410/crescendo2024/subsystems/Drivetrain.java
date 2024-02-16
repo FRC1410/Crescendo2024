@@ -189,6 +189,7 @@ public class Drivetrain implements TickedSubsystem {
     }
 
     public void resetPose(Pose2d pose) {
+		this.gyro.setAngleAdjustment(pose.getRotation().getDegrees());
         this.poseEstimator.resetPosition(
             this.getAngle().toRotation2d(),
             this.getSwerveModulePositions(),

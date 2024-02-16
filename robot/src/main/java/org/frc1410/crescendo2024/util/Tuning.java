@@ -27,7 +27,7 @@ public interface Tuning {
 	double AMP_TOLERANCE = 0;
 
 	// Auto PID Constants
-	double AUTO_DRIVE_P = 1;
+	double AUTO_DRIVE_P = 7;
 	double AUTO_DRIVE_I = 0;
 	double AUTO_DRIVE_D = 0;
 

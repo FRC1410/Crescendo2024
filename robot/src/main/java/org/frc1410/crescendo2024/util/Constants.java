@@ -14,7 +14,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
 import static org.frc1410.crescendo2024.util.Tuning.*;
 
@@ -64,8 +63,8 @@ public interface Constants {
 	int NUM_LEDS = 250;
 
 	List<ShootingPosition> SHOOTING_POSITIONS = Arrays.asList(
-		new ShootingPosition(new Pose2d(2.26, 4.81, Rotation2d.fromDegrees(-22.6)), 0, 0),
-		new ShootingPosition(new Pose2d(1.88, 5, Rotation2d.fromDegrees(-19.6)), 0, 0)
+//		new ShootingPosition(new Pose2d(2.26, 4.81, Rotation2d.fromDegrees(-22.6)), 0, 0),
+		new ShootingPosition(new Pose2d(1.43, 6.53, Rotation2d.fromDegrees(-155.7)), 2700, 625)
 	);
 
 	PathConstraints PATH_FIND_CONSTRAINTS = new PathConstraints(
@@ -73,7 +72,7 @@ public interface Constants {
 		Units.degreesToRadians(150), Units.degreesToRadians(150));
 
 	HolonomicPathFollowerConfig PATH_FIND_FOLLOWER_CONFIG = new HolonomicPathFollowerConfig(
-		new PIDConstants(1.0,0.0, 0.5),
+		new PIDConstants(5.0,0.0, 0),
 		new PIDConstants(1, 0.0, 0),
 		3,
 		0.37268062,
@@ -85,7 +84,7 @@ public interface Constants {
 	double INTAKE_SPEED = 0.75;
 	double OUTTAKE_SPEED = -0.75;
 
-	double STORAGE_INTAKE_SPEED = 200;
+	double STORAGE_INTAKE_RPM = 300;
 	double STORAGE_OUTTAKE_SPEED = -400;
 
 	double SHOOTER_OUTTAKE_SPEED = -500;

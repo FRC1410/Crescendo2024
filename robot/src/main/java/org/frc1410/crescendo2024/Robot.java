@@ -2,6 +2,7 @@ package org.frc1410.crescendo2024;
 
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.sun.jdi.ShortType;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
@@ -10,6 +11,7 @@ import edu.wpi.first.networktables.StringSubscriber;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import org.frc1410.crescendo2024.commands.*;
 import org.frc1410.crescendo2024.commands.ampBarCommands.ScoreAmp;
+import org.frc1410.crescendo2024.commands.drivetrainCommands.AutomaticShooting;
 import org.frc1410.crescendo2024.commands.drivetrainCommands.DriveLooped;
 import org.frc1410.crescendo2024.commands.shooterCommands.Shoot;
 import org.frc1410.crescendo2024.commands.shooterCommands.IncrementShooterRPM;
@@ -28,8 +30,11 @@ import static org.frc1410.crescendo2024.util.Constants.*;
 public final class Robot extends PhaseDrivenRobot {
 
 	public Robot() {
-		NamedCommands.registerCommand("PreloadShoot", new Shoot(shooter, storage, 3300, 400));
+		NamedCommands.registerCommand("PreloadShoot", new Shoot(shooter, storage, intake,3300, 700));
+		NamedCommands.registerCommand("BigShoot", new Shoot(shooter, storage, intake, 1600, 575));
 		NamedCommands.registerCommand("Shoot", new ShooterManual(shooter));
+		NamedCommands.registerCommand("RunIntake", new RunIntakeLooped(intake, storage, 0.75, 100));
+		NamedCommands.registerCommand("RunStorage", new RunStorage(storage, 700));
 	}
 
 	private final Controller driverController = new Controller(scheduler, DRIVER_CONTROLLER, 0.1 );
@@ -38,7 +43,7 @@ public final class Robot extends PhaseDrivenRobot {
 	private final Shooter shooter = subsystems.track(new Shooter());
 	private final AmpBar ampBar = new AmpBar();
 	private final Storage storage = subsystems.track(new Storage());
-	private final Intake intake = new Intake();
+	private final Intake intake = subsystems.track(new Intake());
 
 	private final NetworkTableInstance nt = NetworkTableInstance.getDefault();
 	private final NetworkTable table = nt.getTable("Auto");
@@ -84,13 +89,14 @@ public final class Robot extends PhaseDrivenRobot {
 
 		// Shooter
 		driverController.LEFT_TRIGGER.button().whileHeld(new ScoreAmp(shooter, storage, false), TaskPersistence.GAMEPLAY);
+		driverController.RIGHT_TRIGGER.button().whileHeld(new AutomaticShooting(drivetrain, shooter, storage), TaskPersistence.GAMEPLAY);
 
 		// TODO: switch command to be on the driver controller.
 //		operatorController.RIGHT_BUMPER.whileHeld(new ShooterManual(shooter), TaskPersistence.GAMEPLAY);
 
-		operatorController.RIGHT_BUMPER.whileHeldOnce(new Shoot(shooter, storage, 0,0), TaskPersistence.EPHEMERAL);
+		operatorController.RIGHT_BUMPER.whileHeldOnce(new Shoot(shooter, storage, intake,3350,550), TaskPersistence.EPHEMERAL);
 
-		operatorController.RIGHT_TRIGGER.button().whileHeldOnce(new RunIntakeLooped(intake, storage, INTAKE_SPEED, STORAGE_INTAKE_SPEED), TaskPersistence.GAMEPLAY);
+		operatorController.RIGHT_TRIGGER.button().whileHeldOnce(new RunIntakeLooped(intake, storage, INTAKE_SPEED, STORAGE_INTAKE_RPM), TaskPersistence.GAMEPLAY);
 		operatorController.LEFT_TRIGGER.button().whileHeld(new Outtake(intake, storage, shooter, OUTTAKE_SPEED, STORAGE_OUTTAKE_SPEED, SHOOTER_OUTTAKE_SPEED), TaskPersistence.GAMEPLAY);
 
 		operatorController.A.whenPressed(new IncrementShooterRPM(shooter, SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);

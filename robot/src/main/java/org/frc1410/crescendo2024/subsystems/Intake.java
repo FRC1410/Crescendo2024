@@ -10,8 +10,9 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import static org.frc1410.crescendo2024.util.IDs.*;
 import static org.frc1410.crescendo2024.util.Constants.*;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import org.frc1410.framework.scheduler.subsystem.TickedSubsystem;
 
-public class Intake implements Subsystem {
+public class Intake implements TickedSubsystem {
 
 	private final CANSparkMax intakeMotorFront = new CANSparkMax(INTAKE_FRONT_MOTOR_ID, MotorType.kBrushless);
 
@@ -40,6 +41,11 @@ public class Intake implements Subsystem {
 
 	public boolean getLimitSwitch() {
 		return !lowerLimitSwitch.get();
+	}
+
+	@Override
+	public void periodic() {
+
 	}
 }
 

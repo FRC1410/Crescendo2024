@@ -116,7 +116,6 @@ public class SwerveModule implements TickedSubsystem {
 	public void periodic() {
 		double drivePIDOutput = this.drivePIDController.calculate(this.getDriveVelocityMetersPerSecond(), desiredState.speedMetersPerSecond);
 		double driveForwardOutput = this.driveFeedForwardController.calculate(desiredState.speedMetersPerSecond);
-		System.out.println(drivePIDOutput);
 		this.driveMotor.setVoltage(drivePIDOutput + driveForwardOutput);
 
 		double steerPIDOutput = this.steeringPIDController.calculate(this.getSteerPosition().getRadians(), MathUtil.angleModulus(this.desiredState.angle.getRadians()));
