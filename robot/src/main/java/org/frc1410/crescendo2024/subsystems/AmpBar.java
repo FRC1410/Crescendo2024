@@ -1,5 +1,6 @@
 package org.frc1410.crescendo2024.subsystems;
 
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkPIDController;
@@ -21,6 +22,7 @@ public class AmpBar implements Subsystem {
 
 	public AmpBar() {
 		ampBarMotor.restoreFactoryDefaults();
+		ampBarMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
 		
 		ampBarMotor.setInverted(AMP_BAR_MOTOR_INVERTED);
 	}

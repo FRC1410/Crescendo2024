@@ -33,7 +33,7 @@ public interface IDs {
 	int STORAGE_LEFT_MOTOR_ID = 11;
 	int STORAGE_RIGHT_MOTOR_ID = 12;
 
-	int AMP_BAR_MOTOR_ID = 0;
+	int AMP_BAR_MOTOR_ID = 17;
 
 	int LED_ID = 29;
 

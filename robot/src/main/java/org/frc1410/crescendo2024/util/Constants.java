@@ -36,10 +36,10 @@ public interface Constants {
 	double BACK_RIGHT_STEER_ENCODER_OFFSET = -0.852893;
 
 	// TODO: Change to actual values
-	Translation2d FRONT_LEFT_SWERVE_MODULE_LOCATION = new Translation2d(0.301625, 0.301625);
-	Translation2d FRONT_RIGHT_SWERVE_MODULE_LOCATION = new Translation2d(0.301625, -0.301625);
-	Translation2d BACK_LEFT_SWERVE_MODULE_LOCATION = new Translation2d(-0.301625, 0.301625);
-	Translation2d BACK_RIGHT_SWERVE_MODULE_LOCATION = new Translation2d(-0.301625, -0.301625);
+	Translation2d FRONT_LEFT_SWERVE_MODULE_LOCATION = new Translation2d(0.2985, 0.2985);
+	Translation2d FRONT_RIGHT_SWERVE_MODULE_LOCATION = new Translation2d(0.2985, -0.2985);
+	Translation2d BACK_LEFT_SWERVE_MODULE_LOCATION = new Translation2d(-0.2985, 0.2985);
+	Translation2d BACK_RIGHT_SWERVE_MODULE_LOCATION = new Translation2d(-0.2985, -0.2985);
 
 	SwerveDriveKinematics SWERVE_DRIVE_KINEMATICS = new SwerveDriveKinematics(
 		FRONT_LEFT_SWERVE_MODULE_LOCATION,
@@ -64,12 +64,12 @@ public interface Constants {
 
 	List<ShootingPosition> SHOOTING_POSITIONS = Arrays.asList(
 
-		new ShootingPosition(new Pose2d(1.43, 6.53, Rotation2d.fromDegrees(-155.7)), 1575, 575)
+		new ShootingPosition(new Pose2d(1.43, 6.53, Rotation2d.fromDegrees(-155.7)), 1575, 575),
 //		new ShootingPosition(new Pose2d(0.69, 6.82, Rotation2d.fromDegrees(-127)), 2700, 625),
 ////
 //
 ////
-//		new ShootingPosition(new Pose2d(1.43, 4.57, Rotation2d.fromDegrees(155.7)), 1575, 575),
+		new ShootingPosition(new Pose2d(1.43, 4.57, Rotation2d.fromDegrees(155.7)), 1575, 575)
 //
 //		// close apm wall
 //		new ShootingPosition(new Pose2d(0.69,4.28, Rotation2d.fromDegrees(127)), 2700, 625),
@@ -79,8 +79,9 @@ public interface Constants {
 //		new ShootingPosition(new Pose2d(1.25, 5.55, Rotation2d.fromDegrees(180)), 1550, 575)
 	);
 
+	// old values mVmps : 3.2... mAmps : 4
 	PathConstraints PATH_FIND_CONSTRAINTS = new PathConstraints(
-		3.2, 4.0,
+		2.7, 2.0,
 		Units.degreesToRadians(150), Units.degreesToRadians(150));
 
 	HolonomicPathFollowerConfig PATH_FIND_FOLLOWER_CONFIG = new HolonomicPathFollowerConfig(
@@ -88,7 +89,7 @@ public interface Constants {
 		new PIDConstants(5, 0.0, 0),
 		3,
 		0.37268062,
-		new ReplanningConfig()
+		new ReplanningConfig(true, true)
 	);
 
 	double INTAKE_SPEED = 0.75;
@@ -102,7 +103,7 @@ public interface Constants {
 	double SHOOTER_RPM_INCREMENT = 150;
 
 	int AMP_HOME_POS = 0;
-	double AMP_SHOOT_SPEED = 0;
+	double AMP_SHOOT_SPEED = 1100;
 	double STORAGE_SPEED = 0;
 
 	boolean STORAGE_LEFT_MOTOR_INVERTED = false;

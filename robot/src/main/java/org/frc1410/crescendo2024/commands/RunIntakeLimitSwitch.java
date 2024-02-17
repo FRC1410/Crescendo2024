@@ -16,7 +16,6 @@ public class RunIntakeLimitSwitch extends Command {
 
 	private final double intakeSpeed;
 	private final double storageSpeed;
-
 	private boolean limitSwitchHit;
 
 	public RunIntakeLimitSwitch(Intake intake, Storage storage, double intakeSpeed, double storageSpeed) {
@@ -30,6 +29,7 @@ public class RunIntakeLimitSwitch extends Command {
 
 	@Override
 	public void initialize() {
+
 		limitSwitchHit = false;
 	}
 
@@ -49,9 +49,6 @@ public class RunIntakeLimitSwitch extends Command {
 			leds.defaultLEDsState();
 			limitSwitchHit = false;
 		}
-//		if(!intake.getLimitSwitch()) {
-//			limitSwitchHit = false;
-//		}
 	}
 
 
