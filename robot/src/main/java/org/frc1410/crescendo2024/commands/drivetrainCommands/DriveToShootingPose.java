@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import org.frc1410.crescendo2024.commands.shooterCommands.RunShooterLooped;
 import org.frc1410.crescendo2024.subsystems.Camera;
 import org.frc1410.crescendo2024.subsystems.Drivetrain;
+import org.frc1410.crescendo2024.subsystems.LEDs;
 import org.frc1410.crescendo2024.subsystems.Shooter;
 import org.frc1410.crescendo2024.util.ShootingPosition;
 
@@ -19,6 +20,8 @@ public class DriveToShootingPose extends Command {
 
 	private final Drivetrain drivetrain;
 	private final Pose2d nearestPose;
+
+	private LEDs leds;
 
 	private PathfindHolonomic pathfindHolonomic;
 
@@ -66,5 +69,6 @@ public class DriveToShootingPose extends Command {
 		if(pathfindHolonomic != null) {
 			pathfindHolonomic.end(interrupted);
 		}
+
 	}
 }

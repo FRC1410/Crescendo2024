@@ -9,6 +9,7 @@ import org.frc1410.crescendo2024.subsystems.Storage;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
+import static org.frc1410.crescendo2024.subsystems.LEDs.Colors.OCEAN_BREEZE;
 import static org.frc1410.crescendo2024.subsystems.LEDs.Colors.PRANCING_PONY_PINK;
 
 public class RunIntakeLooped extends Command {
@@ -21,6 +22,7 @@ public class RunIntakeLooped extends Command {
 	private final double storageSpeed;
 
 	private boolean limitSwitchHit;
+	private boolean limitSwitchAlreadyHit;
 
 	public RunIntakeLooped(Intake intake, Storage storage, double intakeSpeed, double storageSpeed) {
 		this.intake = intake;
@@ -34,27 +36,35 @@ public class RunIntakeLooped extends Command {
 	@Override
 	public void initialize() {
 		limitSwitchHit = false;
+		if(intake.getLimitSwitch()) {
+			limitSwitchAlreadyHit = true;
+		} else {
+			limitSwitchAlreadyHit = false;
+		}
+
 	}
 
 	@Override
 	public void execute() {
-		intake.setSpeed(intakeSpeed);
-		storage.setRPM(storageSpeed);
 
-		if(intake.getLimitSwitch()) {
-			intake.setSpeed(0);
-			storage.setRPM(0);
-
-			leds.changeLEDsColor(PRANCING_PONY_PINK);
-
-			limitSwitchHit = true;
+		if(limitSwitchAlreadyHit) {
+			intake.setSpeed(intakeSpeed);
+			storage.setRPM(storageSpeed);
 		} else {
-			leds.defaultLEDsState();
-			limitSwitchHit = false;
+			intake.setSpeed(intakeSpeed);
+			storage.setRPM(storageSpeed);
+			if (intake.getLimitSwitch()) {
+				intake.setSpeed(0);
+				storage.setRPM(0);
+
+				leds.changeLEDsColor(PRANCING_PONY_PINK);
+
+				limitSwitchHit = true;
+			} else {
+				leds.changeLEDsColor(OCEAN_BREEZE);
+				limitSwitchHit = false;
+			}
 		}
-//		if(!intake.getLimitSwitch()) {
-//			limitSwitchHit = false;
-//		}
 	}
 
 

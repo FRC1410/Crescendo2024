@@ -9,6 +9,7 @@ import org.frc1410.crescendo2024.commands.RunStorage;
 import org.frc1410.crescendo2024.commands.shooterCommands.RunShooterLooped;
 import org.frc1410.crescendo2024.commands.shooterCommands.Shoot;
 import org.frc1410.crescendo2024.subsystems.Drivetrain;
+import org.frc1410.crescendo2024.subsystems.LEDs;
 import org.frc1410.crescendo2024.subsystems.Shooter;
 import org.frc1410.crescendo2024.subsystems.Storage;
 import org.frc1410.crescendo2024.util.ShootingPosition;
@@ -16,6 +17,7 @@ import org.frc1410.crescendo2024.util.ShootingPosition;
 import static org.frc1410.crescendo2024.util.Constants.SHOOTING_POSITIONS;
 
 public class AutomaticShooting extends SequentialCommandGroup {
+	
 
 	public AutomaticShooting(Drivetrain drivetrain, Shooter shooter, Storage storage, ShootingPosition position) {
 
@@ -42,6 +44,7 @@ public class AutomaticShooting extends SequentialCommandGroup {
 						new RunStorage(storage, position.storageRPM)
 					)
 				)
+
 			)
 		);
 	}

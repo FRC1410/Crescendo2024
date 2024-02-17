@@ -42,7 +42,7 @@ public class LEDs implements Subsystem {
 			case VIVACIOUS_VIOLENT_VIOLET -> leds.setLEDs(146,28,189);
 			case AMP_ARM_FIRE_ANIMATION -> leds.animate(new FireAnimation());
 			case CLIMBING_RAINBOW_ANIMATION -> leds.animate(new RainbowAnimation());
-			case OCEAN_BREEZE -> leds.animate(new ColorFlowAnimation(30, 100, 250));
+			case OCEAN_BREEZE -> leds.setLEDs(30, 100, 250);
 //			default -> leds.animate(new ColorFlowAnimation(30,100,250));
 		}
 	}
