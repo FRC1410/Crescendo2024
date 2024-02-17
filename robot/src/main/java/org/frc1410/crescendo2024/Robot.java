@@ -13,7 +13,7 @@ import org.frc1410.crescendo2024.commands.*;
 import org.frc1410.crescendo2024.commands.ampBarCommands.ScoreAmp;
 import org.frc1410.crescendo2024.commands.drivetrainCommands.AutomaticShooting;
 import org.frc1410.crescendo2024.commands.drivetrainCommands.DriveLooped;
-import org.frc1410.crescendo2024.commands.drivetrainCommands.ShootAtNearestPosition;
+//import org.frc1410.crescendo2024.commands.drivetrainCommands.ShootAtNearestPosition;
 import org.frc1410.crescendo2024.commands.shooterCommands.Shoot;
 import org.frc1410.crescendo2024.commands.shooterCommands.IncrementShooterRPM;
 import org.frc1410.crescendo2024.commands.shooterCommands.ShooterManual;
@@ -87,7 +87,7 @@ public final class Robot extends PhaseDrivenRobot {
 		leds.defaultLEDsState();
 
 		// Drivetrain
-		scheduler.scheduleDefaultCommand(new DriveLooped(drivetrain, driverController.LEFT_Y_AXIS, driverController.LEFT_X_AXIS, driverController.RIGHT_X_AXIS), TaskPersistence.EPHEMERAL);
+		scheduler.scheduleDefaultCommand(new DriveLooped(drivetrain, driverController.LEFT_X_AXIS, driverController.LEFT_Y_AXIS, driverController.RIGHT_X_AXIS), TaskPersistence.EPHEMERAL);
 
 		driverController.Y.whenPressed(new InstantCommand(
 			() -> drivetrain.zeroYaw()
@@ -95,7 +95,7 @@ public final class Robot extends PhaseDrivenRobot {
 
 		// Shooter
 		driverController.LEFT_TRIGGER.button().whileHeld(new ScoreAmp(shooter, storage, false), TaskPersistence.GAMEPLAY);
-		driverController.RIGHT_TRIGGER.button().whileHeldOnce(new ShootAtNearestPosition(drivetrain, shooter, storage), TaskPersistence.GAMEPLAY);
+		driverController.RIGHT_TRIGGER.button().whileHeldOnce(new AutomaticShooting(drivetrain, shooter, storage), TaskPersistence.GAMEPLAY);
 		driverController.RIGHT_BUMPER.whileHeld(new ShooterManual(shooter), TaskPersistence.GAMEPLAY);
 		driverController.LEFT_BUMPER.whileHeld(new RunStorage(storage, 575), TaskPersistence.GAMEPLAY);
 

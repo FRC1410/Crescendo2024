@@ -172,8 +172,10 @@ public class Drivetrain implements TickedSubsystem {
     }
 
     public void driveFieldRelative(ChassisSpeeds chassisSpeeds) {
-        var robotRelativeChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, this.gyro.getRotation2d());
-        this.drive(robotRelativeChassisSpeeds);
+//		System.out.println("field relative: " + chassisSpeeds);
+        var robotRelativeChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, Rotation2d.fromDegrees(-this.gyro.getYaw()));
+//		System.out.println("robot relative: " + robotRelativeChassisSpeeds);
+		this.drive(robotRelativeChassisSpeeds);
     }
 
     public ChassisSpeeds getChassisSpeeds() {
@@ -201,7 +203,7 @@ public class Drivetrain implements TickedSubsystem {
 
     public void zeroYaw() {
         this.gyro.zeroYaw();
-		this.resetPose(new Pose2d(this.getEstimatedPosition().getTranslation(), this.getAngle().toRotation2d()));
+//		this.resetPose(new Pose2d(this.getEstimatedPosition().getTranslation(), this.getAngle().toRotation2d()));
     }
 
     @Override
@@ -237,7 +239,7 @@ public class Drivetrain implements TickedSubsystem {
 		poseY.set(this.getEstimatedPosition().getY());
 		heading.set(this.getEstimatedPosition().getRotation().getDegrees());
 
-		yaw.set(this.gyro.getYaw());
+		yaw.set(-this.gyro.getYaw());
 		pitch.set(this.gyro.getPitch());
 		roll.set(this.gyro.getRoll());
     }

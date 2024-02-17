@@ -64,17 +64,19 @@ public interface Constants {
 
 	List<ShootingPosition> SHOOTING_POSITIONS = Arrays.asList(
 
-		new ShootingPosition(new Pose2d(1.43, 6.53, Rotation2d.fromDegrees(-155.7)), 1575, 575),
+		new ShootingPosition(new Pose2d(1.43, 6.53, Rotation2d.fromDegrees(-155.7)), 1575, 575)
+//		new ShootingPosition(new Pose2d(0.69, 6.82, Rotation2d.fromDegrees(-127)), 2700, 625),
+////
 //
-		new ShootingPosition(new Pose2d(1.25, 5.55, Rotation2d.fromDegrees(180)), 1550, 575),
+////
+//		new ShootingPosition(new Pose2d(1.43, 4.57, Rotation2d.fromDegrees(155.7)), 1575, 575),
 //
-		new ShootingPosition(new Pose2d(1.43, 4.57, Rotation2d.fromDegrees(155.7)), 1575, 575),
-
-		// close apm wall
-		new ShootingPosition(new Pose2d(0.69, 6.82, Rotation2d.fromDegrees(-127)), 2700, 625),
-		// 24`` from sub
-		new ShootingPosition(new Pose2d(1.5,5.55, Rotation2d.fromDegrees(180)), 1550, 575),
-		new ShootingPosition(new Pose2d(1.5,4.28, Rotation2d.fromDegrees(127)), 2700, 625)
+//		// close apm wall
+//		new ShootingPosition(new Pose2d(0.69,4.28, Rotation2d.fromDegrees(127)), 2700, 625),
+//
+//		// 24`` from sub
+//		new ShootingPosition(new Pose2d(1.5,5.55, Rotation2d.fromDegrees(180)), 1550, 575)
+//		new ShootingPosition(new Pose2d(1.25, 5.55, Rotation2d.fromDegrees(180)), 1550, 575)
 	);
 
 	PathConstraints PATH_FIND_CONSTRAINTS = new PathConstraints(
@@ -83,7 +85,7 @@ public interface Constants {
 
 	HolonomicPathFollowerConfig PATH_FIND_FOLLOWER_CONFIG = new HolonomicPathFollowerConfig(
 		new PIDConstants(7,0.0, 0),
-		new PIDConstants(1, 0.0, 0),
+		new PIDConstants(5, 0.0, 0),
 		3,
 		0.37268062,
 		new ReplanningConfig()
@@ -97,7 +99,7 @@ public interface Constants {
 
 	double SHOOTER_OUTTAKE_SPEED = -500;
 
-	double SHOOTER_RPM_INCREMENT = 0;
+	double SHOOTER_RPM_INCREMENT = 150;
 
 	int AMP_HOME_POS = 0;
 	double AMP_SHOOT_SPEED = 0;

@@ -31,6 +31,17 @@ public class DriveToShootingPose extends Command {
 	@Override
 	public void initialize() {
 
+//		Pose2d currentRobotPose = drivetrain.getEstimatedPosition();
+//		var shootingPoseList = SHOOTING_POSITIONS.stream().map(shootingPositions -> shootingPositions.pose).toList();
+//		Pose2d nearestPose = currentRobotPose.nearest(shootingPoseList);
+//
+//		int nearestPoseIndex = shootingPoseList.indexOf(nearestPose);
+//		double shooterRPM = SHOOTING_POSITIONS.get(nearestPoseIndex).shooterRPM;
+//		double storageRPM = SHOOTING_POSITIONS.get(nearestPoseIndex).storageRPM;
+//
+//		System.out.println("current " + currentRobotPose);
+//		System.out.println("nearest" + nearestPose);
+
 		pathfindHolonomic = new PathfindHolonomic(
 			nearestPose,
 			PATH_FIND_CONSTRAINTS,
@@ -56,6 +67,7 @@ public class DriveToShootingPose extends Command {
 	public boolean isFinished() {
 		if(pathfindHolonomic != null) {
 			boolean var = pathfindHolonomic.isFinished();
+//			System.out.println("is finished: " + var);
 			return var;
 		}
 		return false;

@@ -17,29 +17,29 @@ import static org.frc1410.crescendo2024.util.Constants.SHOOTING_POSITIONS;
 
 public class AutomaticShooting extends SequentialCommandGroup {
 
-	public AutomaticShooting(Drivetrain drivetrain, Shooter shooter, Storage storage, ShootingPosition position) {
+	public AutomaticShooting(Drivetrain drivetrain, Shooter shooter, Storage storage) {
 
-//		Pose2d currentRobotPose = drivetrain.getEstimatedPosition();
-//		var shootingPoseList = SHOOTING_POSITIONS.stream().map(shootingPositions -> shootingPositions.pose).toList();
-//		Pose2d nearestPose = currentRobotPose.nearest(shootingPoseList);
-//
-//		int nearestPoseIndex = shootingPoseList.indexOf(nearestPose);
-//		double shooterRPM = SHOOTING_POSITIONS.get(nearestPoseIndex).shooterRPM;
-//		double storageRPM = SHOOTING_POSITIONS.get(nearestPoseIndex).storageRpm;
-//
-//		System.out.println(currentRobotPose);
-//		System.out.println(nearestPose);
+		Pose2d currentRobotPose = drivetrain.getEstimatedPosition();
+		var shootingPoseList = SHOOTING_POSITIONS.stream().map(shootingPositions -> shootingPositions.pose).toList();
+		Pose2d nearestPose = currentRobotPose.nearest(shootingPoseList);
+
+		int nearestPoseIndex = shootingPoseList.indexOf(nearestPose);
+		double shooterRPM = SHOOTING_POSITIONS.get(nearestPoseIndex).shooterRPM;
+		double storageRPM = SHOOTING_POSITIONS.get(nearestPoseIndex).storageRPM;
+
+		System.out.println(currentRobotPose);
+		System.out.println(nearestPose);
 
 		addCommands(
 			new ParallelRaceGroup(
-				new RunShooterLooped(shooter, position.shooterRPM),
+				new RunShooterLooped(shooter, shooterRPM),
 
 				new SequentialCommandGroup(
-					new DriveToShootingPose(drivetrain, position.pose),
+					new DriveToShootingPose(drivetrain, nearestPose),
 
 					new ParallelRaceGroup(
 						new WaitCommand(0.5),
-						new RunStorage(storage, position.storageRPM)
+						new RunStorage(storage, storageRPM)
 					)
 				)
 			)
