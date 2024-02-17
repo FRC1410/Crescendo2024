@@ -2,7 +2,6 @@ package org.frc1410.crescendo2024;
 
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.sun.jdi.ShortType;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
@@ -32,10 +31,10 @@ public final class Robot extends PhaseDrivenRobot {
 
 	public Robot() {
 		NamedCommands.registerCommand("PreloadShoot", new Shoot(shooter, storage, intake,3300, 700));
-		NamedCommands.registerCommand("BigShoot", new Shoot(shooter, storage, intake, 1600, 575));
-		NamedCommands.registerCommand("Shoot", new ShooterManual(shooter));
-		NamedCommands.registerCommand("RunIntake", new RunIntakeLooped(intake, storage, 0.75, 100));
+		NamedCommands.registerCommand("ShooterManual", new ShooterManual(shooter));
+		NamedCommands.registerCommand("RunIntakeLimitSwitch", new RunIntakeLimitSwitch(intake, storage, 0.75, 100));
 		NamedCommands.registerCommand("RunStorage", new RunStorage(storage, 700));
+		NamedCommands.registerCommand("RunIntake", new RunIntake(intake, 0.75));
 	}
 
 	private final Controller driverController = new Controller(scheduler, DRIVER_CONTROLLER, 0.1 );
@@ -103,7 +102,7 @@ public final class Robot extends PhaseDrivenRobot {
 
 		operatorController.RIGHT_BUMPER.whileHeldOnce(new Shoot(shooter, storage, intake,3350,550), TaskPersistence.EPHEMERAL);
 
-		operatorController.RIGHT_TRIGGER.button().whileHeldOnce(new RunIntakeLooped(intake, storage, INTAKE_SPEED, STORAGE_INTAKE_RPM), TaskPersistence.GAMEPLAY);
+		operatorController.RIGHT_TRIGGER.button().whileHeldOnce(new RunIntakeLimitSwitch(intake, storage, INTAKE_SPEED, STORAGE_INTAKE_RPM), TaskPersistence.GAMEPLAY);
 		operatorController.LEFT_TRIGGER.button().whileHeld(new Outtake(intake, storage, shooter, OUTTAKE_SPEED, STORAGE_OUTTAKE_SPEED, SHOOTER_OUTTAKE_SPEED), TaskPersistence.GAMEPLAY);
 
 		operatorController.A.whenPressed(new IncrementShooterRPM(shooter, SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);
