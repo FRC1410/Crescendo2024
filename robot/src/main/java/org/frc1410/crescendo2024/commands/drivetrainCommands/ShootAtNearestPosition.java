@@ -38,7 +38,7 @@ public class ShootAtNearestPosition extends Command {
 		System.out.println(currentRobotPose);
 		System.out.println(nearestPose);
 
-		this.command = new AutomaticShooting(this.drivetrain, this.shooter, this.storage, SHOOTING_POSITIONS.get(nearestPoseIndex));
+		//this.command = new AutomaticShooting(this.drivetrain, this.shooter, this.storage, SHOOTING_POSITIONS.get(nearestPoseIndex));
 
 		this.command.initialize();
 	}
