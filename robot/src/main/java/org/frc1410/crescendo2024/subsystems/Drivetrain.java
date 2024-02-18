@@ -148,7 +148,7 @@ public class Drivetrain implements TickedSubsystem {
 
         this.poseEstimator = new SwerveDrivePoseEstimator(
             SWERVE_DRIVE_KINEMATICS,
-            this.getAngle().toRotation2d(),
+            this.getYaw(),
             this.getSwerveModulePositions(),
             new Pose2d()
         );
@@ -172,8 +172,10 @@ public class Drivetrain implements TickedSubsystem {
     }
 
     public void driveFieldRelative(ChassisSpeeds chassisSpeeds) {
-        var robotRelativeChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, this.gyro.getRotation2d());
-        this.drive(robotRelativeChassisSpeeds);
+//		System.out.println("field relative: " + chassisSpeeds);
+        var robotRelativeChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, this.getYaw());
+//		System.out.println("robot relative: " + robotRelativeChassisSpeeds);
+		this.drive(robotRelativeChassisSpeeds);
     }
 
     public ChassisSpeeds getChassisSpeeds() {
@@ -193,7 +195,7 @@ public class Drivetrain implements TickedSubsystem {
     public void resetPose(Pose2d pose) {
 		this.gyro.setAngleAdjustment(pose.getRotation().getDegrees());
         this.poseEstimator.resetPosition(
-            this.getAngle().toRotation2d(),
+            this.getYaw(),
             this.getSwerveModulePositions(),
             pose
         );
@@ -201,14 +203,14 @@ public class Drivetrain implements TickedSubsystem {
 
     public void zeroYaw() {
         this.gyro.zeroYaw();
-		this.resetPose(new Pose2d(this.getEstimatedPosition().getTranslation(), this.getAngle().toRotation2d()));
+//		this.resetPose(new Pose2d(this.getEstimatedPosition().getTranslation(), this.getAngle().toRotation2d()));
     }
 
     @Override
     public void periodic() {
 //		System.out.println(this.getChassisSpeeds());
         this.poseEstimator.update(
-            this.getAngle().toRotation2d(),
+            this.getYaw(),
             this.getSwerveModulePositions()
         );
 
@@ -221,10 +223,10 @@ public class Drivetrain implements TickedSubsystem {
 		 	// TODO: Possible bug where bad data is fed into pose estimator when no vision
 		 	var resultTimestamp = estimatedPose.get().timestampSeconds;
 
-		 	if(resultTimestamp != previousPipelineTimestamp) {
+//		 	if(resultTimestamp != previousPipelineTimestamp) {
 				 previousPipelineTimestamp = resultTimestamp;
 				 poseEstimator.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), resultTimestamp);
-		 	}
+//		 	}
 		 } else {
 
 		 }
@@ -237,7 +239,7 @@ public class Drivetrain implements TickedSubsystem {
 		poseY.set(this.getEstimatedPosition().getY());
 		heading.set(this.getEstimatedPosition().getRotation().getDegrees());
 
-		yaw.set(this.gyro.getYaw());
+		yaw.set(-this.gyro.getYaw());
 		pitch.set(this.gyro.getPitch());
 		roll.set(this.gyro.getRoll());
     }
@@ -251,7 +253,10 @@ public class Drivetrain implements TickedSubsystem {
         };
     }
 
-    private Rotation3d getAngle() {
-        return gyro.getRotation3d();
-    }
+//    private Rotation3d getAngle() {
+//        return gyro.getRotation3d();
+//    }
+	private Rotation2d getYaw() {
+		return Rotation2d.fromDegrees(-this.gyro.getYaw());
+	}
 }

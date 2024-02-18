@@ -2,7 +2,6 @@ package org.frc1410.crescendo2024;
 
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.sun.jdi.ShortType;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
@@ -10,10 +9,11 @@ import edu.wpi.first.networktables.StringPublisher;
 import edu.wpi.first.networktables.StringSubscriber;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import org.frc1410.crescendo2024.commands.*;
+import org.frc1410.crescendo2024.commands.ampBarCommands.ExtendAmpBar;
 import org.frc1410.crescendo2024.commands.ampBarCommands.ScoreAmp;
 import org.frc1410.crescendo2024.commands.drivetrainCommands.AutomaticShooting;
 import org.frc1410.crescendo2024.commands.drivetrainCommands.DriveLooped;
-import org.frc1410.crescendo2024.commands.drivetrainCommands.ShootAtNearestPosition;
+//import org.frc1410.crescendo2024.commands.drivetrainCommands.ShootAtNearestPosition;
 import org.frc1410.crescendo2024.commands.shooterCommands.Shoot;
 import org.frc1410.crescendo2024.commands.shooterCommands.IncrementShooterRPM;
 import org.frc1410.crescendo2024.commands.shooterCommands.ShooterManual;
@@ -32,10 +32,10 @@ public final class Robot extends PhaseDrivenRobot {
 
 	public Robot() {
 		NamedCommands.registerCommand("PreloadShoot", new Shoot(shooter, storage, intake,3300, 700));
-		NamedCommands.registerCommand("BigShoot", new Shoot(shooter, storage, intake, 1600, 575));
-		NamedCommands.registerCommand("Shoot", new ShooterManual(shooter));
-		NamedCommands.registerCommand("RunIntake", new RunIntakeLooped(intake, storage, 0.75, 100));
+		NamedCommands.registerCommand("ShooterManual", new ShooterManual(shooter));
+		NamedCommands.registerCommand("RunIntakeLimitSwitch", new RunIntakeLimitSwitch(intake, storage, 0.75, 100));
 		NamedCommands.registerCommand("RunStorage", new RunStorage(storage, 700));
+		NamedCommands.registerCommand("RunIntake", new RunIntake(intake, 0.75));
 	}
 
 	private final Controller driverController = new Controller(scheduler, DRIVER_CONTROLLER, 0.1 );
@@ -86,7 +86,7 @@ public final class Robot extends PhaseDrivenRobot {
 		//leds.defaultLEDsState();
 
 		// Drivetrain
-		scheduler.scheduleDefaultCommand(new DriveLooped(drivetrain, driverController.LEFT_Y_AXIS, driverController.LEFT_X_AXIS, driverController.RIGHT_X_AXIS), TaskPersistence.EPHEMERAL);
+		scheduler.scheduleDefaultCommand(new DriveLooped(drivetrain, driverController.LEFT_X_AXIS, driverController.LEFT_Y_AXIS, driverController.RIGHT_X_AXIS), TaskPersistence.EPHEMERAL);
 
 		driverController.Y.whenPressed(new InstantCommand(
 			() -> drivetrain.zeroYaw()
@@ -94,7 +94,7 @@ public final class Robot extends PhaseDrivenRobot {
 
 		// Shooter
 		driverController.LEFT_TRIGGER.button().whileHeld(new ScoreAmp(shooter, storage, false), TaskPersistence.GAMEPLAY);
-		driverController.RIGHT_TRIGGER.button().whileHeldOnce(new ShootAtNearestPosition(drivetrain, shooter, storage), TaskPersistence.GAMEPLAY);
+		driverController.RIGHT_TRIGGER.button().whileHeldOnce(new AutomaticShooting(drivetrain, storage, shooter), TaskPersistence.GAMEPLAY);
 		driverController.RIGHT_BUMPER.whileHeld(new ShooterManual(shooter), TaskPersistence.GAMEPLAY);
 
 		driverController.LEFT_BUMPER.whileHeld(new RunStorage(storage, 575), TaskPersistence.GAMEPLAY);
@@ -104,11 +104,14 @@ public final class Robot extends PhaseDrivenRobot {
 
 		operatorController.RIGHT_BUMPER.whileHeldOnce(new Shoot(shooter, storage, intake,3350,550), TaskPersistence.EPHEMERAL);
 
-		operatorController.RIGHT_TRIGGER.button().whileHeldOnce(new RunIntakeLooped(intake, storage, INTAKE_SPEED, STORAGE_INTAKE_RPM), TaskPersistence.GAMEPLAY);
+		operatorController.RIGHT_TRIGGER.button().whileHeldOnce(new RunIntakeLimitSwitch(intake, storage, INTAKE_SPEED, STORAGE_INTAKE_RPM), TaskPersistence.GAMEPLAY);
 		operatorController.LEFT_TRIGGER.button().whileHeld(new Outtake(intake, storage, shooter, OUTTAKE_SPEED, STORAGE_OUTTAKE_SPEED, SHOOTER_OUTTAKE_SPEED), TaskPersistence.GAMEPLAY);
 
 		operatorController.A.whenPressed(new IncrementShooterRPM(shooter, SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);
 		operatorController.B.whenPressed(new IncrementShooterRPM(shooter, -SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);
+
+		operatorController.DPAD_UP.whenPressed(new ExtendAmpBar(ampBar, 0.2, 0.7), TaskPersistence.GAMEPLAY);
+		operatorController.DPAD_DOWN.whenPressed(new ExtendAmpBar(ampBar, -0.2, 0.7), TaskPersistence.GAMEPLAY);
 	}
 
 	@Override
