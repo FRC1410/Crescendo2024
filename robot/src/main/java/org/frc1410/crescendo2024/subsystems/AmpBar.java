@@ -16,6 +16,7 @@ public class AmpBar implements Subsystem {
 	private final NetworkTable table = NetworkTableInstance.getDefault().getTable("Amp");
 
 	private final CANSparkMax ampBarMotor = new CANSparkMax(AMP_BAR_MOTOR_ID, MotorType.kBrushless);
+	public boolean isExtended = true;
 
 //	private final SparkPIDController ampPIDController = ampBarMotor.getPIDController();
 
@@ -30,7 +31,6 @@ public class AmpBar implements Subsystem {
 	public void setSpeed(double speed) {
 		ampBarMotor.set(speed);
 	}
-
 }
 
 

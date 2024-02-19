@@ -30,6 +30,7 @@ public class SwerveModule implements TickedSubsystem {
 	private final RelativeEncoder driveEncoder;
 	private final CANcoder steerEncoder;
 
+	// TODO: Change PID controller to Spark max PID controller
 	private final PIDController drivePIDController = new PIDController(SWERVE_DRIVE_P, SWERVE_DRIVE_I, SWERVE_DRIVE_D);
 
 	private final SimpleMotorFeedforward driveFeedForwardController = new SimpleMotorFeedforward(DRIVE_MOTOR_KS, DRIVE_MOTOR_KV);

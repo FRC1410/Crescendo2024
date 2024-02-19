@@ -13,10 +13,10 @@ import org.frc1410.crescendo2024.commands.ampBarCommands.ExtendAmpBar;
 import org.frc1410.crescendo2024.commands.ampBarCommands.ScoreAmp;
 import org.frc1410.crescendo2024.commands.drivetrainCommands.AutomaticShooting;
 import org.frc1410.crescendo2024.commands.drivetrainCommands.DriveLooped;
-//import org.frc1410.crescendo2024.commands.drivetrainCommands.ShootAtNearestPosition;
 import org.frc1410.crescendo2024.commands.shooterCommands.Shoot;
 import org.frc1410.crescendo2024.commands.shooterCommands.IncrementShooterRPM;
 import org.frc1410.crescendo2024.commands.shooterCommands.ShooterManual;
+import org.frc1410.crescendo2024.commands.ClimbLooped;
 import org.frc1410.crescendo2024.subsystems.*;
 import org.frc1410.crescendo2024.util.NetworkTables;
 import org.frc1410.framework.AutoSelector;
@@ -45,6 +45,7 @@ public final class Robot extends PhaseDrivenRobot {
 	private final AmpBar ampBar = new AmpBar();
 	private final Storage storage = subsystems.track(new Storage());
 	private final Intake intake = subsystems.track(new Intake());
+	private final Climb climb = new Climb();
 	private final LEDs leds = new LEDs();
 
 	private final NetworkTableInstance nt = NetworkTableInstance.getDefault();
@@ -102,7 +103,8 @@ public final class Robot extends PhaseDrivenRobot {
 
 //		operatorController.RIGHT_BUMPER.whileHeld(new ShooterManual(shooter), TaskPersistence.GAMEPLAY);
 
-		operatorController.RIGHT_BUMPER.whileHeldOnce(new Shoot(shooter, storage, intake,3350,550), TaskPersistence.EPHEMERAL);
+		operatorController.RIGHT_BUMPER.whileHeldOnce(new RunStorage(storage, 575), TaskPersistence.GAMEPLAY);
+		operatorController.LEFT_BUMPER.whileHeldOnce(new ShooterManual(shooter), TaskPersistence.GAMEPLAY);
 
 		operatorController.RIGHT_TRIGGER.button().whileHeldOnce(new RunIntakeLimitSwitch(intake, storage, INTAKE_SPEED, STORAGE_INTAKE_RPM), TaskPersistence.GAMEPLAY);
 		operatorController.LEFT_TRIGGER.button().whileHeld(new Outtake(intake, storage, shooter, OUTTAKE_SPEED, STORAGE_OUTTAKE_SPEED, SHOOTER_OUTTAKE_SPEED), TaskPersistence.GAMEPLAY);
@@ -110,8 +112,10 @@ public final class Robot extends PhaseDrivenRobot {
 		operatorController.A.whenPressed(new IncrementShooterRPM(shooter, SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);
 		operatorController.B.whenPressed(new IncrementShooterRPM(shooter, -SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);
 
-		operatorController.DPAD_UP.whenPressed(new ExtendAmpBar(ampBar, 0.2, 0.7), TaskPersistence.GAMEPLAY);
-		operatorController.DPAD_DOWN.whenPressed(new ExtendAmpBar(ampBar, -0.2, 0.7), TaskPersistence.GAMEPLAY);
+		operatorController.DPAD_UP.whenPressed(new ExtendAmpBar(ampBar, leds, false), TaskPersistence.GAMEPLAY);
+		operatorController.DPAD_DOWN.whenPressed(new ExtendAmpBar(ampBar, leds, true), TaskPersistence.GAMEPLAY);
+
+		scheduler.scheduleDefaultCommand(new ClimbLooped(climb, operatorController.LEFT_Y_AXIS, operatorController.RIGHT_Y_AXIS), TaskPersistence.EPHEMERAL);
 	}
 
 	@Override

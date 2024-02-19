@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Test"
+                  "pathName": "Mid sub to B"
                 }
               },
               {
@@ -53,7 +53,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Test2"
+                        "pathName": "b to mid sub"
                       }
                     },
                     {
@@ -94,7 +94,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Test A"
+                  "pathName": "Mid sub to A"
                 }
               },
               {
@@ -123,7 +123,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "TestA2"
+                        "pathName": "A to sub"
                       }
                     },
                     {

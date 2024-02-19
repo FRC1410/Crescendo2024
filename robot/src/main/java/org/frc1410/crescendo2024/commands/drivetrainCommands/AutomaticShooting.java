@@ -34,6 +34,8 @@ public class AutomaticShooting extends Command {
 	private boolean storageIsRunning = false;
 	private PathfindHolonomic pathfindHolonomic;
 
+	private Pose2d nearestPose;
+
 
 	public AutomaticShooting(Drivetrain drivetrain, Storage storage, Shooter shooter) {
 		this.drivetrain = drivetrain;
@@ -41,12 +43,17 @@ public class AutomaticShooting extends Command {
 		this.shooter = shooter;
 		addRequirements(drivetrain);
 
-		PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
+//		PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
 	}
 
 	public Optional<Rotation2d> getRotationTargetOverride() {
 		var r = this.drivetrain.getEstimatedPosition();
 		var a = new Translation2d(0.0381, 5.55);
+
+		if(this.nearestPose != null && this.nearestPose.getTranslation().getDistance(this.drivetrain.getEstimatedPosition().getTranslation()) > 0.5) {
+			return Optional.empty();
+		}
+
 		return Optional.of(Rotation2d.fromRadians(
 			MathUtil.angleModulus(Math.PI + Math.atan(
 				(r.getY() - a.getY())/
@@ -65,6 +72,8 @@ public class AutomaticShooting extends Command {
 		Pose2d currentRobotPose = drivetrain.getEstimatedPosition();
 		var shootingPoseList = SHOOTING_POSITIONS.stream().map(shootingPositions -> shootingPositions.pose).toList();
 		Pose2d nearestPose = currentRobotPose.nearest(shootingPoseList);
+
+		this.nearestPose = nearestPose;
 
 		int nearestPoseIndex = shootingPoseList.indexOf(nearestPose);
 		double shooterRPM = SHOOTING_POSITIONS.get(nearestPoseIndex).shooterRPM;
