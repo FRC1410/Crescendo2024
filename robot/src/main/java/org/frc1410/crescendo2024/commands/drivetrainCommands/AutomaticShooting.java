@@ -3,6 +3,7 @@ package org.frc1410.crescendo2024.commands.drivetrainCommands;
 import com.pathplanner.lib.commands.PathfindHolonomic;
 import com.pathplanner.lib.commands.PathfindThenFollowPathHolonomic;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.sun.jdi.ShortType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -32,7 +33,8 @@ public class AutomaticShooting extends Command {
 	private double storageRPM;
 	private final Timer timer = new Timer();
 	private boolean storageIsRunning = false;
-	private PathfindHolonomic pathfindHolonomic;
+	private PathfindThenFollowPathHolonomic pathfindHolonomic;
+	private PathPlannerPath pathPlannerPath;
 
 	private Pose2d nearestPose;
 
@@ -81,20 +83,28 @@ public class AutomaticShooting extends Command {
 		storageRPM = SHOOTING_POSITIONS.get(nearestPoseIndex).storageRPM;
 		String pathName = SHOOTING_POSITIONS.get(nearestPoseIndex).pathName;
 
+		pathPlannerPath = PathPlannerPath.fromPathFile(pathName);
+
 		System.out.println("current " + currentRobotPose);
 		System.out.println("nearest " + nearestPose);
 
 		//this.command = new AutomaticShooting(this.drivetrain, this.shooter, this.storage, SHOOTING_POSITIONS.get(nearestPoseIndex));
 
-		pathfindHolonomic = new PathfindHolonomic(
-			nearestPose,
+		pathfindHolonomic = new PathfindThenFollowPathHolonomic(
+			pathPlannerPath,
 			PATH_FIND_CONSTRAINTS,
-			0.0,
 			drivetrain::getEstimatedPosition,
 			drivetrain::getChassisSpeeds,
 			drivetrain::drive,
 			PATH_FIND_FOLLOWER_CONFIG,
 			0,
+			() -> {
+				var alliance = DriverStation.getAlliance();
+				if (alliance.isPresent()) {
+					return alliance.get() == DriverStation.Alliance.Red;
+				}
+				return false;
+			},
 			drivetrain
 		);
 
@@ -112,28 +122,29 @@ public class AutomaticShooting extends Command {
 				storage.setRPM(storageRPM);
 				intake.setSpeed(0.75);
 				storageIsRunning = true;
-				timer.start();
+//				timer.start();
 			}
 		}
 	}
 
 	@Override
 	public boolean isFinished() {
-		return timer.hasElapsed(1);
+//		return timer.hasElapsed(1);
 //		if (this.pathfindHolonomic != null) {
 //			return this.pathfindHolonomic.isFinished();
 //		}
 //		return true;
+		return false;
 	}
 
 	@Override
 	public void end(boolean interrupted) {
-		if(pathfindHolonomic != null) {
-			pathfindHolonomic.end(interrupted);
-		}
-		storage.setRPM(0);
-		shooter.setRPM(0);
-		intake.setSpeed(0);
-		System.out.println("end " + drivetrain.getEstimatedPosition());
+//		if(pathfindHolonomic != null) {
+//			pathfindHolonomic.end(interrupted);
+//		}
+//		storage.setRPM(0);
+//		shooter.setRPM(0);
+//		intake.setSpeed(0);
+//		System.out.println("end " + drivetrain.getEstimatedPosition());
 	}
 }
