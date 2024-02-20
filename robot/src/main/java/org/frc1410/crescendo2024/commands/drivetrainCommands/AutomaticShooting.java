@@ -1,19 +1,18 @@
 package org.frc1410.crescendo2024.commands.drivetrainCommands;
 
 import com.pathplanner.lib.commands.PathfindHolonomic;
+import com.pathplanner.lib.commands.PathfindThenFollowPathHolonomic;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.sun.jdi.ShortType;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import org.frc1410.crescendo2024.commands.shooterCommands.RunShooterLooped;
-import org.frc1410.crescendo2024.subsystems.Camera;
-import org.frc1410.crescendo2024.subsystems.Drivetrain;
-import org.frc1410.crescendo2024.subsystems.Shooter;
-import org.frc1410.crescendo2024.subsystems.Storage;
+import org.frc1410.crescendo2024.subsystems.*;
 import org.frc1410.crescendo2024.util.ShootingPosition;
 
 import java.util.List;
@@ -29,6 +28,7 @@ public class AutomaticShooting extends Command {
 
 	private final Shooter shooter;
 	private final Storage storage;
+	private final Intake intake;
 	private double storageRPM;
 	private final Timer timer = new Timer();
 	private boolean storageIsRunning = false;
@@ -37,10 +37,11 @@ public class AutomaticShooting extends Command {
 	private Pose2d nearestPose;
 
 
-	public AutomaticShooting(Drivetrain drivetrain, Storage storage, Shooter shooter) {
+	public AutomaticShooting(Drivetrain drivetrain, Storage storage, Intake intake, Shooter shooter) {
 		this.drivetrain = drivetrain;
 		this.storage = storage;
 		this.shooter = shooter;
+		this.intake = intake;
 		addRequirements(drivetrain);
 
 //		PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
@@ -78,6 +79,7 @@ public class AutomaticShooting extends Command {
 		int nearestPoseIndex = shootingPoseList.indexOf(nearestPose);
 		double shooterRPM = SHOOTING_POSITIONS.get(nearestPoseIndex).shooterRPM;
 		storageRPM = SHOOTING_POSITIONS.get(nearestPoseIndex).storageRPM;
+		String pathName = SHOOTING_POSITIONS.get(nearestPoseIndex).pathName;
 
 		System.out.println("current " + currentRobotPose);
 		System.out.println("nearest " + nearestPose);
@@ -108,6 +110,7 @@ public class AutomaticShooting extends Command {
 			} else if(!storageIsRunning) {
 				pathfindHolonomic.end(false);
 				storage.setRPM(storageRPM);
+				intake.setSpeed(0.75);
 				storageIsRunning = true;
 				timer.start();
 			}
@@ -130,6 +133,7 @@ public class AutomaticShooting extends Command {
 		}
 		storage.setRPM(0);
 		shooter.setRPM(0);
+		intake.setSpeed(0);
 		System.out.println("end " + drivetrain.getEstimatedPosition());
 	}
 }

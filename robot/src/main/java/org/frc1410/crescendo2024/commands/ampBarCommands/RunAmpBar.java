@@ -13,8 +13,6 @@ public class RunAmpBar extends Command {
 
 	private boolean isExtended;
 
-	LEDs leds = new LEDs();
-
 	public RunAmpBar(AmpBar ampBar, boolean isExtended) {
 		this.ampBar = ampBar;
 		this.isExtended = isExtended;

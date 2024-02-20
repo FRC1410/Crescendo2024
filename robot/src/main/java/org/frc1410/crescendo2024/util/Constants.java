@@ -64,12 +64,12 @@ public interface Constants {
 
 	List<ShootingPosition> SHOOTING_POSITIONS = Arrays.asList(
 
-		new ShootingPosition(new Pose2d(1.43, 6.53, Rotation2d.fromDegrees(-155.7)), 1575, 575),
+		new ShootingPosition(new Pose2d(1.43, 6.53, Rotation2d.fromDegrees(-155.7)), 1600, 575, "Sub Amp point"),
 //		new ShootingPosition(new Pose2d(0.69, 6.82, Rotation2d.fromDegrees(-127)), 2700, 625),
 ////
 //
 ////
-		new ShootingPosition(new Pose2d(1.43, 4.57, Rotation2d.fromDegrees(155.7)), 1575, 575)
+		new ShootingPosition(new Pose2d(1.43, 4.57, Rotation2d.fromDegrees(155.7)), 1575, 575, "Source side point")
 //
 //		// close apm wall
 //		new ShootingPosition(new Pose2d(0.69,4.28, Rotation2d.fromDegrees(127)), 2700, 625),
@@ -86,7 +86,7 @@ public interface Constants {
 
 	HolonomicPathFollowerConfig PATH_FIND_FOLLOWER_CONFIG = new HolonomicPathFollowerConfig(
 		new PIDConstants(7,0.0, 0),
-		new PIDConstants(5, 0.0, 0),
+		new PIDConstants(4, 0.0, 0),
 		3,
 		0.37268062,
 		new ReplanningConfig(true, true)
@@ -105,7 +105,7 @@ public interface Constants {
 	double AMP_BAR_SPEED = 0.2;
 	double AMP_BAR_SPEED_REVERSED = -0.2;
 	double AMP_SHOOT_SPEED = 1100;
-	double AMP_BAR_TIMER = 0.5;
+	double AMP_BAR_TIMER = 0.7;
 
 	boolean STORAGE_LEFT_MOTOR_INVERTED = false;
 	boolean STORAGE_RIGHT_MOTOR_INVERTED = true;
@@ -123,7 +123,7 @@ public interface Constants {
 	HolonomicPathFollowerConfig HOLONOMIC_AUTO_CONFIG = new HolonomicPathFollowerConfig(
 		new PIDConstants(AUTO_DRIVE_P, AUTO_DRIVE_I, AUTO_DRIVE_D),
 		new PIDConstants(AUTO_TURN_P, AUTO_TURN_I, AUTO_TURN_D),
-		3,
+		4.2,
 		0.426562165692177,
 		new ReplanningConfig()
 	);

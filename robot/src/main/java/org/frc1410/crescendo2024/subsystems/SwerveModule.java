@@ -4,10 +4,7 @@ package org.frc1410.crescendo2024.subsystems;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
-import com.revrobotics.CANSparkLowLevel;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
+import com.revrobotics.*;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -31,9 +28,11 @@ public class SwerveModule implements TickedSubsystem {
 	private final CANcoder steerEncoder;
 
 	// TODO: Change PID controller to Spark max PID controller
-	private final PIDController drivePIDController = new PIDController(SWERVE_DRIVE_P, SWERVE_DRIVE_I, SWERVE_DRIVE_D);
+//	private final PIDController drivePIDController = new PIDController(SWERVE_DRIVE_P, SWERVE_DRIVE_I, SWERVE_DRIVE_D);
 
 	private final SimpleMotorFeedforward driveFeedForwardController = new SimpleMotorFeedforward(DRIVE_MOTOR_KS, DRIVE_MOTOR_KV);
+
+	private final SparkPIDController drivePIDController;
 
 	// radians
 	private final PIDController steeringPIDController = new PIDController(
@@ -76,6 +75,13 @@ public class SwerveModule implements TickedSubsystem {
 
 		this.driveEncoder = driveMotor.getEncoder();
 
+		drivePIDController = driveMotor.getPIDController();
+
+		drivePIDController.setP(SWERVE_DRIVE_P);
+		drivePIDController.setI(SWERVE_DRIVE_I);
+		drivePIDController.setD(SWERVE_DRIVE_D);
+		drivePIDController.setFF(SWERVE_DRIVE_FF);
+
 		this.steerEncoder = new CANcoder(steeringEncoderID);
 		var configurator = this.steerEncoder.getConfigurator();
 
@@ -96,11 +102,13 @@ public class SwerveModule implements TickedSubsystem {
 
 	public void setDesiredState(SwerveModuleState desiredState) {
 		SwerveModuleState optimized = SwerveModuleState.optimize(
-			desiredState, 
+			desiredState,
 			this.getSteerPosition()
 		);
 
 		this.desiredState = optimized;
+
+		this.drivePIDController.setReference(metersPerSecondToEncoderRPM(optimized.speedMetersPerSecond), CANSparkBase.ControlType.kVelocity);
 	}
 
 	public SwerveModuleState getState() {
@@ -115,9 +123,6 @@ public class SwerveModule implements TickedSubsystem {
 
 	@Override
 	public void periodic() {
-		double drivePIDOutput = this.drivePIDController.calculate(this.getDriveVelocityMetersPerSecond(), desiredState.speedMetersPerSecond);
-		double driveForwardOutput = this.driveFeedForwardController.calculate(desiredState.speedMetersPerSecond);
-		this.driveMotor.setVoltage(drivePIDOutput + driveForwardOutput);
 
 		double steerPIDOutput = this.steeringPIDController.calculate(this.getSteerPosition().getRadians(), MathUtil.angleModulus(this.desiredState.angle.getRadians()));
 

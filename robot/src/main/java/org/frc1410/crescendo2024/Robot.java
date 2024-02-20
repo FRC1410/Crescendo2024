@@ -33,9 +33,9 @@ public final class Robot extends PhaseDrivenRobot {
 	public Robot() {
 		NamedCommands.registerCommand("PreloadShoot", new Shoot(shooter, storage, intake,3300, 700));
 		NamedCommands.registerCommand("ShooterManual", new ShooterManual(shooter));
-		NamedCommands.registerCommand("RunIntakeLimitSwitch", new RunIntakeLimitSwitch(intake, storage, 0.75, 100));
+		NamedCommands.registerCommand("RunIntakeLimitSwitch", new RunIntakeLimitSwitch(intake, storage, 0.75, 575));
 		NamedCommands.registerCommand("RunStorage", new RunStorage(storage, 700));
-		NamedCommands.registerCommand("RunIntake", new RunIntake(intake, 0.75));
+		NamedCommands.registerCommand("RunIntake", new RunIntake(intake, 0.5));
 	}
 
 	private final Controller driverController = new Controller(scheduler, DRIVER_CONTROLLER, 0.1 );
@@ -52,7 +52,7 @@ public final class Robot extends PhaseDrivenRobot {
 	private final NetworkTable table = nt.getTable("Auto");
 
 	private final AutoSelector autoSelector = new AutoSelector()
-		.add("Test", () -> new PathPlannerAuto("Test"));
+		.add("4 piece mid sub", () -> new PathPlannerAuto("4 piece mid sub"));
 
 	{
 		var profiles = new String[autoSelector.getProfiles().size()];
@@ -95,7 +95,7 @@ public final class Robot extends PhaseDrivenRobot {
 
 		// Shooter
 		driverController.LEFT_TRIGGER.button().whileHeld(new ScoreAmp(shooter, storage, false), TaskPersistence.GAMEPLAY);
-		driverController.RIGHT_TRIGGER.button().whileHeldOnce(new AutomaticShooting(drivetrain, storage, shooter), TaskPersistence.GAMEPLAY);
+		driverController.RIGHT_TRIGGER.button().whileHeldOnce(new AutomaticShooting(drivetrain, storage, intake, shooter), TaskPersistence.GAMEPLAY);
 		driverController.RIGHT_BUMPER.whileHeld(new ShooterManual(shooter), TaskPersistence.GAMEPLAY);
 
 		driverController.LEFT_BUMPER.whileHeld(new RunStorage(storage, 575), TaskPersistence.GAMEPLAY);

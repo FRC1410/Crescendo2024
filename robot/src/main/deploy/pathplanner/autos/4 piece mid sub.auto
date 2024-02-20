@@ -43,7 +43,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Shoot"
+                  "name": "ShooterManual"
                 }
               },
               {
@@ -53,7 +53,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "b to mid sub"
+                        "pathName": "B mid sub"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.04
                       }
                     },
                     {

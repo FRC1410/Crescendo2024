@@ -3,9 +3,15 @@ package org.frc1410.crescendo2024.util;
 import static org.frc1410.crescendo2024.util.Constants.*;
 
 public interface Tuning {
-    double SWERVE_DRIVE_P = 0.5;
+
+//    double SWERVE_DRIVE_P = 0.5;
+//	double SWERVE_DRIVE_I = 0;
+//	double SWERVE_DRIVE_D = 0.05;
+
+	double SWERVE_DRIVE_P = 0;
 	double SWERVE_DRIVE_I = 0;
-	double SWERVE_DRIVE_D = 0.05;
+	double SWERVE_DRIVE_D = 0;
+	double SWERVE_DRIVE_FF = 0.00032;
 
     double SWERVE_STEERING_P = 4;
 	double SWERVE_STEERING_I = 0;
@@ -31,7 +37,7 @@ public interface Tuning {
 	double AUTO_DRIVE_I = 0;
 	double AUTO_DRIVE_D = 0;
 
-	double AUTO_TURN_P = 1;
+	double AUTO_TURN_P = 4;
 	double AUTO_TURN_I = 0;
 	double AUTO_TURN_D = 0;
 
