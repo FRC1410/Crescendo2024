@@ -1,5 +1,6 @@
 package org.frc1410.crescendo2024.subsystems;
 
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkPIDController;
@@ -15,12 +16,14 @@ public class AmpBar implements Subsystem {
 	private final NetworkTable table = NetworkTableInstance.getDefault().getTable("Amp");
 
 	private final CANSparkMax ampBarMotor = new CANSparkMax(AMP_BAR_MOTOR_ID, MotorType.kBrushless);
+	public boolean isExtended = true;
 
-	private final SparkPIDController ampPIDController = ampBarMotor.getPIDController();
+//	private final SparkPIDController ampPIDController = ampBarMotor.getPIDController();
 
 
 	public AmpBar() {
 		ampBarMotor.restoreFactoryDefaults();
+		ampBarMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
 		
 		ampBarMotor.setInverted(AMP_BAR_MOTOR_INVERTED);
 	}
@@ -28,7 +31,6 @@ public class AmpBar implements Subsystem {
 	public void setSpeed(double speed) {
 		ampBarMotor.set(speed);
 	}
-
 }
 
 

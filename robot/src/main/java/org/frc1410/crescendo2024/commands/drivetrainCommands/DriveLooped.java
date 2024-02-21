@@ -32,8 +32,6 @@ public class DriveLooped extends Command {
 
 	@Override
 	public void execute() {
-		System.out.println("x axis: " + xAxis.get());
-		System.out.println("y axis: " + yAxis.get());
 		var xVelocity = -yAxis.get() * SWERVE_DRIVE_MAX_SPEED;
 		var yVelocity = -xAxis.get() * SWERVE_DRIVE_MAX_SPEED;
 		var rotation = -rotationAxis.get() * SWERVE_DRIVE_MAX_ANGULAR_VELOCITY;
