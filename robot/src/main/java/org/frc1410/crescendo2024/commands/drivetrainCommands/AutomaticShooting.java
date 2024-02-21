@@ -1,8 +1,12 @@
 package org.frc1410.crescendo2024.commands.drivetrainCommands;
 
+import com.pathplanner.lib.commands.FollowPathCommand;
+import com.pathplanner.lib.commands.FollowPathHolonomic;
 import com.pathplanner.lib.commands.PathfindHolonomic;
 import com.pathplanner.lib.commands.PathfindThenFollowPathHolonomic;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.sun.jdi.ShortType;
 import edu.wpi.first.math.MathUtil;
@@ -33,8 +37,8 @@ public class AutomaticShooting extends Command {
 	private double storageRPM;
 	private final Timer timer = new Timer();
 	private boolean storageIsRunning = false;
-	private PathfindThenFollowPathHolonomic pathfindHolonomic;
-	private PathPlannerPath pathPlannerPath;
+
+	private FollowPathHolonomic followPathCommand = null;
 
 	private Pose2d nearestPose;
 
@@ -50,6 +54,7 @@ public class AutomaticShooting extends Command {
 	}
 
 	public Optional<Rotation2d> getRotationTargetOverride() {
+
 		var r = this.drivetrain.getEstimatedPosition();
 		var a = new Translation2d(0.0381, 5.55);
 
@@ -81,70 +86,55 @@ public class AutomaticShooting extends Command {
 		int nearestPoseIndex = shootingPoseList.indexOf(nearestPose);
 		double shooterRPM = SHOOTING_POSITIONS.get(nearestPoseIndex).shooterRPM;
 		storageRPM = SHOOTING_POSITIONS.get(nearestPoseIndex).storageRPM;
-		String pathName = SHOOTING_POSITIONS.get(nearestPoseIndex).pathName;
-
-		pathPlannerPath = PathPlannerPath.fromPathFile(pathName);
 
 		System.out.println("current " + currentRobotPose);
 		System.out.println("nearest " + nearestPose);
 
-		//this.command = new AutomaticShooting(this.drivetrain, this.shooter, this.storage, SHOOTING_POSITIONS.get(nearestPoseIndex));
-
-		pathfindHolonomic = new PathfindThenFollowPathHolonomic(
-			pathPlannerPath,
+		var pathPlannerPath = new PathPlannerPath(
+			PathPlannerPath.bezierFromPoses(
+				drivetrain.getEstimatedPosition(),
+				nearestPose
+			),
 			PATH_FIND_CONSTRAINTS,
-			drivetrain::getEstimatedPosition,
-			drivetrain::getChassisSpeeds,
-			drivetrain::drive,
-			PATH_FIND_FOLLOWER_CONFIG,
-			0,
-			() -> {
-				var alliance = DriverStation.getAlliance();
-				if (alliance.isPresent()) {
-					return alliance.get() == DriverStation.Alliance.Red;
-				}
-				return false;
-			},
-			drivetrain
+			new GoalEndState(0, nearestPose.getRotation())
 		);
 
-		pathfindHolonomic.initialize();
+		this.followPathCommand = new FollowPathHolonomic(pathPlannerPath, drivetrain::getEstimatedPosition, drivetrain::getChassisSpeeds, drivetrain::drive, PATH_FIND_FOLLOWER_CONFIG, () -> false, drivetrain);
+		this.followPathCommand.initialize();
 		shooter.setRPM(shooterRPM);
 	}
 
 	@Override
 	public void execute() {
-		if(pathfindHolonomic != null) {
-			if(!pathfindHolonomic.isFinished()) {
-				pathfindHolonomic.execute();
+		if(followPathCommand != null) {
+			System.out.println("exec not null");
+			if(!followPathCommand.isFinished() && !storageIsRunning) {
+				System.out.println("exec pathfind");
+				followPathCommand.execute();
 			} else if(!storageIsRunning) {
-				pathfindHolonomic.end(false);
+				System.out.println("exec storage (once)");
+				followPathCommand.end(false);
 				storage.setRPM(storageRPM);
 				intake.setSpeed(0.75);
 				storageIsRunning = true;
-//				timer.start();
+				timer.start();
 			}
 		}
 	}
 
 	@Override
 	public boolean isFinished() {
-//		return timer.hasElapsed(1);
-//		if (this.pathfindHolonomic != null) {
-//			return this.pathfindHolonomic.isFinished();
-//		}
-//		return true;
-		return false;
+		return timer.hasElapsed(1);
 	}
 
 	@Override
 	public void end(boolean interrupted) {
-//		if(pathfindHolonomic != null) {
-//			pathfindHolonomic.end(interrupted);
-//		}
-//		storage.setRPM(0);
-//		shooter.setRPM(0);
-//		intake.setSpeed(0);
-//		System.out.println("end " + drivetrain.getEstimatedPosition());
+		if(followPathCommand != null) {
+			followPathCommand.end(interrupted);
+		}
+		storage.setRPM(0);
+		shooter.setRPM(0);
+		intake.setSpeed(0);
+		System.out.println("end " + drivetrain.getEstimatedPosition());
 	}
 }
