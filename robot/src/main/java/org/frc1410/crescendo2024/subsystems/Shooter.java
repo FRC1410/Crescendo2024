@@ -78,24 +78,11 @@ public class Shooter implements TickedSubsystem {
 		this.rightPIDController.setFF(SHOOTER_RIGHT_FF);
 	}
 
-	public double getSpeed() {
-		return this.desiredShooterRPM.get();
-	}
+	public double getRPM() {
+		double leftRPMVal = shooterLeftEncoder.getVelocity();
+		double rightRPMVal = shooterRightEncoder.getVelocity();
 
-	public void setVoltsLeft(double volts) {
-		shooterMotorLeft.setVoltage(volts);
-	}
-
-	public void setVoltsRight(double volts) {
-		shooterMotorRight.setVoltage(volts);
-	}
-
-	public double getRPMLeft() {
-		return shooterLeftEncoder.getVelocity();
-	}
-
-	public double getRPMRight() {
-		return shooterRightEncoder.getVelocity();
+		return (leftRPMVal + rightRPMVal) / 2;
 	}
 
 	@Override

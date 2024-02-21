@@ -64,12 +64,12 @@ public interface Constants {
 
 	List<ShootingPosition> SHOOTING_POSITIONS = Arrays.asList(
 
-		new ShootingPosition(new Pose2d(1.43, 6.53, Rotation2d.fromDegrees(-159.7)), 1700, 575, "Sub Amp point"),
+		new ShootingPosition(new Pose2d(1.01, 6.32, Rotation2d.fromDegrees(-139.34)), 1700, 575, "Sub Amp point"),
 //		new ShootingPosition(new Pose2d(0.69, 6.82, Rotation2d.fromDegrees(-127)), 2700, 625),
 ////
 //
 ////
-		new ShootingPosition(new Pose2d(1.43, 4.57, Rotation2d.fromDegrees(155.7)), 1700, 575, "Source side point"),
+		new ShootingPosition(new Pose2d(1.01, 6.32, Rotation2d.fromDegrees(139.34)), 1700, 575, "Source side point"),
 //
 //		// close apm wall
 //		new ShootingPosition(new Pose2d(0.69,4.28, Rotation2d.fromDegrees(127)), 2700, 625),

@@ -1,15 +1,9 @@
 package org.frc1410.crescendo2024.commands.drivetrainCommands;
 
-import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.FollowPathHolonomic;
-import com.pathplanner.lib.commands.PathfindHolonomic;
-import com.pathplanner.lib.commands.PathfindThenFollowPathHolonomic;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+
 import com.pathplanner.lib.path.GoalEndState;
-import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
-import com.sun.jdi.ShortType;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -34,40 +28,24 @@ public class AutomaticShooting extends Command {
 	private final Shooter shooter;
 	private final Storage storage;
 	private final Intake intake;
-	private double storageRPM;
+
+	private ShootingPosition shootingPosition;
 	private final Timer timer = new Timer();
 	private boolean storageIsRunning = false;
+	private LEDs leds;
 
 	private FollowPathHolonomic followPathCommand = null;
 
 	private Pose2d nearestPose;
 
 
-	public AutomaticShooting(Drivetrain drivetrain, Storage storage, Intake intake, Shooter shooter) {
+	public AutomaticShooting(Drivetrain drivetrain, Storage storage, Intake intake, Shooter shooter, LEDs leds) {
 		this.drivetrain = drivetrain;
 		this.storage = storage;
 		this.shooter = shooter;
 		this.intake = intake;
-		addRequirements(drivetrain);
-
-//		PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
-	}
-
-	public Optional<Rotation2d> getRotationTargetOverride() {
-
-		var r = this.drivetrain.getEstimatedPosition();
-		var a = new Translation2d(0.0381, 5.55);
-
-		if(this.nearestPose != null && this.nearestPose.getTranslation().getDistance(this.drivetrain.getEstimatedPosition().getTranslation()) > 0.5) {
-			return Optional.empty();
-		}
-
-		return Optional.of(Rotation2d.fromRadians(
-			MathUtil.angleModulus(Math.PI + Math.atan(
-				(r.getY() - a.getY())/
-					(r.getX() - a.getX())
-			))
-		));
+		this.leds = leds;
+		addRequirements(drivetrain, leds);
 	}
 
 	@Override
@@ -84,8 +62,8 @@ public class AutomaticShooting extends Command {
 		this.nearestPose = nearestPose;
 
 		int nearestPoseIndex = shootingPoseList.indexOf(nearestPose);
-		double shooterRPM = SHOOTING_POSITIONS.get(nearestPoseIndex).shooterRPM;
-		storageRPM = SHOOTING_POSITIONS.get(nearestPoseIndex).storageRPM;
+
+		this.shootingPosition = SHOOTING_POSITIONS.get(nearestPoseIndex);
 
 		System.out.println("current " + currentRobotPose);
 		System.out.println("nearest " + nearestPose);
@@ -99,22 +77,22 @@ public class AutomaticShooting extends Command {
 			new GoalEndState(0, nearestPose.getRotation())
 		);
 
+		leds.changeLEDsColor(LEDs.Colors.LIMELIGHT_GREEN);
 		this.followPathCommand = new FollowPathHolonomic(pathPlannerPath, drivetrain::getEstimatedPosition, drivetrain::getChassisSpeeds, drivetrain::drive, PATH_FIND_FOLLOWER_CONFIG, () -> false, drivetrain);
 		this.followPathCommand.initialize();
-		shooter.setRPM(shooterRPM);
+		shooter.setRPM(this.shootingPosition.shooterRPM);
 	}
 
 	@Override
 	public void execute() {
+		System.out.println(shooter.getRPM());
 		if(followPathCommand != null) {
-			System.out.println("exec not null");
 			if(!followPathCommand.isFinished() && !storageIsRunning) {
-				System.out.println("exec pathfind");
 				followPathCommand.execute();
-			} else if(!storageIsRunning) {
-				System.out.println("exec storage (once)");
+			} else if(!storageIsRunning && Math.abs(shooter.getRPM() - this.shootingPosition.shooterRPM) <= 50) {
+				System.out.println("Correct RPM");
 				followPathCommand.end(false);
-				storage.setRPM(storageRPM);
+				storage.setRPM(this.shootingPosition.storageRPM);
 				intake.setSpeed(0.75);
 				storageIsRunning = true;
 				timer.start();
@@ -131,10 +109,10 @@ public class AutomaticShooting extends Command {
 	public void end(boolean interrupted) {
 		if(followPathCommand != null) {
 			followPathCommand.end(interrupted);
+			leds.defaultLEDsState();
 		}
 		storage.setRPM(0);
 		shooter.setRPM(0);
 		intake.setSpeed(0);
-		System.out.println("end " + drivetrain.getEstimatedPosition());
 	}
 }
