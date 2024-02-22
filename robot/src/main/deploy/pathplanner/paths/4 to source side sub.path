@@ -3,28 +3,44 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.22,
-        "y": 5.55
+        "x": 7.9,
+        "y": 2.45
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8819847299801942,
-        "y": 5.800844517610323
+        "x": 7.531915377390684,
+        "y": 2.12691498889259
       },
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.8,
-        "y": 7.0
+        "x": 4.172951172378196,
+        "y": 1.8650816550291425
       },
       "prevControl": {
-        "x": 1.7132595080932556,
-        "y": 6.970628635353871
+        "x": 5.7882151751886655,
+        "y": 0.9585559391661239
+      },
+      "nextControl": {
+        "x": 1.2945574370576298,
+        "y": 3.4805067105661944
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 0.77,
+        "y": 4.5
+      },
+      "prevControl": {
+        "x": 0.898044014334899,
+        "y": 4.346961967626977
       },
       "nextControl": null,
-      "isLocked": true,
+      "isLocked": false,
       "linkedName": null
     }
   ],
@@ -39,13 +55,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": 120.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "To subwoffer",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 180.0,
     "velocity": 0
   },
   "useDefaultConstraints": true
