@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.28,
-      "y": 5.42
+      "x": 0.75,
+      "y": 6.58
     },
-    "rotation": 180.0
+    "rotation": -120.0
   },
   "command": {
     "type": "sequential",
@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Mid sub to B"
+                  "pathName": "Amp side sub to A"
                 }
               },
               {
@@ -43,7 +43,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ShooterManual"
+                  "name": "RunIntake"
                 }
               },
               {
@@ -53,13 +53,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "B mid sub"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.04
+                        "pathName": "A to amp side sub"
                       }
                     },
                     {
@@ -100,7 +94,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Mid sub to A"
+                  "pathName": "Amp side sub to 1"
                 }
               },
               {
@@ -129,7 +123,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "A to mid sub"
+                        "pathName": "1 to amp side sub"
                       }
                     },
                     {
@@ -170,7 +164,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Mid sub to C"
+                  "pathName": "Amp side sub to 2"
                 }
               },
               {
@@ -199,32 +193,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "C to mid sub"
-                      }
-                    },
-                    {
-                      "type": "race",
-                      "data": {
-                        "commands": [
-                          {
-                            "type": "wait",
-                            "data": {
-                              "waitTime": 0.5
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "RunIntake"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "RunStorage"
-                            }
-                          }
-                        ]
+                        "pathName": "2 to amp side sub"
                       }
                     }
                   ]
