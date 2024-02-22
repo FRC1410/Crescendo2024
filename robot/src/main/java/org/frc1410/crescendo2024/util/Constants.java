@@ -102,10 +102,10 @@ public interface Constants {
 
 	double SHOOTER_RPM_INCREMENT = 150;
 
-	double AMP_BAR_SPEED = 0.2;
+	double AMP_BAR_SPEED = 0.4;
 	double AMP_BAR_SPEED_REVERSED = -0.2;
 	double AMP_SHOOT_SPEED = 1100;
-	double AMP_BAR_TIMER = 0.7;
+	double AMP_BAR_TIMER = .6;
 
 	boolean STORAGE_LEFT_MOTOR_INVERTED = false;
 	boolean STORAGE_RIGHT_MOTOR_INVERTED = true;
