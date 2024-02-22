@@ -10,24 +10,19 @@ import static org.frc1410.crescendo2024.util.Constants.*;
 public class RunAmpBar extends Command {
 
 	private final AmpBar ampBar;
+	private final int direction;
 
 	private boolean isExtended;
 
-	public RunAmpBar(AmpBar ampBar, boolean isExtended) {
+	public RunAmpBar(AmpBar ampBar, int direction) {
 		this.ampBar = ampBar;
-		this.isExtended = isExtended;
+		this.direction = direction;
 		addRequirements(this.ampBar);
 	}
 
 	@Override
 	public void initialize() {
-		if(ampBar.isExtended && !isExtended) {
-			ampBar.setSpeed(AMP_BAR_SPEED_REVERSED);
-		} else if(!ampBar.isExtended && isExtended) {
-			ampBar.setSpeed(AMP_BAR_SPEED);
-		} else {
-			ampBar.setSpeed(0);
-		}
+		ampBar.setSpeed(AMP_BAR_SPEED * direction);
 	}
 
 	@Override

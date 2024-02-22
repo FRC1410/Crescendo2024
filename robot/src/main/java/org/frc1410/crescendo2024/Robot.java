@@ -112,8 +112,8 @@ public final class Robot extends PhaseDrivenRobot {
 		operatorController.A.whenPressed(new IncrementShooterRPM(shooter, SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);
 		operatorController.B.whenPressed(new IncrementShooterRPM(shooter, -SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);
 
-		operatorController.DPAD_UP.whenPressed(new ExtendAmpBar(ampBar, leds, false), TaskPersistence.GAMEPLAY);
-		operatorController.DPAD_DOWN.whenPressed(new ExtendAmpBar(ampBar, leds, true), TaskPersistence.GAMEPLAY);
+		operatorController.DPAD_UP.whenPressed(new ExtendAmpBar(ampBar, leds, 1), TaskPersistence.GAMEPLAY);
+		operatorController.DPAD_DOWN.whenPressed(new ExtendAmpBar(ampBar, leds, -1 /* Negative 1 is reversed */), TaskPersistence.GAMEPLAY);
 
 		scheduler.scheduleDefaultCommand(new ClimbLooped(climb, operatorController.LEFT_Y_AXIS, operatorController.RIGHT_Y_AXIS), TaskPersistence.EPHEMERAL);
 	}
