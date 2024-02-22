@@ -92,6 +92,7 @@ public class AutomaticShooting extends Command {
 			} else if(!storageIsRunning && Math.abs(shooter.getRPM() - this.shootingPosition.shooterRPM) <= 50) {
 				System.out.println("Correct RPM");
 				followPathCommand.end(false);
+				drivetrain.lockDrivetrain();
 				storage.setRPM(this.shootingPosition.storageRPM);
 				intake.setSpeed(0.75);
 				storageIsRunning = true;

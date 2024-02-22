@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -252,6 +253,13 @@ public class Drivetrain implements TickedSubsystem {
             this.backRight.getPosition()
         };
     }
+
+	public void lockDrivetrain() {
+		frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+		frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(135)));
+		backLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(135)));
+		backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+	}
 
 //    private Rotation3d getAngle() {
 //        return gyro.getRotation3d();

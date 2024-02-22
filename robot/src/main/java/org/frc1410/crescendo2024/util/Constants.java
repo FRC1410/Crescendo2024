@@ -69,7 +69,7 @@ public interface Constants {
 ////
 //
 ////
-		new ShootingPosition(new Pose2d(1.01, 6.32, Rotation2d.fromDegrees(139.34)), 1700, 575, "Source side point"),
+		new ShootingPosition(new Pose2d(1.01, 4.78, Rotation2d.fromDegrees(139.34)), 1700, 575, "Source side point"),
 //
 //		// close apm wall
 //		new ShootingPosition(new Pose2d(0.69,4.28, Rotation2d.fromDegrees(127)), 2700, 625),
@@ -150,5 +150,5 @@ public interface Constants {
 	double STORAGE_LEFT_S = 0.15384;
 	double STORAGE_LEFT_V = 0.00107;
 
-	Transform3d CAMERA_POSE = new Transform3d(new Translation3d(0.3683,0,0.559), new Rotation3d(0,Math.toRadians(15),0));
+	Transform3d CAMERA_POSE = new Transform3d(new Translation3d(0.3683,0,0.559), new Rotation3d(0,Math.toRadians(27),0));
 }
