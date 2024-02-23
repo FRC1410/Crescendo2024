@@ -89,14 +89,17 @@ public class AutomaticShooting extends Command {
 		if(followPathCommand != null) {
 			if(!followPathCommand.isFinished() && !storageIsRunning) {
 				followPathCommand.execute();
-			} else if(!storageIsRunning && Math.abs(shooter.getRPM() - this.shootingPosition.shooterRPM) <= 50) {
-				System.out.println("Correct RPM");
-				followPathCommand.end(false);
+			} else if (!storageIsRunning) {
 				drivetrain.lockDrivetrain();
-				storage.setRPM(this.shootingPosition.storageRPM);
-				intake.setSpeed(0.75);
-				storageIsRunning = true;
-				timer.start();
+				
+				if(Math.abs(shooter.getRPM() - this.shootingPosition.shooterRPM) <= 50) {
+					System.out.println("Correct RPM");
+					followPathCommand.end(false);
+					storage.setRPM(this.shootingPosition.storageRPM);
+					intake.setSpeed(0.75);
+					storageIsRunning = true;
+					timer.start();
+				}
 			}
 		}
 	}
