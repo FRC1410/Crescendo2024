@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import org.frc1410.crescendo2024.commands.shooterCommands.RunShooterLooped;
 import org.frc1410.crescendo2024.subsystems.*;
@@ -91,7 +92,7 @@ public class AutomaticShooting extends Command {
 				followPathCommand.execute();
 			} else if (!storageIsRunning) {
 				drivetrain.lockDrivetrain();
-				
+
 				if(Math.abs(shooter.getRPM() - this.shootingPosition.shooterRPM) <= 50) {
 					System.out.println("Correct RPM");
 					followPathCommand.end(false);

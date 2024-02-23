@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.55,
-        "y": 4.1
+        "x": 2.54,
+        "y": 4.17
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.01501802512377,
-        "y": 4.650358408085237
+        "x": 2.0050180251237704,
+        "y": 4.720358408085238
       },
       "isLocked": false,
       "linkedName": null
@@ -45,7 +45,7 @@
   "reversed": false,
   "folder": "To subwoffer",
   "previewStartingState": {
-    "rotation": 180.0,
+    "rotation": 170.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

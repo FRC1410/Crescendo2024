@@ -20,6 +20,8 @@ public class Shoot extends ParallelRaceGroup {
 				new WaitCommand(1),
 
 				new ParallelRaceGroup(
+
+					// TODO: Check how long to shoot
 					new WaitCommand(0.5),
 					new RunStorage(storage, desiredStorageRPM),
 					new RunIntake(intake, 0.5)

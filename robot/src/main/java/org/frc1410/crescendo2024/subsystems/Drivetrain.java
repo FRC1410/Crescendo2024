@@ -255,10 +255,10 @@ public class Drivetrain implements TickedSubsystem {
     }
 
 	public void lockDrivetrain() {
-		frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
-		frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(135)));
-		backLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(135)));
-		backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+		frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(135)));
+		frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+		backLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+		backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(135)));
 	}
 
 //    private Rotation3d getAngle() {

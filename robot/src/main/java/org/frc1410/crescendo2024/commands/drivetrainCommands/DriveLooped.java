@@ -34,7 +34,7 @@ public class DriveLooped extends Command {
 	public void execute() {
 		var xVelocity = -yAxis.get() * SWERVE_DRIVE_MAX_SPEED;
 		var yVelocity = -xAxis.get() * SWERVE_DRIVE_MAX_SPEED;
-		var rotation = -rotationAxis.get() > 0 ? Math.pow(-rotationAxis.get() * Math.sqrt(SWERVE_DRIVE_MAX_ANGULAR_VELOCITY), 2) : Math.pow(-rotationAxis.get() * Math.sqrt(SWERVE_DRIVE_MAX_ANGULAR_VELOCITY), 2) * -1;
+		var rotation = -rotationAxis.get() > 0 ? Math.pow(-rotationAxis.get() * Math.sqrt(SWERVE_DRIVE_MAX_ANGULAR_VELOCITY), 1.5) : Math.pow(-rotationAxis.get() * Math.sqrt(SWERVE_DRIVE_MAX_ANGULAR_VELOCITY), 2) * -1;
 		drivetrain.driveFieldRelative(new ChassisSpeeds(xVelocity, yVelocity, rotation));
 	}
 
