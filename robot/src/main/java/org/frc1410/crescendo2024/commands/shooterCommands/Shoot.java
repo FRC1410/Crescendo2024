@@ -17,7 +17,7 @@ public class Shoot extends ParallelRaceGroup {
 
 			new SequentialCommandGroup(
 				//Shooter length
-				new WaitCommand(1),
+				new WaitCommand(1.5),
 
 				new ParallelRaceGroup(
 					new WaitCommand(0.5),

@@ -21,12 +21,10 @@ public class RunAmpBar extends Command {
 
 	@Override
 	public void initialize() {
-		if(ampBar.isExtended && !isExtended) {
+		if(!isExtended) {
 			ampBar.setSpeed(AMP_BAR_SPEED_REVERSED);
-		} else if(!ampBar.isExtended && isExtended) {
-			ampBar.setSpeed(AMP_BAR_SPEED);
 		} else {
-			ampBar.setSpeed(0);
+			ampBar.setSpeed(AMP_BAR_SPEED);
 		}
 	}
 

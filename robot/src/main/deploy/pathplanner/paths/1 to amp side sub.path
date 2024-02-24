@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 0.77,
-        "y": 6.58
+        "x": 0.74,
+        "y": 6.66
       },
       "prevControl": {
-        "x": 1.1153964413163797,
-        "y": 6.7979225432097525
+        "x": 1.0853964413163801,
+        "y": 6.877922543209753
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "To subwoffer",
+  "folder": null,
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0

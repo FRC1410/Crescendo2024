@@ -30,8 +30,8 @@ public class Camera implements Subsystem {
 		try {
 			layout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
 			var alliance = DriverStation.getAlliance();
-//             layout.setOrigin(alliance == Optional.of(Alliance.Blue) ?
-//                   OriginPosition.kBlueAllianceWallRightSide : OriginPosition.kRedAllianceWallRightSide);
+				// layout.setOrigin(alliance == Optional.of(Alliance.Blue) ?
+				// 	OriginPosition.kBlueAllianceWallRightSide : OriginPosition.kRedAllianceWallRightSide);
 		} catch(IOException e) {
 			DriverStation.reportError("Failed to load AprilTagFieldLayout", e.getStackTrace());
 			layout = null;

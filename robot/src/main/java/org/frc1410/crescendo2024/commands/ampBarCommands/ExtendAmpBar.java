@@ -18,15 +18,15 @@ public class ExtendAmpBar extends SequentialCommandGroup {
 			new ParallelRaceGroup(
 				new RunAmpBar(ampBar, isExtended),
 				new WaitCommand(AMP_BAR_TIMER)
-			),
-			new InstantCommand(() -> {
-				ampBar.isExtended = isExtended;
-				if(isExtended) {
-					leds.changeLEDsColor(LEDs.Colors.AMP_ARM_FIRE_ANIMATION);
-				} else {
-					leds.defaultLEDsState();
-				}
-			})
+			)
+			// new InstantCommand(() -> {
+			// 	ampBar.isExtended = isExtended;
+			// 	// if(isExtended) {
+			// 	// 	leds.changeLEDsColor(LEDs.Colors.AMP_ARM_FIRE_ANIMATION);
+			// 	// } else {
+			// 	// 	leds.defaultLEDsState();
+			// 	// }
+			// })
 		);
 
 	}

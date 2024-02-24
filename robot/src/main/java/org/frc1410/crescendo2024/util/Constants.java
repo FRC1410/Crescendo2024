@@ -58,36 +58,50 @@ public interface Constants {
 	double LED_BRIGHTNESS = 1.0;
 	int NUM_LEDS = 250;
 
-	List<ShootingPosition> SHOOTING_POSITIONS = Arrays.asList(
+// 	List<ShootingPosition> SHOOTING_POSITIONS = Arrays.asList(
 
-// 		new ShootingPosition(new Pose2d(1.43, 6.53, Rotation2d.fromDegrees(-155.7)), 1600, 575),
+// // 		new ShootingPosition(new Pose2d(1.43, 6.53, Rotation2d.fromDegrees(-155.7)), 1600, 575),
+// // //		new ShootingPosition(new Pose2d(0.69, 6.82, Rotation2d.fromDegrees(-127)), 2700, 625),
+// // ////
+// // //
+// // ////
+// // 		new ShootingPosition(new Pose2d(1.43, 4.57, Rotation2d.fromDegrees(155.7)), 1575, 575)
+// // //
+// // //		// close apm wall
+// // //		new ShootingPosition(new Pose2d(0.69,4.28, Rotation2d.fromDegrees(127)), 2700, 625),
+// // //
+// // //		// 24`` from sub
+// // //		new ShootingPosition(new Pose2d(1.5,5.55, Rotation2d.fromDegrees(180)), 1550, 575)
+// // //		new ShootingPosition(new Pose2d(1.25, 5.55, Rotation2d.fromDegrees(180)), 1550, 575)
+
+
+// 		new ShootingPosition(new Pose2d(1.01, 6.32, Rotation2d.fromDegrees(-139.34)), 1700, 575),
 // //		new ShootingPosition(new Pose2d(0.69, 6.82, Rotation2d.fromDegrees(-127)), 2700, 625),
 // ////
 // //
 // ////
-// 		new ShootingPosition(new Pose2d(1.43, 4.57, Rotation2d.fromDegrees(155.7)), 1575, 575)
+// 		new ShootingPosition(new Pose2d(1.01, 4.78, Rotation2d.fromDegrees(139.34)), 1700, 575),
 // //
 // //		// close apm wall
 // //		new ShootingPosition(new Pose2d(0.69,4.28, Rotation2d.fromDegrees(127)), 2700, 625),
 // //
 // //		// 24`` from sub
 // //		new ShootingPosition(new Pose2d(1.5,5.55, Rotation2d.fromDegrees(180)), 1550, 575)
-// //		new ShootingPosition(new Pose2d(1.25, 5.55, Rotation2d.fromDegrees(180)), 1550, 575)
+// 		new ShootingPosition(new Pose2d(1.25, 5.55, Rotation2d.fromDegrees(180)), 1750, 575)
+// 	);
 
+	double FIELD_LENGTH = 16.59128;
 
-		new ShootingPosition(new Pose2d(1.01, 6.32, Rotation2d.fromDegrees(-139.34)), 1700, 575),
-//		new ShootingPosition(new Pose2d(0.69, 6.82, Rotation2d.fromDegrees(-127)), 2700, 625),
-////
-//
-////
-		new ShootingPosition(new Pose2d(1.01, 4.78, Rotation2d.fromDegrees(139.34)), 1700, 575),
-//
-//		// close apm wall
-//		new ShootingPosition(new Pose2d(0.69,4.28, Rotation2d.fromDegrees(127)), 2700, 625),
-//
-//		// 24`` from sub
-//		new ShootingPosition(new Pose2d(1.5,5.55, Rotation2d.fromDegrees(180)), 1550, 575)
-		new ShootingPosition(new Pose2d(1.25, 5.55, Rotation2d.fromDegrees(180)), 1750, 575)
+	List<ShootingPosition> SHOOTING_POSITIONS_BLUE = Arrays.asList(
+		new ShootingPosition(new Pose2d(1.35, 6.42, Rotation2d.fromDegrees(-145)), 1700, 575),
+		new ShootingPosition(new Pose2d(1.35, 4.68, Rotation2d.fromDegrees(145)), 1700, 575),
+		new ShootingPosition(new Pose2d(1.35, 5.55, Rotation2d.fromDegrees(180)), 1750, 575)
+	);
+
+	List<ShootingPosition> SHOOTING_POSITIONS_RED = Arrays.asList(
+		new ShootingPosition(new Pose2d(FIELD_LENGTH - 1.01, 6.32, Rotation2d.fromDegrees(-40.66)), 1700, 575),
+		new ShootingPosition(new Pose2d(FIELD_LENGTH - 1.01, 4.78, Rotation2d.fromDegrees(40.66)), 1700, 575),
+		new ShootingPosition(new Pose2d(FIELD_LENGTH - 1.25, 5.55, Rotation2d.fromDegrees(0)), 1750, 575)
 	);
 
 	// old values mVmps : 3.2... mAmps : 4
@@ -113,10 +127,10 @@ public interface Constants {
 
 	double SHOOTER_RPM_INCREMENT = 150;
 
-	double AMP_BAR_SPEED = 0.2;
-	double AMP_BAR_SPEED_REVERSED = -0.2;
+	double AMP_BAR_SPEED = 0.4;
+	double AMP_BAR_SPEED_REVERSED = -0.4;
 	double AMP_SHOOT_SPEED = 1100;
-	double AMP_BAR_TIMER = 0.7;
+	double AMP_BAR_TIMER = 0.6;
 
 	boolean STORAGE_LEFT_MOTOR_INVERTED = false;
 	boolean STORAGE_RIGHT_MOTOR_INVERTED = true;
@@ -161,5 +175,6 @@ public interface Constants {
 	double STORAGE_LEFT_S = 0.15384;
 	double STORAGE_LEFT_V = 0.00107;
 
-	Transform3d CAMERA_POSE = new Transform3d(new Translation3d(0.3683,0,0.559), new Rotation3d(0,Math.toRadians(15),0));
+	Transform3d CAMERA_POSE = new Transform3d(new Translation3d(0.3683,0,0.559), new Rotation3d(0,Units.degreesToRadians(-27),0));
+	// Transform3d CAMERA_POSE = new Transform3d(new Translation3d(0,0,0), new Rotation3d(0,Units.degreesToRadians(-27),0));
 }

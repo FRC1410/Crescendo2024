@@ -42,7 +42,7 @@ public class Shooter implements TickedSubsystem {
 	private final PIDController pidController = new PIDController(SHOOTER_LEFT_P, SHOOTER_LEFT_I, SHOOTER_LEFT_D);
 	private final SimpleMotorFeedforward feedforwardController = new SimpleMotorFeedforward(SHOOTER_LEFT_S, SHOOTER_LEFT_V);
 
-	public double rpmAdjustment;
+	public double rpmAdjustment = 0;
 
 	public Shooter() {
 		shooterMotorLeft.restoreFactoryDefaults();

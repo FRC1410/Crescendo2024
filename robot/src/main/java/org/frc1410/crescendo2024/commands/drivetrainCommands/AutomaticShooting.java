@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import org.frc1410.crescendo2024.commands.shooterCommands.RunShooterLooped;
 import org.frc1410.crescendo2024.subsystems.*;
+import org.frc1410.crescendo2024.subsystems.LEDs.Colors;
 import org.frc1410.crescendo2024.util.ShootingPosition;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class AutomaticShooting extends Command {
 	private final Shooter shooter;
 	private final Storage storage;
 	private final Intake intake;
+	private final LEDs leds;
 
 	private ShootingPosition shootingPosition;
 	private boolean storageIsRunning = false;
@@ -40,12 +42,13 @@ public class AutomaticShooting extends Command {
 
 	private FollowPathHolonomic followPathCommand = null;
 
-	public AutomaticShooting(Drivetrain drivetrain, Storage storage, Intake intake, Shooter shooter) {
+	public AutomaticShooting(Drivetrain drivetrain, Storage storage, Intake intake, Shooter shooter, LEDs leds) {
 		this.drivetrain = drivetrain;
 		this.storage = storage;
 		this.shooter = shooter;
 		this.intake = intake;
-		addRequirements(drivetrain);
+		this.leds = leds;
+		addRequirements(drivetrain, storage, shooter, intake, leds);
 
 //		PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
 	}
@@ -68,22 +71,25 @@ public class AutomaticShooting extends Command {
 
 	@Override
 	public void initialize() {
+		var alliance = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue);
+		var shootingPositions = (alliance == DriverStation.Alliance.Blue) ? SHOOTING_POSITIONS_BLUE : SHOOTING_POSITIONS_RED;
+		
 		timer.stop();
 		timer.reset();
 
 		storageIsRunning = false;
 
 		Pose2d currentRobotPose = drivetrain.getEstimatedPosition();
-		var shootingPoseList = SHOOTING_POSITIONS.stream().map(shootingPositions -> shootingPositions.pose).toList();
+		var shootingPoseList = shootingPositions.stream().map(x -> x.pose).toList();
 		Pose2d nearestPose = currentRobotPose.nearest(shootingPoseList);
 
 		// this.nearestPose = nearestPose;
 
 		int nearestPoseIndex = shootingPoseList.indexOf(nearestPose);
-		double shooterRPM = SHOOTING_POSITIONS.get(nearestPoseIndex).shooterRPM;
-		var storageRPM = SHOOTING_POSITIONS.get(nearestPoseIndex).storageRPM;
+		double shooterRPM = shootingPositions.get(nearestPoseIndex).shooterRPM;
+		// var storageRPM = shootingPositions.get(nearestPoseIndex).storageRPM;
 
-		this.shootingPosition = SHOOTING_POSITIONS.get(nearestPoseIndex);
+		this.shootingPosition = shootingPositions.get(nearestPoseIndex);
 
 		System.out.println("current " + currentRobotPose);
 		System.out.println("nearest " + nearestPose);
@@ -101,6 +107,8 @@ public class AutomaticShooting extends Command {
 
 		this.followPathCommand = new FollowPathHolonomic(pathPlannerPath, drivetrain::getEstimatedPosition, drivetrain::getChassisSpeeds, drivetrain::drive, PATH_FIND_FOLLOWER_CONFIG, () -> false, drivetrain);
 		this.followPathCommand.initialize();
+
+		this.leds.changeLEDsColor(Colors.LIMELIGHT_GREEN);
 
 		shooter.setRPM(shooterRPM);
 	}
