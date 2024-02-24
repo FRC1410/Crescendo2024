@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import org.frc1410.crescendo2024.subsystems.LEDs;
 import org.frc1410.crescendo2024.subsystems.Shooter;
 
-
 public class ShooterManual extends Command {
 	private final Shooter shooter;
 	private LEDs leds = new LEDs();
