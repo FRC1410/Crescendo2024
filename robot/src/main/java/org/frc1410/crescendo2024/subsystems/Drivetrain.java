@@ -85,10 +85,10 @@ public class Drivetrain implements TickedSubsystem {
 			this::drive,
 			HOLONOMIC_AUTO_CONFIG,
 			() -> {
-//				var alliance = DriverStation.getAlliance();
-//				if (alliance.isPresent()) {
-//					return alliance.get() == DriverStation.Alliance.Red;
-//				}
+				var alliance = DriverStation.getAlliance();
+				if (alliance.isPresent()) {
+					return alliance.get() == DriverStation.Alliance.Red;
+				}
 				return false;
 			},
 			this
@@ -193,7 +193,7 @@ public class Drivetrain implements TickedSubsystem {
     }
 
     public void resetPose(Pose2d pose) {
-		this.gyro.setAngleAdjustment(pose.getRotation().getDegrees());
+		// this.gyro.setAngleAdjustment(pose.getRotation().getDegrees());
         this.poseEstimator.resetPosition(
             this.getYaw(),
             this.getSwerveModulePositions(),

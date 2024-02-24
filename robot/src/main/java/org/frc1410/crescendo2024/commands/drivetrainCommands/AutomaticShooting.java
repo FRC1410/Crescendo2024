@@ -1,9 +1,13 @@
 package org.frc1410.crescendo2024.commands.drivetrainCommands;
 
 import com.pathplanner.lib.commands.FollowPathHolonomic;
-
+import com.pathplanner.lib.commands.PathfindHolonomic;
+import com.pathplanner.lib.commands.PathfindThenFollowPathHolonomic;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.sun.jdi.ShortType;
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -30,23 +34,37 @@ public class AutomaticShooting extends Command {
 	private final Intake intake;
 
 	private ShootingPosition shootingPosition;
-	private final Timer timer = new Timer();
 	private boolean storageIsRunning = false;
-	private LEDs leds;
+
+	private final Timer timer = new Timer();
 
 	private FollowPathHolonomic followPathCommand = null;
 
-	private Pose2d nearestPose;
-
-
-	public AutomaticShooting(Drivetrain drivetrain, Storage storage, Intake intake, Shooter shooter, LEDs leds) {
+	public AutomaticShooting(Drivetrain drivetrain, Storage storage, Intake intake, Shooter shooter) {
 		this.drivetrain = drivetrain;
 		this.storage = storage;
 		this.shooter = shooter;
 		this.intake = intake;
-		this.leds = leds;
-		addRequirements(drivetrain, leds);
+		addRequirements(drivetrain);
+
+//		PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
 	}
+
+	// public Optional<Rotation2d> getRotationTargetOverride() {
+	// 	var r = this.drivetrain.getEstimatedPosition();
+	// 	var a = new Translation2d(0.0381, 5.55);
+
+	// 	if(this.nearestPose != null && this.nearestPose.getTranslation().getDistance(this.drivetrain.getEstimatedPosition().getTranslation()) > 0.5) {
+	// 		return Optional.empty();
+	// 	}
+
+	// 	return Optional.of(Rotation2d.fromRadians(
+	// 		MathUtil.angleModulus(Math.PI + Math.atan(
+	// 			(r.getY() - a.getY())/
+	// 				(r.getX() - a.getX())
+	// 		))
+	// 	));
+	// }
 
 	@Override
 	public void initialize() {
@@ -59,14 +77,18 @@ public class AutomaticShooting extends Command {
 		var shootingPoseList = SHOOTING_POSITIONS.stream().map(shootingPositions -> shootingPositions.pose).toList();
 		Pose2d nearestPose = currentRobotPose.nearest(shootingPoseList);
 
-		this.nearestPose = nearestPose;
+		// this.nearestPose = nearestPose;
 
 		int nearestPoseIndex = shootingPoseList.indexOf(nearestPose);
+		double shooterRPM = SHOOTING_POSITIONS.get(nearestPoseIndex).shooterRPM;
+		var storageRPM = SHOOTING_POSITIONS.get(nearestPoseIndex).storageRPM;
 
 		this.shootingPosition = SHOOTING_POSITIONS.get(nearestPoseIndex);
 
 		System.out.println("current " + currentRobotPose);
 		System.out.println("nearest " + nearestPose);
+
+		//this.command = new AutomaticShooting(this.drivetrain, this.shooter, this.storage, SHOOTING_POSITIONS.get(nearestPoseIndex));
 
 		var pathPlannerPath = new PathPlannerPath(
 			PathPlannerPath.bezierFromPoses(
@@ -77,20 +99,18 @@ public class AutomaticShooting extends Command {
 			new GoalEndState(0, nearestPose.getRotation())
 		);
 
-		leds.changeLEDsColor(LEDs.Colors.LIMELIGHT_GREEN);
 		this.followPathCommand = new FollowPathHolonomic(pathPlannerPath, drivetrain::getEstimatedPosition, drivetrain::getChassisSpeeds, drivetrain::drive, PATH_FIND_FOLLOWER_CONFIG, () -> false, drivetrain);
 		this.followPathCommand.initialize();
-		shooter.setRPM(this.shootingPosition.shooterRPM);
+
+		shooter.setRPM(shooterRPM);
 	}
 
 	@Override
 	public void execute() {
-		System.out.println(shooter.getRPM());
 		if(followPathCommand != null) {
 			if(!followPathCommand.isFinished() && !storageIsRunning) {
 				followPathCommand.execute();
-			} else if(!storageIsRunning && Math.abs(shooter.getRPM() - this.shootingPosition.shooterRPM) <= 50) {
-				System.out.println("Correct RPM");
+			} else if(!storageIsRunning) {
 				followPathCommand.end(false);
 				storage.setRPM(this.shootingPosition.storageRPM);
 				intake.setSpeed(0.75);
@@ -103,16 +123,20 @@ public class AutomaticShooting extends Command {
 	@Override
 	public boolean isFinished() {
 		return timer.hasElapsed(1);
+//		if (this.pathfindHolonomic != null) {
+//			return this.pathfindHolonomic.isFinished();
+//		}
+//		return true;
 	}
 
 	@Override
 	public void end(boolean interrupted) {
 		if(followPathCommand != null) {
 			followPathCommand.end(interrupted);
-			leds.defaultLEDsState();
 		}
 		storage.setRPM(0);
 		shooter.setRPM(0);
 		intake.setSpeed(0);
+		System.out.println("end " + drivetrain.getEstimatedPosition());
 	}
 }

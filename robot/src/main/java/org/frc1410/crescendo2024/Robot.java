@@ -40,6 +40,7 @@ public final class Robot extends PhaseDrivenRobot {
 
 	private final Controller driverController = new Controller(scheduler, DRIVER_CONTROLLER, 0.1 );
 	private final Controller operatorController = new Controller(scheduler, OPERATOR_CONTROLLER,  0.1);
+	
 	private final Drivetrain drivetrain = subsystems.track(new Drivetrain(subsystems));
 	private final Shooter shooter = subsystems.track(new Shooter());
 	private final AmpBar ampBar = new AmpBar();
@@ -95,7 +96,7 @@ public final class Robot extends PhaseDrivenRobot {
 
 		// Shooter
 		driverController.LEFT_TRIGGER.button().whileHeld(new ScoreAmp(shooter, storage, false), TaskPersistence.GAMEPLAY);
-		driverController.RIGHT_TRIGGER.button().whileHeldOnce(new AutomaticShooting(drivetrain, storage, intake, shooter, leds), TaskPersistence.GAMEPLAY);
+		driverController.RIGHT_TRIGGER.button().whileHeldOnce(new AutomaticShooting(drivetrain, storage, intake, shooter), TaskPersistence.GAMEPLAY);
 		driverController.RIGHT_BUMPER.whileHeld(new ShooterManual(shooter), TaskPersistence.GAMEPLAY);
 
 		driverController.LEFT_BUMPER.whileHeld(new RunStorage(storage, 575), TaskPersistence.GAMEPLAY);

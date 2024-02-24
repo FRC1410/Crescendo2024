@@ -3,11 +3,9 @@
   "robotLength": 0.7366,
   "holonomicMode": true,
   "pathFolders": [
-    "Points",
-    "To A",
-    "To B",
     "To C",
-    "To subwoffer"
+    "To A",
+    "To B"
   ],
   "autoFolders": [],
   "defaultMaxVel": 4.2,

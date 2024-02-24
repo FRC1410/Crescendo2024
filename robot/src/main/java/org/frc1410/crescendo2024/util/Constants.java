@@ -3,8 +3,6 @@ package org.frc1410.crescendo2024.util;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
-import edu.wpi.first.math.geometry.Rotation3d;
-
 import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -12,8 +10,6 @@ import edu.wpi.first.math.util.Units;
 
 import java.util.Arrays;
 import java.util.List;
-
-import edu.wpi.first.math.geometry.Translation2d;
 
 import static org.frc1410.crescendo2024.util.Tuning.*;
 
@@ -64,19 +60,34 @@ public interface Constants {
 
 	List<ShootingPosition> SHOOTING_POSITIONS = Arrays.asList(
 
-		new ShootingPosition(new Pose2d(1.01, 6.32, Rotation2d.fromDegrees(-139.34)), 1700, 575, "Sub Amp point"),
+// 		new ShootingPosition(new Pose2d(1.43, 6.53, Rotation2d.fromDegrees(-155.7)), 1600, 575),
+// //		new ShootingPosition(new Pose2d(0.69, 6.82, Rotation2d.fromDegrees(-127)), 2700, 625),
+// ////
+// //
+// ////
+// 		new ShootingPosition(new Pose2d(1.43, 4.57, Rotation2d.fromDegrees(155.7)), 1575, 575)
+// //
+// //		// close apm wall
+// //		new ShootingPosition(new Pose2d(0.69,4.28, Rotation2d.fromDegrees(127)), 2700, 625),
+// //
+// //		// 24`` from sub
+// //		new ShootingPosition(new Pose2d(1.5,5.55, Rotation2d.fromDegrees(180)), 1550, 575)
+// //		new ShootingPosition(new Pose2d(1.25, 5.55, Rotation2d.fromDegrees(180)), 1550, 575)
+
+
+		new ShootingPosition(new Pose2d(1.01, 6.32, Rotation2d.fromDegrees(-139.34)), 1700, 575),
 //		new ShootingPosition(new Pose2d(0.69, 6.82, Rotation2d.fromDegrees(-127)), 2700, 625),
 ////
 //
 ////
-		new ShootingPosition(new Pose2d(1.01, 6.32, Rotation2d.fromDegrees(139.34)), 1700, 575, "Source side point"),
+		new ShootingPosition(new Pose2d(1.01, 4.78, Rotation2d.fromDegrees(139.34)), 1700, 575),
 //
 //		// close apm wall
 //		new ShootingPosition(new Pose2d(0.69,4.28, Rotation2d.fromDegrees(127)), 2700, 625),
 //
 //		// 24`` from sub
 //		new ShootingPosition(new Pose2d(1.5,5.55, Rotation2d.fromDegrees(180)), 1550, 575)
-		new ShootingPosition(new Pose2d(1.25, 5.55, Rotation2d.fromDegrees(180)), 1750, 575, "Bull")
+		new ShootingPosition(new Pose2d(1.25, 5.55, Rotation2d.fromDegrees(180)), 1750, 575)
 	);
 
 	// old values mVmps : 3.2... mAmps : 4

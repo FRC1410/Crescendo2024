@@ -9,12 +9,10 @@ public class ShootingPosition {
 	public final Pose2d pose;
 	public final double shooterRPM;
 	public final double storageRPM;
-	public final String pathName;
 
-	public ShootingPosition(Pose2d pose, double shooterRPM, double storageRPM, String pathName) {
+	public ShootingPosition(Pose2d pose, double shooterRPM, double storageRPM) {
 		this.pose = pose;
 		this.shooterRPM = shooterRPM;
 		this.storageRPM = storageRPM;
-		this.pathName = pathName;
 	}
 }
