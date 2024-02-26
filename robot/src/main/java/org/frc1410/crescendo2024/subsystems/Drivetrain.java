@@ -12,19 +12,14 @@ import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.SPI;
 
 import edu.wpi.first.wpilibj.SerialPort;
 import org.frc1410.framework.scheduler.subsystem.SubsystemStore;
 import org.frc1410.framework.scheduler.subsystem.TickedSubsystem;
 
-import com.pathplanner.lib.commands.PathPlannerAuto;
-
 import static org.frc1410.crescendo2024.util.IDs.*;
 
 import org.frc1410.crescendo2024.util.NetworkTables;
-
-import java.util.Optional;
 
 import static org.frc1410.crescendo2024.util.Constants.*;
 
@@ -66,7 +61,7 @@ public class Drivetrain implements TickedSubsystem {
     private final SwerveModule backLeft;
     private final SwerveModule backRight;
 
-	 private final Camera camera = new Camera();
+	private final Camera camera = new Camera();
 
     private final AHRS gyro = new AHRS(SerialPort.Port.kUSB);
 
@@ -76,8 +71,8 @@ public class Drivetrain implements TickedSubsystem {
     private final SwerveDrivePoseEstimator poseEstimator;
 
 	private double previousPipelineTimestamp = 0;
-    public Drivetrain(SubsystemStore subsystems) {
 
+    public Drivetrain(SubsystemStore subsystems) {
 		AutoBuilder.configureHolonomic(
 			this::getEstimatedPosition,
 			this::resetPose,
@@ -148,33 +143,24 @@ public class Drivetrain implements TickedSubsystem {
 
         this.poseEstimator = new SwerveDrivePoseEstimator(
             SWERVE_DRIVE_KINEMATICS,
-            this.getYaw(),
+            this.getGyroYaw(),
             this.getSwerveModulePositions(),
             new Pose2d()
         );
-
-        this.gyro.reset();
-
     }
 
     public void drive(ChassisSpeeds chassisSpeeds) {
         var swerveModuleStates = SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
-
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SWERVE_DRIVE_MAX_SPEED);
 
         this.frontLeft.setDesiredState(swerveModuleStates[0]);
         this.frontRight.setDesiredState(swerveModuleStates[1]);
         this.backLeft.setDesiredState(swerveModuleStates[2]);
         this.backRight.setDesiredState(swerveModuleStates[3]);
-
-//		System.out.println(chassisSpeeds);
-
     }
 
     public void driveFieldRelative(ChassisSpeeds chassisSpeeds) {
-//		System.out.println("field relative: " + chassisSpeeds);
-        var robotRelativeChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, this.getYaw());
-//		System.out.println("robot relative: " + robotRelativeChassisSpeeds);
+        var robotRelativeChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, this.getEstimatedPosition().getRotation());
 		this.drive(robotRelativeChassisSpeeds);
     }
 
@@ -188,58 +174,44 @@ public class Drivetrain implements TickedSubsystem {
     }
 
     public Pose2d getEstimatedPosition() {
-//		System.out.println(this.poseEstimator.getEstimatedPosition());
         return this.poseEstimator.getEstimatedPosition();
     }
 
     public void resetPose(Pose2d pose) {
-		// this.gyro.setAngleAdjustment(pose.getRotation().getDegrees());
         this.poseEstimator.resetPosition(
-            this.getYaw(),
+            this.getGyroYaw(),
             this.getSwerveModulePositions(),
             pose
         );
     }
 
     public void zeroYaw() {
-        this.gyro.zeroYaw();
-//		this.resetPose(new Pose2d(this.getEstimatedPosition().getTranslation(), this.getAngle().toRotation2d()));
+        this.resetPose(new Pose2d(this.getEstimatedPosition().getTranslation(), new Rotation2d()));
     }
 
     @Override
     public void periodic() {
-//		System.out.println(this.getChassisSpeeds());
         this.poseEstimator.update(
-            this.getYaw(),
+            this.getGyroYaw(),
             this.getSwerveModulePositions()
         );
 
-		 var estimatedPose = camera.getEstimatedPose();
+		var estimatedPose = camera.getEstimatedPose();
 
-		 if(estimatedPose.isPresent()) {
-
-
-
-		 	// TODO: Possible bug where bad data is fed into pose estimator when no vision
+		if(estimatedPose.isPresent()) {
 		 	var resultTimestamp = estimatedPose.get().timestampSeconds;
 
-//		 	if(resultTimestamp != previousPipelineTimestamp) {
-				 previousPipelineTimestamp = resultTimestamp;
-				 poseEstimator.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), resultTimestamp);
-//		 	}
-		 } else {
-
-		 }
-
-//        this.yaw.set(this.gyro.getYaw());
-//        this.roll.set(this.gyro.getRoll());
-//        this.pitch.set(this.gyro.getPitch());
+		 	if(resultTimestamp != previousPipelineTimestamp) {
+				previousPipelineTimestamp = resultTimestamp;
+				poseEstimator.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), resultTimestamp);
+		 	}
+		}
 
 		poseX.set(this.getEstimatedPosition().getX());
 		poseY.set(this.getEstimatedPosition().getY());
 		heading.set(this.getEstimatedPosition().getRotation().getDegrees());
 
-		yaw.set(-this.gyro.getYaw());
+		yaw.set(this.getGyroYaw().getDegrees());
 		pitch.set(this.gyro.getPitch());
 		roll.set(this.gyro.getRoll());
     }
@@ -253,10 +225,7 @@ public class Drivetrain implements TickedSubsystem {
         };
     }
 
-//    private Rotation3d getAngle() {
-//        return gyro.getRotation3d();
-//    }
-	private Rotation2d getYaw() {
+	private Rotation2d getGyroYaw() {
 		return Rotation2d.fromDegrees(-this.gyro.getYaw());
 	}
 }
