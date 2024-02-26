@@ -6,31 +6,34 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkPIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 import static org.frc1410.crescendo2024.util.IDs.*;
 import static org.frc1410.crescendo2024.util.Constants.*;
+import static org.frc1410.crescendo2024.util.IDs.AMP_LIMIT_SWITCH_ID;
 
 public class AmpBar implements Subsystem {
 
 	private final NetworkTable table = NetworkTableInstance.getDefault().getTable("Amp");
 
 	private final CANSparkMax ampBarMotor = new CANSparkMax(AMP_BAR_MOTOR_ID, MotorType.kBrushless);
-	public boolean isExtended = true;
 
-//	private final SparkPIDController ampPIDController = ampBarMotor.getPIDController();
+	DigitalInput ampLimitSwitch = new DigitalInput(AMP_LIMIT_SWITCH_ID);
 
 
 	public AmpBar() {
 		ampBarMotor.restoreFactoryDefaults();
 		ampBarMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
-		
+
 		ampBarMotor.setInverted(AMP_BAR_MOTOR_INVERTED);
 	}
 
 	public void setSpeed(double speed) {
 		ampBarMotor.set(speed);
 	}
+
+	public boolean getLimitSwitch() {return !ampLimitSwitch.get();}
 }
 
 

@@ -40,5 +40,6 @@ public interface IDs {
 
 	int LED_ID = 29;
 
-	int INTAKE_LIMIT_SWITCH_ID = 0;
+	int INTAKE_LIMIT_SWITCH_ID = 1;
+	int AMP_LIMIT_SWITCH_ID = 0;
 }

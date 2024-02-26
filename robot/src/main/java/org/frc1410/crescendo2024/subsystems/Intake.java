@@ -20,7 +20,7 @@ public class Intake implements TickedSubsystem {
 
 	private final NetworkTable table = NetworkTableInstance.getDefault().getTable("Drivetrain");
 
-	private final DigitalInput lowerLimitSwitch = new DigitalInput(1);
+	private final DigitalInput lowerLimitSwitch = new DigitalInput(INTAKE_LIMIT_SWITCH_ID);
 
 	public Intake () {
 		intakeMotorFront.restoreFactoryDefaults();
