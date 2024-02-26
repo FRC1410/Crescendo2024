@@ -24,6 +24,7 @@ import org.frc1410.framework.AutoSelector;
 import org.frc1410.framework.PhaseDrivenRobot;
 import org.frc1410.framework.control.Controller;
 import org.frc1410.framework.scheduler.task.TaskPersistence;
+import org.frc1410.framework.scheduler.task.lock.LockPriority;
 
 import static org.frc1410.crescendo2024.util.IDs.*;
 import static org.frc1410.crescendo2024.util.Constants.*;
@@ -97,7 +98,7 @@ public final class Robot extends PhaseDrivenRobot {
 
 		// Shooter
 		driverController.LEFT_TRIGGER.button().whileHeld(new ScoreAmp(shooter, storage, false), TaskPersistence.GAMEPLAY);
-		driverController.RIGHT_TRIGGER.button().whileHeldOnce(new AutomaticShooting(drivetrain, storage, intake, shooter, leds), TaskPersistence.GAMEPLAY);
+		driverController.RIGHT_TRIGGER.button().whileHeldOnce(new AutomaticShooting(drivetrain, storage, intake, shooter, leds), TaskPersistence.GAMEPLAY, LockPriority.HIGHEST);
 		driverController.RIGHT_BUMPER.whileHeld(new ShooterManual(shooter), TaskPersistence.GAMEPLAY);
 
 		driverController.LEFT_BUMPER.whileHeld(new RunStorage(storage, 575), TaskPersistence.GAMEPLAY);

@@ -80,29 +80,40 @@ public class AutomaticShooting extends Command {
 		storageIsRunning = false;
 
 		Pose2d currentRobotPose = drivetrain.getEstimatedPosition();
-		var shootingPoseList = shootingPositions.stream().map(x -> x.pose).toList();
-		Pose2d nearestPose = currentRobotPose.nearest(shootingPoseList);
+		// var shootingPoseList = shootingPositions.stream().map(x -> x.pose).toList();
+		// Pose2d nearestPose = currentRobotPose.nearest(shootingPoseList);
+		
+		ShootingPosition nearestPosition = null;
+		double smallestDistance = Double.MAX_VALUE;
+		
+		for (ShootingPosition position : shootingPositions) {
+			var distance = position.pose.getTranslation().getDistance(currentRobotPose.getTranslation());
+			if (distance < smallestDistance) {
+				smallestDistance = distance;
+				nearestPosition = position;
+			}
+		}
 
 		// this.nearestPose = nearestPose;
 
-		int nearestPoseIndex = shootingPoseList.indexOf(nearestPose);
-		double shooterRPM = shootingPositions.get(nearestPoseIndex).shooterRPM;
+		// int nearestPoseIndex = shootingPoseList.indexOf(nearestPose);
+		// double shooterRPM = shootingPositions.get(nearestPoseIndex).shooterRPM;
 		// var storageRPM = shootingPositions.get(nearestPoseIndex).storageRPM;
 
-		this.shootingPosition = shootingPositions.get(nearestPoseIndex);
+		this.shootingPosition = nearestPosition;
 
-		System.out.println("current " + currentRobotPose);
-		System.out.println("nearest " + nearestPose);
+		// System.out.println("current " + currentRobotPose);
+		// System.out.println("nearest " + nearestPosition.pose);
 
 		//this.command = new AutomaticShooting(this.drivetrain, this.shooter, this.storage, SHOOTING_POSITIONS.get(nearestPoseIndex));
 
 		var pathPlannerPath = new PathPlannerPath(
 			PathPlannerPath.bezierFromPoses(
 				drivetrain.getEstimatedPosition(),
-				nearestPose
+				nearestPosition.pose
 			),
 			PATH_FIND_CONSTRAINTS,
-			new GoalEndState(0, nearestPose.getRotation())
+			new GoalEndState(0, nearestPosition.pose.getRotation())
 		);
 
 		this.followPathCommand = new FollowPathHolonomic(pathPlannerPath, drivetrain::getEstimatedPosition, drivetrain::getChassisSpeeds, drivetrain::drive, PATH_FIND_FOLLOWER_CONFIG, () -> false, drivetrain);
@@ -110,7 +121,7 @@ public class AutomaticShooting extends Command {
 
 		this.leds.changeLEDsColor(Colors.LIMELIGHT_GREEN);
 
-		shooter.setRPM(shooterRPM);
+		shooter.setRPM(nearestPosition.shooterRPM);
 	}
 
 	@Override
@@ -118,7 +129,7 @@ public class AutomaticShooting extends Command {
 		if(followPathCommand != null) {
 			if(!followPathCommand.isFinished() && !storageIsRunning) {
 				followPathCommand.execute();
-			} else if(!storageIsRunning) {
+			} else if(!storageIsRunning && Math.abs(shooter.getRPM() - this.shootingPosition.shooterRPM) <= 50) {
 				followPathCommand.end(false);
 				storage.setRPM(this.shootingPosition.storageRPM);
 				intake.setSpeed(0.75);

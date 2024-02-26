@@ -9,6 +9,7 @@ import org.frc1410.framework.scheduler.task.TaskPersistence;
 import org.frc1410.framework.scheduler.task.TaskScheduler;
 import org.frc1410.framework.scheduler.task.impl.CommandTask;
 import org.frc1410.framework.scheduler.task.lock.LockPriority;
+import org.intellij.lang.annotations.MagicConstant;
 
 public interface Button {
 
@@ -38,6 +39,10 @@ public interface Button {
 
 	default void whileHeldOnce(Command command, TaskPersistence persistence) {
 		whileHeldOnce(new CommandTask(command), persistence);
+	}
+
+	default void whileHeldOnce(Command command, TaskPersistence persistence, @MagicConstant(valuesFromClass = LockPriority.class) int lockPriority) {
+		scheduler().schedule(new CommandTask(command), persistence, new WhileHeldOnceObserver(this), lockPriority);
 	}
 
 	default void toggleWhenPressed(Task task, TaskPersistence persistence) {
