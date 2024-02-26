@@ -3,7 +3,7 @@ package org.frc1410.crescendo2024.commands.shooterCommands;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import org.frc1410.crescendo2024.commands.RunIntake;
+import org.frc1410.crescendo2024.commands.Intake.RunIntake;
 import org.frc1410.crescendo2024.commands.RunStorage;
 import org.frc1410.crescendo2024.subsystems.Intake;
 import org.frc1410.crescendo2024.subsystems.Shooter;

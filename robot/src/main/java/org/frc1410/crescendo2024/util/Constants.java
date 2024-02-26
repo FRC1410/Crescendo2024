@@ -94,14 +94,14 @@ public interface Constants {
 
 	List<ShootingPosition> SHOOTING_POSITIONS_BLUE = Arrays.asList(
 		new ShootingPosition(new Pose2d(1.55, 6.42, Rotation2d.fromDegrees(-145)), 1700, 575),
-		new ShootingPosition(new Pose2d(1.55, 4.68, Rotation2d.fromDegrees(145)), 1700, 575),
-		new ShootingPosition(new Pose2d(1.55, 5.55, Rotation2d.fromDegrees(180)), 2400, 575)
+		new ShootingPosition(new Pose2d(1.55, 4.68, Rotation2d.fromDegrees(145)), 1700, 575)
+//		new ShootingPosition(new Pose2d(1.55, 5.55, Rotation2d.fromDegrees(180)), 2400, 575)
 	);
 
 	List<ShootingPosition> SHOOTING_POSITIONS_RED = Arrays.asList(
 		new ShootingPosition(new Pose2d(FIELD_LENGTH - 1.55, 6.42, Rotation2d.fromDegrees(-35)), 1700, 575),
-		new ShootingPosition(new Pose2d(FIELD_LENGTH - 1.55, 4.68, Rotation2d.fromDegrees(35)), 1700, 575),
-		new ShootingPosition(new Pose2d(FIELD_LENGTH - 1.55, 5.55, Rotation2d.fromDegrees(0)), 2400, 575)
+		new ShootingPosition(new Pose2d(FIELD_LENGTH - 1.55, 4.68, Rotation2d.fromDegrees(35)), 1700, 575)
+//		new ShootingPosition(new Pose2d(FIELD_LENGTH - 1.55, 5.55, Rotation2d.fromDegrees(0)), 2400, 575)
 	);
 
 	// old values mVmps : 3.2... mAmps : 4

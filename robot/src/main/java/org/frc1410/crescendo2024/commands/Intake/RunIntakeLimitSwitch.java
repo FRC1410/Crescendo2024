@@ -1,4 +1,4 @@
-package org.frc1410.crescendo2024.commands;
+package org.frc1410.crescendo2024.commands.Intake;
 
 import org.frc1410.crescendo2024.subsystems.Intake;
 import org.frc1410.crescendo2024.subsystems.LEDs;

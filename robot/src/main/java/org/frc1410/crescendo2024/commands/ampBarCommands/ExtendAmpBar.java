@@ -19,6 +19,8 @@ public class ExtendAmpBar extends SequentialCommandGroup {
 				new RunAmpBar(ampBar, isExtended),
 				new WaitCommand(AMP_BAR_TIMER)
 			)
+
+
 			// new InstantCommand(() -> {
 			// 	ampBar.isExtended = isExtended;
 			// 	// if(isExtended) {
