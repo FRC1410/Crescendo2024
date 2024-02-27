@@ -16,7 +16,7 @@ import org.frc1410.crescendo2024.commands.ampBarCommands.ExtendAmpBar;
 import org.frc1410.crescendo2024.commands.ampBarCommands.ScoreAmp;
 import org.frc1410.crescendo2024.commands.drivetrainCommands.AutomaticShooting;
 import org.frc1410.crescendo2024.commands.drivetrainCommands.DriveLooped;
-import org.frc1410.crescendo2024.commands.shooterCommands.Shoot;
+import org.frc1410.crescendo2024.commands.shooterCommands.PreloadShoot;
 import org.frc1410.crescendo2024.commands.shooterCommands.IncrementShooterRPM;
 import org.frc1410.crescendo2024.commands.shooterCommands.ShooterManual;
 import org.frc1410.crescendo2024.commands.ClimbLooped;
@@ -35,11 +35,12 @@ import static org.frc1410.crescendo2024.util.Constants.*;
 public final class Robot extends PhaseDrivenRobot {
 
 	public Robot() {
-		NamedCommands.registerCommand("PreloadShoot", new Shoot(shooter, storage, intake,3300, 700));
+		NamedCommands.registerCommand("PreloadShoot", new PreloadShoot(shooter, storage, intake, ampBar, 3300, 700));
 		NamedCommands.registerCommand("ShooterManual", new ShooterManual(shooter));
 		NamedCommands.registerCommand("RunIntakeLimitSwitch", new RunIntakeLimitSwitch(intake, storage, 0.75, 575));
 		NamedCommands.registerCommand("RunStorage", new RunStorage(storage, 700));
 		NamedCommands.registerCommand("RunIntake", new RunIntake(intake, 0.5));
+		NamedCommands.registerCommand("FlipAmpBar", new ExtendAmpBar(ampBar, leds, -1));
 	}
 
 	private final Controller driverController = new Controller(scheduler, DRIVER_CONTROLLER, 0.1 );
