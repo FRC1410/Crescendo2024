@@ -35,7 +35,7 @@ import static org.frc1410.crescendo2024.util.Constants.*;
 public final class Robot extends PhaseDrivenRobot {
 
 	public Robot() {
-		NamedCommands.registerCommand("PreloadShoot", new PreloadShoot(shooter, storage, intake, ampBar, 3300, 700));
+		NamedCommands.registerCommand("PreloadShoot", new PreloadShoot(drivetrain, shooter, storage, intake, ampBar, leds, 3300, 700));
 		NamedCommands.registerCommand("ShooterManual", new ShooterManual(shooter));
 		NamedCommands.registerCommand("RunIntakeLimitSwitch", new RunIntakeLimitSwitch(intake, storage, 0.75, 575));
 		NamedCommands.registerCommand("RunStorage", new RunStorage(storage, 700));
@@ -58,7 +58,6 @@ public final class Robot extends PhaseDrivenRobot {
 	private final NetworkTable table = nt.getTable("Auto");
 
 	private final AutoSelector autoSelector = new AutoSelector()
-		.add("none", () -> new InstantCommand())
 		.add("4 piece mid sub", () -> new PathPlannerAuto("4 piece mid sub"));
 
 	{

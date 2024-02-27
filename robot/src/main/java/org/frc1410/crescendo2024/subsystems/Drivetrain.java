@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -82,8 +83,10 @@ public class Drivetrain implements TickedSubsystem {
 			() -> {
 				var alliance = DriverStation.getAlliance();
 				if (alliance.isPresent()) {
+                    System.out.println("IS RED: " + (alliance.get() == DriverStation.Alliance.Red));
 					return alliance.get() == DriverStation.Alliance.Red;
 				}
+                System.out.println("IS RED: " + false);
 				return false;
 			},
 			this
@@ -178,6 +181,7 @@ public class Drivetrain implements TickedSubsystem {
     }
 
     public void resetPose(Pose2d pose) {
+        System.out.println("RESET POSE TO: " + pose);
         this.poseEstimator.resetPosition(
             this.getGyroYaw(),
             this.getSwerveModulePositions(),
@@ -228,4 +232,11 @@ public class Drivetrain implements TickedSubsystem {
 	private Rotation2d getGyroYaw() {
 		return Rotation2d.fromDegrees(-this.gyro.getYaw());
 	}
+
+    public void alignWheels() {
+        frontLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d()));
+        frontRight.setDesiredState(new SwerveModuleState(0, new Rotation2d()));
+        backLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d()));
+        backRight.setDesiredState(new SwerveModuleState(0, new Rotation2d()));
+    }
 }

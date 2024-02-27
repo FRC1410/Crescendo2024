@@ -156,6 +156,5 @@ public class AutomaticShooting extends Command {
 		storage.setRPM(0);
 		shooter.setRPM(0);
 		intake.setSpeed(0);
-		System.out.println("end " + drivetrain.getEstimatedPosition());
 	}
 }

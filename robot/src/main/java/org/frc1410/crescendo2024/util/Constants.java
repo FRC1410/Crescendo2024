@@ -148,7 +148,7 @@ public interface Constants {
 	HolonomicPathFollowerConfig HOLONOMIC_AUTO_CONFIG = new HolonomicPathFollowerConfig(
 		new PIDConstants(AUTO_DRIVE_P, AUTO_DRIVE_I, AUTO_DRIVE_D),
 		new PIDConstants(AUTO_TURN_P, AUTO_TURN_I, AUTO_TURN_D),
-		4.2,
+		3.2,
 		0.426562165692177,
 		new ReplanningConfig()
 	);

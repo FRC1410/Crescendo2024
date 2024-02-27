@@ -24,7 +24,7 @@ public interface Tuning {
 
 	double SHOOTER_RIGHT_P = 0;
 	double SHOOTER_RIGHT_I = 0;
-	double SHOOTER_RIGHT_D = 0;
+	double SHOOTER_RIGHT_D = 0;	
 	double SHOOTER_RIGHT_FF = 1;
 
 	double AMP_P = 0;
@@ -33,12 +33,11 @@ public interface Tuning {
 	double AMP_TOLERANCE = 0;
 
 	// Auto PID Constants
-	double AUTO_DRIVE_P = 6;
+	double AUTO_DRIVE_P = 5;
 	double AUTO_DRIVE_I = 0;
 	double AUTO_DRIVE_D = 0;
 
-	double AUTO_TURN_P = 2;
+	double AUTO_TURN_P = 1;
 	double AUTO_TURN_I = 0;
 	double AUTO_TURN_D = 0;
-
 }
