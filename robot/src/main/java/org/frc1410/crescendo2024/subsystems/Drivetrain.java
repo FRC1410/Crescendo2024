@@ -15,6 +15,8 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+
 import org.frc1410.framework.scheduler.subsystem.SubsystemStore;
 import org.frc1410.framework.scheduler.subsystem.TickedSubsystem;
 
@@ -165,7 +167,16 @@ public class Drivetrain implements TickedSubsystem {
     }
 
     public void driveFieldRelative(ChassisSpeeds chassisSpeeds) {
-        var robotRelativeChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, this.getGyroYaw().minus(this.fieldRelativeOffset));
+        Rotation2d angle;
+        if (DriverStation.getAlliance().isPresent()) {
+            angle = DriverStation.getAlliance().get() == Alliance.Blue 
+                ? this.getGyroYaw().minus(this.fieldRelativeOffset)
+                : this.getGyroYaw().minus(this.fieldRelativeOffset).rotateBy(Rotation2d.fromDegrees(180));
+        } else {
+            angle = this.getGyroYaw().minus(this.fieldRelativeOffset);
+        }
+
+        var robotRelativeChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, angle);
 		this.drive(robotRelativeChassisSpeeds);
     }
 
@@ -242,5 +253,12 @@ public class Drivetrain implements TickedSubsystem {
         frontRight.setDesiredState(new SwerveModuleState(0, new Rotation2d()));
         backLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d()));
         backRight.setDesiredState(new SwerveModuleState(0, new Rotation2d()));
+    }
+
+    public void lockWheels() {
+        frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(135)));
+        frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+        backLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+        backRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(135)));
     }
 }

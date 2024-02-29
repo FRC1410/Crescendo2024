@@ -58,8 +58,9 @@ public final class Robot extends PhaseDrivenRobot {
 	private final NetworkTable table = nt.getTable("Auto");
 
 	private final AutoSelector autoSelector = new AutoSelector()
-		.add("4 piece mid sub", () -> new PathPlannerAuto("4 piece mid sub"))
-		.add("1.5 source side auto", () -> new PathPlannerAuto("1.5 source side auto"));
+		.add("4", () -> new PathPlannerAuto("4 piece mid sub"))
+		.add("1", () -> new PathPlannerAuto("1.5 source side auto"))
+		.add("0", () -> new InstantCommand());
 
 	{
 		var profiles = new String[autoSelector.getProfiles().size()];
