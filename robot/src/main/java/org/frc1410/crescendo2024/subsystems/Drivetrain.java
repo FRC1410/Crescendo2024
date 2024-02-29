@@ -87,10 +87,8 @@ public class Drivetrain implements TickedSubsystem {
 			() -> {
 				var alliance = DriverStation.getAlliance();
 				if (alliance.isPresent()) {
-                    System.out.println("IS RED: " + (alliance.get() == DriverStation.Alliance.Red));
 					return alliance.get() == DriverStation.Alliance.Red;
 				}
-                System.out.println("IS RED: " + false);
 				return false;
 			},
 			this

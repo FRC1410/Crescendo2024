@@ -1,5 +1,6 @@
 package org.frc1410.crescendo2024.util;
 
+import com.pathplanner.lib.util.GeometryUtil;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -90,7 +91,7 @@ public interface Constants {
 // 		new ShootingPosition(new Pose2d(1.25, 5.55, Rotation2d.fromDegrees(180)), 1750, 575)
 // 	);
 
-	double FIELD_LENGTH = 16.59128;
+	double FIELD_LENGTH = 16.54;
 
 	List<ShootingPosition> SHOOTING_POSITIONS_BLUE = Arrays.asList(
 		new ShootingPosition(new Pose2d(1.12, 6.76, Rotation2d.fromDegrees(-133)), 1800, 575),
