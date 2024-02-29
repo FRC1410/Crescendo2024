@@ -35,7 +35,12 @@ public class DriveLooped extends Command {
 		var xVelocity = -yAxis.get() * SWERVE_DRIVE_MAX_SPEED;
 		var yVelocity = -xAxis.get() * SWERVE_DRIVE_MAX_SPEED;
 		var rotation = -rotationAxis.get() * SWERVE_DRIVE_MAX_ANGULAR_VELOCITY;
-		drivetrain.driveFieldRelative(new ChassisSpeeds(xVelocity, yVelocity, rotation));
+
+		if (drivetrain.teleopIsFieldRelative) {
+			drivetrain.driveFieldRelative(new ChassisSpeeds(xVelocity, yVelocity, rotation));
+		} else {
+			drivetrain.drive(new ChassisSpeeds(-xVelocity, yVelocity, rotation));
+		}
 	}
 
 	@Override

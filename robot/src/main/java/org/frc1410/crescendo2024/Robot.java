@@ -58,7 +58,8 @@ public final class Robot extends PhaseDrivenRobot {
 	private final NetworkTable table = nt.getTable("Auto");
 
 	private final AutoSelector autoSelector = new AutoSelector()
-		.add("4 piece mid sub", () -> new PathPlannerAuto("4 piece mid sub"));
+		.add("4 piece mid sub", () -> new PathPlannerAuto("4 piece mid sub"))
+		.add("1.5 source side auto", () -> new PathPlannerAuto("1.5 source side auto"));
 
 	{
 		var profiles = new String[autoSelector.getProfiles().size()];
@@ -106,6 +107,10 @@ public final class Robot extends PhaseDrivenRobot {
 
 		driverController.LEFT_BUMPER.whileHeld(new RunStorage(storage, 575), TaskPersistence.GAMEPLAY);
 		driverController.LEFT_BUMPER.whileHeld(new RunIntake(intake, 0.5), TaskPersistence.GAMEPLAY);
+
+		driverController.START.whenPressed(new InstantCommand(() -> {
+			drivetrain.teleopIsFieldRelative = !drivetrain.teleopIsFieldRelative;
+		}), TaskPersistence.GAMEPLAY);
 
 //		operatorController.RIGHT_BUMPER.whileHeld(new ShooterManual(shooter), TaskPersistence.GAMEPLAY);
 

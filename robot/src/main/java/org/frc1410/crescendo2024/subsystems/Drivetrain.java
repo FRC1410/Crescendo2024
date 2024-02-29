@@ -73,6 +73,10 @@ public class Drivetrain implements TickedSubsystem {
 
 	private double previousPipelineTimestamp = 0;
 
+	public boolean teleopIsFieldRelative = true;
+
+	private Rotation2d fieldRelativeOffset = new Rotation2d();
+
     public Drivetrain(SubsystemStore subsystems) {
 		AutoBuilder.configureHolonomic(
 			this::getEstimatedPosition,
@@ -163,7 +167,7 @@ public class Drivetrain implements TickedSubsystem {
     }
 
     public void driveFieldRelative(ChassisSpeeds chassisSpeeds) {
-        var robotRelativeChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, this.getEstimatedPosition().getRotation());
+        var robotRelativeChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, this.getGyroYaw().minus(this.fieldRelativeOffset));
 		this.drive(robotRelativeChassisSpeeds);
     }
 
@@ -187,6 +191,8 @@ public class Drivetrain implements TickedSubsystem {
             this.getSwerveModulePositions(),
             pose
         );
+
+		this.fieldRelativeOffset = this.getGyroYaw().minus(pose.getRotation());
     }
 
     public void zeroYaw() {
