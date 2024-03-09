@@ -16,13 +16,16 @@ public class DriveLooped extends Command {
 	private final Axis yAxis;
 
 	private final Axis rotationAxis;
+
+	private final Axis trigger;
 	
-	public DriveLooped(Drivetrain drivetrain, Axis xAxis, Axis yAxis, Axis rotationAxis) {
+	public DriveLooped(Drivetrain drivetrain, Axis xAxis, Axis yAxis, Axis rotationAxis, Axis trigger) {
 		this.drivetrain = drivetrain;
 
 		this.xAxis = xAxis;
 		this.yAxis = yAxis;
 		this.rotationAxis = rotationAxis;
+		this.trigger = trigger;
 
 		this.addRequirements(drivetrain);
 	}
@@ -36,10 +39,10 @@ public class DriveLooped extends Command {
 		var yVelocity = -xAxis.get() * SWERVE_DRIVE_MAX_SPEED;
 		var rotation = -rotationAxis.get() * SWERVE_DRIVE_MAX_ANGULAR_VELOCITY;
 
-		if (drivetrain.teleopIsFieldRelative) {
-			drivetrain.driveFieldRelative(new ChassisSpeeds(xVelocity, yVelocity, rotation));
-		} else {
+		if (trigger.button().isActive()) {
 			drivetrain.drive(new ChassisSpeeds(-xVelocity, yVelocity, rotation));
+		} else {
+			drivetrain.driveFieldRelative(new ChassisSpeeds(xVelocity, yVelocity, rotation));
 		}
 	}
 

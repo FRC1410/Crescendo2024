@@ -19,7 +19,6 @@ import org.frc1410.crescendo2024.commands.drivetrainCommands.DriveLooped;
 import org.frc1410.crescendo2024.commands.shooterCommands.PreloadShoot;
 import org.frc1410.crescendo2024.commands.shooterCommands.IncrementShooterRPM;
 import org.frc1410.crescendo2024.commands.shooterCommands.ShooterManual;
-import org.frc1410.crescendo2024.commands.ClimbLooped;
 import org.frc1410.crescendo2024.subsystems.*;
 import org.frc1410.crescendo2024.util.NetworkTables;
 import org.frc1410.framework.AutoSelector;
@@ -58,9 +57,12 @@ public final class Robot extends PhaseDrivenRobot {
 	private final NetworkTable table = nt.getTable("Auto");
 
 	private final AutoSelector autoSelector = new AutoSelector()
+		.add("3", () -> new PathPlannerAuto("3 piece mid sub"))
 		.add("4", () -> new PathPlannerAuto("4 piece mid sub"))
-		.add("1", () -> new PathPlannerAuto("1.5 source side auto"))
-		.add("0", () -> new InstantCommand());
+		.add("1 drive", () -> new PathPlannerAuto("1.5 source side auto"))
+		.add("1 intake",() -> new PathPlannerAuto("1 piece intake"))
+		.add("0", () -> new InstantCommand())
+		.add("1", () -> new PreloadShoot(drivetrain, shooter, storage, intake, ampBar, leds, 3300, 700));
 
 	{
 		var profiles = new String[autoSelector.getProfiles().size()];
@@ -95,23 +97,21 @@ public final class Robot extends PhaseDrivenRobot {
 		//leds.defaultLEDsState();
 
 		// Drivetrain
-		scheduler.scheduleDefaultCommand(new DriveLooped(drivetrain, driverController.LEFT_X_AXIS, driverController.LEFT_Y_AXIS, driverController.RIGHT_X_AXIS), TaskPersistence.EPHEMERAL);
+		scheduler.scheduleDefaultCommand(new DriveLooped(drivetrain, driverController.LEFT_X_AXIS, driverController.LEFT_Y_AXIS, driverController.RIGHT_X_AXIS, driverController.LEFT_TRIGGER), TaskPersistence.EPHEMERAL);
 
 		driverController.Y.whenPressed(new InstantCommand(
 			() -> drivetrain.zeroYaw()
 		), TaskPersistence.GAMEPLAY);
 
 		// Shooter
-		driverController.LEFT_TRIGGER.button().whileHeld(new ScoreAmp(shooter, storage, false), TaskPersistence.GAMEPLAY);
+		// driverController.LEFT_TRIGGER.button().whileHeld(new ScoreAmp(shooter, storage, false), TaskPersistence.GAMEPLAY);
 		driverController.RIGHT_TRIGGER.button().whileHeldOnce(new AutomaticShooting(drivetrain, storage, intake, shooter, leds), TaskPersistence.GAMEPLAY, LockPriority.HIGHEST);
 		driverController.RIGHT_BUMPER.whileHeld(new ShooterManual(shooter), TaskPersistence.GAMEPLAY);
 
 		driverController.LEFT_BUMPER.whileHeld(new RunStorage(storage, 575), TaskPersistence.GAMEPLAY);
 		driverController.LEFT_BUMPER.whileHeld(new RunIntake(intake, 0.5), TaskPersistence.GAMEPLAY);
 
-		driverController.START.whenPressed(new InstantCommand(() -> {
-			drivetrain.teleopIsFieldRelative = !drivetrain.teleopIsFieldRelative;
-		}), TaskPersistence.GAMEPLAY);
+		driverController.LEFT_TRIGGER.button().whenPressed(new RobotRelative(drivetrain), TaskPersistence.GAMEPLAY);
 
 //		operatorController.RIGHT_BUMPER.whileHeld(new ShooterManual(shooter), TaskPersistence.GAMEPLAY);
 

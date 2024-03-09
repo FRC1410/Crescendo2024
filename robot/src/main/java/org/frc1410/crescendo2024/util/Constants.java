@@ -15,6 +15,8 @@ import java.util.List;
 import static org.frc1410.crescendo2024.util.Tuning.*;
 
 public interface Constants {
+	double STARTING_RPM_ADJUSTMENT = 0;
+
 	double DRIVE_GEAR_RATIO = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
 
 	double WHEEL_RADIUS = 0.0508;
@@ -28,9 +30,9 @@ public interface Constants {
 	double SWERVE_DRIVE_MAX_ANGULAR_VELOCITY = 10;
 
 	double FRONT_LEFT_STEER_ENCODER_OFFSET = -1.549321;
-	double FRONT_RIGHT_STEER_ENCODER_OFFSET = 2.293301;
+	double FRONT_RIGHT_STEER_ENCODER_OFFSET = -0.207087;
 	double BACK_LEFT_STEER_ENCODER_OFFSET = 2.659923;
-	double BACK_RIGHT_STEER_ENCODER_OFFSET = -0.852893;
+	double BACK_RIGHT_STEER_ENCODER_OFFSET = -1.250194;
 
 	// TODO: Change to actual values
 	Translation2d FRONT_LEFT_SWERVE_MODULE_LOCATION = new Translation2d(0.2985, 0.2985);
@@ -47,11 +49,11 @@ public interface Constants {
 
 	boolean FRONT_LEFT_DRIVE_MOTOR_INVERTED = true;
 	boolean FRONT_LEFT_STEER_MOTOR_INVERTED = true;
-	boolean FRONT_RIGHT_DRIVE_MOTOR_INVERTED = false;
+	boolean FRONT_RIGHT_DRIVE_MOTOR_INVERTED = true;
 	boolean FRONT_RIGHT_STEER_MOTOR_INVERTED = true;
 	boolean BACK_LEFT_DRIVE_MOTOR_INVERTED = true;
 	boolean BACK_LEFT_STEER_MOTOR_INVERTED = true;
-	boolean BACK_RIGHT_DRIVE_MOTOR_INVERTED = false;
+	boolean BACK_RIGHT_DRIVE_MOTOR_INVERTED = true;
 	boolean BACK_RIGHT_STEER_MOTOR_INVERTED = true;
 
 	String CAMERA_NAME = "Arducam_OV9281_USB_Camera";
@@ -94,14 +96,14 @@ public interface Constants {
 	double FIELD_LENGTH = 16.54;
 
 	List<ShootingPosition> SHOOTING_POSITIONS_BLUE = Arrays.asList(
-		new ShootingPosition(new Pose2d(1.12, 6.76, Rotation2d.fromDegrees(-133)), 1800, 575),
-		new ShootingPosition(new Pose2d(1.12, 4.34, Rotation2d.fromDegrees(137)), 1800, 575)
+		new ShootingPosition(new Pose2d(1.12, 6.76, Rotation2d.fromDegrees(-133)), 1850, 575),
+		new ShootingPosition(new Pose2d(1.12, 4.34, Rotation2d.fromDegrees(137)), 1850, 575)
 //		new ShootingPosition(new Pose2d(1.55, 5.55, Rotation2d.fromDegrees(180)), 2400, 575)
 	);
 
 	List<ShootingPosition> SHOOTING_POSITIONS_RED = Arrays.asList(
-		new ShootingPosition(new Pose2d(FIELD_LENGTH - 1.12, 6.76, Rotation2d.fromDegrees(-43)), 1800, 575),
-		new ShootingPosition(new Pose2d(FIELD_LENGTH - 1.12, 4.34, Rotation2d.fromDegrees(43)), 1800, 575)
+		new ShootingPosition(new Pose2d(FIELD_LENGTH - 1.12, 6.76, Rotation2d.fromDegrees(-43)), 1850, 575),
+		new ShootingPosition(new Pose2d(FIELD_LENGTH - 1.12, 4.34, Rotation2d.fromDegrees(43)), 1850, 575)
 //		new ShootingPosition(new Pose2d(FIELD_LENGTH - 1.55, 5.55, Rotation2d.fromDegrees(0)), 2400, 575)
 	);
 
@@ -130,8 +132,8 @@ public interface Constants {
 
 	double AMP_BAR_SPEED = 0.4;
 	double AMP_BAR_SPEED_REVERSED = -0.4;
-	double AMP_SHOOT_SPEED = 1100;
-	double AMP_BAR_TIMER = 0.8;
+	double AMP_SHOOT_SPEED = 1900;
+	double AMP_BAR_TIMER = 0.7;
 
 	boolean STORAGE_LEFT_MOTOR_INVERTED = false;
 	boolean STORAGE_RIGHT_MOTOR_INVERTED = true;

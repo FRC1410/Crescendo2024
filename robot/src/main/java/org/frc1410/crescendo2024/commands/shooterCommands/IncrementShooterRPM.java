@@ -17,6 +17,7 @@ public class IncrementShooterRPM extends Command {
 	@Override
 	public void initialize() {
 		shooter.rpmAdjustment += increment;
+		System.out.println("RPM ADJUSTMENT: " + shooter.rpmAdjustment);
 	}
 
 	@Override
