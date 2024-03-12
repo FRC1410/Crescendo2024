@@ -29,6 +29,7 @@ public interface IDs {
 
 	int INTAKE_FRONT_MOTOR_ID = 13;
 	int INTAKE_BACK_MOTOR_ID = 14;
+	int INTAKE_BAR_MOTOR_ID = 18;
 
 	int STORAGE_LEFT_MOTOR_ID = 11;
 	int STORAGE_RIGHT_MOTOR_ID = 12;

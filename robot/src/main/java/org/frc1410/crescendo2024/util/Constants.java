@@ -111,6 +111,7 @@ public interface Constants {
 	boolean STORAGE_RIGHT_MOTOR_INVERTED = true;
 
 	boolean AMP_BAR_MOTOR_INVERTED = false;
+	boolean INTAKE_BAR_MOTOR_INVERTED = false;
 
 	boolean INTAKE_FRONT_MOTOR_INVERTED = false;
 	boolean INTAKE_BACK_MOTOR_INVERTED = false;
