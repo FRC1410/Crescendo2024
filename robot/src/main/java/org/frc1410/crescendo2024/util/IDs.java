@@ -38,6 +38,8 @@ public interface IDs {
 
 	int AMP_BAR_MOTOR_ID = 17;
 
+	int INTAKE_BAR_MOTOR_ID = 18;
+
 	int LED_ID = 29;
 
 	int INTAKE_LIMIT_SWITCH_ID = 1;
