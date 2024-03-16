@@ -23,7 +23,6 @@ public class intakeBarCommandsCommand extends Command {
 
 	@Override
 	public void execute() {
-
 	}
 
 	@Override
