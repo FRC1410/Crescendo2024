@@ -43,7 +43,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "RunIntake"
+                  "name": "ShooterManual"
                 }
               },
               {
@@ -149,51 +149,6 @@
                             }
                           }
                         ]
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Amp side sub to 2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunIntakeLimitSwitch"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShooterManual"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "2 to amp side sub"
                       }
                     }
                   ]

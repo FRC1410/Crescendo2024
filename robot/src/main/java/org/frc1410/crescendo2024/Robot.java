@@ -61,6 +61,7 @@ public final class Robot extends PhaseDrivenRobot {
 		.add("4", () -> new PathPlannerAuto("4 piece mid sub"))
 		.add("1 drive", () -> new PathPlannerAuto("1.5 source side auto"))
 		.add("1 intake",() -> new PathPlannerAuto("1 piece intake"))
+		.add("3 amp",() -> new PathPlannerAuto("3 piece amp side auto"))
 		.add("0", () -> new InstantCommand())
 		.add("1", () -> new PreloadShoot(drivetrain, shooter, storage, intake, ampBar, leds, 3300, 700));
 
