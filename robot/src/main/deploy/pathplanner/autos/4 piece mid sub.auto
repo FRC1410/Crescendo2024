@@ -265,12 +265,6 @@
               }
             ]
           }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": []
-          }
         }
       ]
     }
