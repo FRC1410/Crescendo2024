@@ -143,6 +143,9 @@ public interface Constants {
 	boolean INTAKE_FRONT_MOTOR_INVERTED = false;
 	boolean INTAKE_BACK_MOTOR_INVERTED = false;
 
+	boolean INTAKE_BAR_MOTOR_INVERTED = false;
+	boolean INTAKE_EXTENDED_MOTOR_INVERTED = false;
+
 	boolean SHOOTER_LEFT_MOTOR_INVERTED = false;
 	boolean SHOOTER_RIGHT_MOTOR_INVERTED = true;
 
@@ -180,4 +183,6 @@ public interface Constants {
 
 	Transform3d CAMERA_POSE = new Transform3d(new Translation3d(0.3683,0,0.559), new Rotation3d(0,Units.degreesToRadians(-27),0));
 	// Transform3d CAMERA_POSE = new Transform3d(new Translation3d(0,0,0), new Rotation3d(0,Units.degreesToRadians(-27),0));
+
+	int INTAKE_BAR_ENCODER_RANGE = 613;
 }
