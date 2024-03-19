@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.28,
-      "y": 5.42
+      "x": 1.4,
+      "y": 5.55
     },
     "rotation": 180.0
   },
@@ -22,15 +22,28 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "Mid sub to B"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "RunIntakeLimitSwitch"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Mid sub to B"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.3
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -57,19 +70,13 @@
                       }
                     },
                     {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.04
-                      }
-                    },
-                    {
                       "type": "race",
                       "data": {
                         "commands": [
                           {
                             "type": "wait",
                             "data": {
-                              "waitTime": 0.5
+                              "waitTime": 0.3
                             }
                           },
                           {
@@ -98,28 +105,9 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "Mid sub to A"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "RunIntakeLimitSwitch"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShooterManual"
                 }
               },
               {
@@ -129,54 +117,16 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "A to mid sub"
+                        "pathName": "Mid sub to C"
                       }
                     },
                     {
-                      "type": "race",
+                      "type": "wait",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "wait",
-                            "data": {
-                              "waitTime": 0.5
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "RunIntake"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "RunStorage"
-                            }
-                          }
-                        ]
+                        "waitTime": 0.3
                       }
                     }
                   ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Mid sub to C"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunIntakeLimitSwitch"
                 }
               }
             ]
@@ -209,7 +159,7 @@
                           {
                             "type": "wait",
                             "data": {
-                              "waitTime": 0.5
+                              "waitTime": 0.3
                             }
                           },
                           {
@@ -238,15 +188,28 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "Mid sub to 1"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "RunIntakeLimitSwitch"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Mid sub to A"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.3
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -269,7 +232,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "1 to mid sub"
+                        "pathName": "A to sub"
                       }
                     },
                     {
@@ -279,7 +242,7 @@
                           {
                             "type": "wait",
                             "data": {
-                              "waitTime": 0.5
+                              "waitTime": 0.3
                             }
                           },
                           {
@@ -295,6 +258,38 @@
                             }
                           }
                         ]
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunIntakeLimitSwitch"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Mid sub to 1"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.3
                       }
                     }
                   ]

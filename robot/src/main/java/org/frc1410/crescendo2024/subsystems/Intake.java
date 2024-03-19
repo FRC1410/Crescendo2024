@@ -1,6 +1,5 @@
 package org.frc1410.crescendo2024.subsystems;
 
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.networktables.DoublePublisher;
@@ -8,7 +7,6 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 
 import static org.frc1410.crescendo2024.util.IDs.*;
 import static org.frc1410.crescendo2024.util.Constants.*;
@@ -35,7 +33,7 @@ public class Intake implements TickedSubsystem {
 
 	private boolean isExtended = false;
 
-	public Intake () {
+	public Intake() {
 		intakeMotorFront.restoreFactoryDefaults();
 		intakeMotorBack.restoreFactoryDefaults();
 		intakeBarMotor.restoreFactoryDefaults();
@@ -45,14 +43,12 @@ public class Intake implements TickedSubsystem {
 		intakeMotorBack.setInverted(INTAKE_BACK_MOTOR_INVERTED);
 		intakeBarMotor.setInverted(INTAKE_BAR_MOTOR_INVERTED);
 		intakeBarMotor.setInverted(INTAKE_EXTENDED_MOTOR_INVERTED);
-		// One motor will be inverted (front) and the other will go in normal direction (opposite)
 
 		intakeMotorFront.setIdleMode(CANSparkBase.IdleMode.kBrake);
 		intakeMotorBack.setIdleMode(CANSparkBase.IdleMode.kBrake);
 
 		intakeBarMotor.setInverted(true);
-
-
+		intakeBarMotor.setSmartCurrentLimit(30);
 	}
 
 	public void setSpeed(double speed) {
@@ -69,6 +65,10 @@ public class Intake implements TickedSubsystem {
 		intakeBarMotor.set(speed);
 	}
 
+	public boolean isExtended() {
+		return this.isExtended;
+	}
+
 	public boolean getLimitSwitch() {
 		return !lowerLimitSwitch.get();
 	}
@@ -76,13 +76,13 @@ public class Intake implements TickedSubsystem {
 	@Override
 	public void periodic() {
 		if (this.isExtended && this.encoder.get() < INTAKE_BAR_ENCODER_RANGE - 20) {
-			this.intakeBarMotor.set(0.15);
+			this.intakeBarMotor.set(1);
 		} else if (!this.isExtended && this.encoder.get() > 20) {
-			this.intakeBarMotor.set(-0.15);
+			this.intakeBarMotor.set(-1);
 		} else {
 			this.intakeBarMotor.set(0);
 		}
-		// System.out.println(encoder.get());
+
 		encoderCounter.set(encoder.get());
 	}
 }
