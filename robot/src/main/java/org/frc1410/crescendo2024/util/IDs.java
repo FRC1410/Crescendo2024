@@ -36,10 +36,11 @@ public interface IDs {
 	int CLIMB_LEFT_MOTOR_ID = 15;
 	int CLIMB_RIGHT_MOTOR_ID = 16;
 
-	int AMP_BAR_MOTOR_ID = 17;
-
 	int LED_ID = 29;
 
-	int INTAKE_LIMIT_SWITCH_ID = 1;
-	int AMP_LIMIT_SWITCH_ID = 0;
+	int INTAKE_LIMIT_SWITCH_ID = 0;
+
+	int INTAKE_BAR_MOTOR_ID = 18;
+
+	int INTAKE_EXTENDED_MOTOR_ID = 17;
 }

@@ -11,29 +11,28 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 
 import static org.frc1410.crescendo2024.util.IDs.*;
 import static org.frc1410.crescendo2024.util.Constants.*;
-import static org.frc1410.crescendo2024.util.IDs.AMP_LIMIT_SWITCH_ID;
 
-public class AmpBar implements Subsystem {
+// public class AmpBar implements Subsystem {
 
-	private final NetworkTable table = NetworkTableInstance.getDefault().getTable("Amp");
+// 	private final NetworkTable table = NetworkTableInstance.getDefault().getTable("Amp");
 
-	private final CANSparkMax ampBarMotor = new CANSparkMax(AMP_BAR_MOTOR_ID, MotorType.kBrushless);
+// 	private final CANSparkMax ampBarMotor = new CANSparkMax(AMP_BAR_MOTOR_ID, MotorType.kBrushless);
 
-	DigitalInput ampLimitSwitch = new DigitalInput(AMP_LIMIT_SWITCH_ID);
+// 	DigitalInput ampLimitSwitch = new DigitalInput(AMP_LIMIT_SWITCH_ID);
 
 
-	public AmpBar() {
-		ampBarMotor.restoreFactoryDefaults();
-		ampBarMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
+// 	public AmpBar() {
+// 		ampBarMotor.restoreFactoryDefaults();
+// 		ampBarMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
 
-		ampBarMotor.setInverted(AMP_BAR_MOTOR_INVERTED);
-	}
+// 		ampBarMotor.setInverted(AMP_BAR_MOTOR_INVERTED);
+// 	}
 
-	public void setSpeed(double speed) {
-		ampBarMotor.set(speed);
-	}
+// 	public void setSpeed(double speed) {
+// 		ampBarMotor.set(speed);
+// 	}
 
-	public boolean getLimitSwitch() {return !ampLimitSwitch.get();}
-}
+// 	public boolean getLimitSwitch() {return !ampLimitSwitch.get();}
+// }
 
 

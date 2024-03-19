@@ -12,7 +12,6 @@ import org.frc1410.crescendo2024.commands.*;
 import org.frc1410.crescendo2024.commands.Intake.Outtake;
 import org.frc1410.crescendo2024.commands.Intake.RunIntake;
 import org.frc1410.crescendo2024.commands.Intake.RunIntakeLimitSwitch;
-import org.frc1410.crescendo2024.commands.ampBarCommands.ExtendAmpBar;
 import org.frc1410.crescendo2024.commands.ampBarCommands.ScoreAmp;
 import org.frc1410.crescendo2024.commands.drivetrainCommands.AutomaticShooting;
 import org.frc1410.crescendo2024.commands.drivetrainCommands.DriveLooped;
@@ -34,12 +33,12 @@ import static org.frc1410.crescendo2024.util.Constants.*;
 public final class Robot extends PhaseDrivenRobot {
 
 	public Robot() {
-		NamedCommands.registerCommand("PreloadShoot", new PreloadShoot(drivetrain, shooter, storage, intake, ampBar, leds, 3300, 700));
+		NamedCommands.registerCommand("PreloadShoot", new PreloadShoot(drivetrain, shooter, storage, intake, leds, 3300, 700));
 		NamedCommands.registerCommand("ShooterManual", new ShooterManual(shooter));
 		NamedCommands.registerCommand("RunIntakeLimitSwitch", new RunIntakeLimitSwitch(intake, storage, 0.75, 575));
 		NamedCommands.registerCommand("RunStorage", new RunStorage(storage, 700));
 		NamedCommands.registerCommand("RunIntake", new RunIntake(intake, 0.5));
-		NamedCommands.registerCommand("FlipAmpBar", new ExtendAmpBar(ampBar, leds, -1));
+		// NamedCommands.registerCommand("FlipAmpBar", new ExtendAmpBar(ampBar, leds, -1));
 	}
 
 	private final Controller driverController = new Controller(scheduler, DRIVER_CONTROLLER, 0.1 );
@@ -47,7 +46,7 @@ public final class Robot extends PhaseDrivenRobot {
 
 	private final Drivetrain drivetrain = subsystems.track(new Drivetrain(subsystems));
 	private final Shooter shooter = subsystems.track(new Shooter());
-	private final AmpBar ampBar = new AmpBar();
+	// private final AmpBar ampBar = new AmpBar();
 	private final Storage storage = subsystems.track(new Storage());
 	private final Intake intake = subsystems.track(new Intake());
 	private final Climb climb = new Climb();
@@ -63,7 +62,8 @@ public final class Robot extends PhaseDrivenRobot {
 		.add("1 intake",() -> new PathPlannerAuto("1 piece intake"))
 		.add("3 amp",() -> new PathPlannerAuto("3 piece amp side auto"))
 		.add("0", () -> new InstantCommand())
-		.add("1", () -> new PreloadShoot(drivetrain, shooter, storage, intake, ampBar, leds, 3300, 700));
+		.add("1", () -> new PreloadShoot(drivetrain, shooter, storage, intake, leds, 3300, 700))
+		.add("5", () -> new PathPlannerAuto("5 piece mid sub"));
 
 	{
 		var profiles = new String[autoSelector.getProfiles().size()];
@@ -125,8 +125,8 @@ public final class Robot extends PhaseDrivenRobot {
 		operatorController.A.whenPressed(new IncrementShooterRPM(shooter, SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);
 		operatorController.B.whenPressed(new IncrementShooterRPM(shooter, -SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);
 
-		operatorController.DPAD_UP.whenPressed(new ExtendAmpBar(ampBar, leds, 1), TaskPersistence.GAMEPLAY);
-		operatorController.DPAD_DOWN.whenPressed(new ExtendAmpBar(ampBar, leds, -1), TaskPersistence.GAMEPLAY);
+		// operatorController.DPAD_UP.whenPressed(new ExtendAmpBar(ampBar, leds, 1), TaskPersistence.GAMEPLAY);
+		// operatorController.DPAD_DOWN.whenPressed(new ExtendAmpBar(ampBar, leds, -1), TaskPersistence.GAMEPLAY);
 
 		scheduler.scheduleDefaultCommand(new ClimbLooped(climb, operatorController.LEFT_Y_AXIS, operatorController.RIGHT_Y_AXIS), TaskPersistence.EPHEMERAL);
 	}

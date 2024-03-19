@@ -39,6 +39,7 @@ public class RunIntakeLimitSwitch extends Command {
 			limitSwitchAlreadyHit = false;
 		}
 
+		this.intake.setExtended(true);
 	}
 
 	@Override
@@ -74,6 +75,7 @@ public class RunIntakeLimitSwitch extends Command {
 	public void end(boolean interrupted) {
 		intake.setSpeed(0); 
 		storage.setSpeed(0);
+		this.intake.setExtended(false);
 	}
 
 }
