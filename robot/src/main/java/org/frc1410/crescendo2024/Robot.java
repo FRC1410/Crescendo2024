@@ -9,12 +9,12 @@ import edu.wpi.first.networktables.StringPublisher;
 import edu.wpi.first.networktables.StringSubscriber;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import org.frc1410.crescendo2024.commands.*;
+import org.frc1410.crescendo2024.commands.Intake.FlipIntake;
 import org.frc1410.crescendo2024.commands.Intake.Outtake;
 import org.frc1410.crescendo2024.commands.Intake.RunIntake;
 import org.frc1410.crescendo2024.commands.Intake.RunIntakeLimitSwitch;
-import org.frc1410.crescendo2024.commands.ampBarCommands.ScoreAmp;
-import org.frc1410.crescendo2024.commands.drivetrainCommands.AutomaticShooting;
-import org.frc1410.crescendo2024.commands.drivetrainCommands.DriveLooped;
+import org.frc1410.crescendo2024.commands.drivetrain.AutoScoreSpeaker;
+import org.frc1410.crescendo2024.commands.drivetrain.DriveLooped;
 import org.frc1410.crescendo2024.commands.shooterCommands.PreloadShoot;
 import org.frc1410.crescendo2024.commands.shooterCommands.IncrementShooterRPM;
 import org.frc1410.crescendo2024.commands.shooterCommands.ShooterManual;
@@ -106,7 +106,7 @@ public final class Robot extends PhaseDrivenRobot {
 
 		// Shooter
 		// driverController.LEFT_TRIGGER.button().whileHeld(new ScoreAmp(shooter, storage, false), TaskPersistence.GAMEPLAY);
-		driverController.RIGHT_TRIGGER.button().whileHeldOnce(new AutomaticShooting(drivetrain, storage, intake, shooter, leds), TaskPersistence.GAMEPLAY, LockPriority.HIGHEST);
+		driverController.RIGHT_TRIGGER.button().whileHeldOnce(new AutoScoreSpeaker(drivetrain, storage, intake, shooter, leds), TaskPersistence.GAMEPLAY, LockPriority.HIGHEST);
 		driverController.RIGHT_BUMPER.whileHeld(new ShooterManual(shooter), TaskPersistence.GAMEPLAY);
 
 		driverController.LEFT_BUMPER.whileHeld(new RunStorage(storage, 575), TaskPersistence.GAMEPLAY);
@@ -124,6 +124,8 @@ public final class Robot extends PhaseDrivenRobot {
 
 		operatorController.A.whenPressed(new IncrementShooterRPM(shooter, SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);
 		operatorController.B.whenPressed(new IncrementShooterRPM(shooter, -SHOOTER_RPM_INCREMENT), TaskPersistence.GAMEPLAY);
+
+		operatorController.X.whenPressed(new FlipIntake(intake), TaskPersistence.GAMEPLAY);
 
 		// operatorController.DPAD_UP.whenPressed(new ExtendAmpBar(ampBar, leds, 1), TaskPersistence.GAMEPLAY);
 		// operatorController.DPAD_DOWN.whenPressed(new ExtendAmpBar(ampBar, leds, -1), TaskPersistence.GAMEPLAY);
