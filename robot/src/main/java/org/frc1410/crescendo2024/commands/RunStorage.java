@@ -3,26 +3,30 @@ package org.frc1410.crescendo2024.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import org.frc1410.crescendo2024.subsystems.Storage;
 
-
 public class RunStorage extends Command {
 	private final Storage storage;
-	private final double storageRPM;
 
-	public RunStorage(Storage storage, double storageRPM) {
+	private final double rpm;
+
+	public RunStorage(Storage storage, double rpm) {
 		this.storage = storage;
-		this.storageRPM = storageRPM;
-		addRequirements(this.storage);
-	}
+		this.rpm = rpm;
 
+		this.addRequirements(this.storage);
+	}
 
 	@Override
 	public void initialize() {
-		storage.setRPM(storageRPM);
+		this.storage.setRPM(this.rpm);
 	}
 
 	@Override
-	public boolean isFinished() {return false;}
+	public boolean isFinished() {
+		return false;
+	}
 
 	@Override
-	public void end(boolean interrupted) {storage.setRPM(0);}
+	public void end(boolean interrupted) {
+		this.storage.setRPM(0);
+	}
 }

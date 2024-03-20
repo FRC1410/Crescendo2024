@@ -31,18 +31,15 @@ public class DriveLooped extends Command {
 	}
 
 	@Override
-	public void initialize() {}
-
-	@Override
 	public void execute() {
-		var xVelocity = -yAxis.get() * SWERVE_DRIVE_MAX_SPEED;
-		var yVelocity = -xAxis.get() * SWERVE_DRIVE_MAX_SPEED;
-		var angularVelocity = -rotationAxis.get() * SWERVE_DRIVE_MAX_ANGULAR_VELOCITY;
+		var xVelocity = -this.yAxis.get() * SWERVE_DRIVE_MAX_SPEED;
+		var yVelocity = -this.xAxis.get() * SWERVE_DRIVE_MAX_SPEED;
+		var angularVelocity = -this.rotationAxis.get() * SWERVE_DRIVE_MAX_ANGULAR_VELOCITY;
 
-		if (trigger.button().isActive()) {
-			drivetrain.drive(new ChassisSpeeds(-xVelocity, -yVelocity, angularVelocity));
+		if (this.trigger.button().isActive()) {
+			this.drivetrain.drive(new ChassisSpeeds(-xVelocity, -yVelocity, angularVelocity));
 		} else {
-			drivetrain.driveFieldRelative(new ChassisSpeeds(xVelocity, yVelocity, angularVelocity));
+			this.drivetrain.driveFieldRelative(new ChassisSpeeds(xVelocity, yVelocity, angularVelocity));
 		}
 	}
 

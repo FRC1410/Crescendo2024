@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "PreloadShoot"
+            "name": "ShootNote"
           }
         },
         {
@@ -30,7 +30,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "RunIntakeLimitSwitch"
+                  "name": "IntakeNote"
                 }
               }
             ]
@@ -43,7 +43,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ShooterManual"
+                  "name": "RunShooter"
                 }
               },
               {
@@ -69,13 +69,7 @@
                           {
                             "type": "named",
                             "data": {
-                              "name": "RunIntake"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "RunStorage"
+                              "name": "FireShooter"
                             }
                           }
                         ]
@@ -100,7 +94,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "RunIntakeLimitSwitch"
+                  "name": "IntakeNote"
                 }
               }
             ]
@@ -113,7 +107,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ShooterManual"
+                  "name": "RunShooter"
                 }
               },
               {
@@ -139,13 +133,7 @@
                           {
                             "type": "named",
                             "data": {
-                              "name": "RunIntake"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "RunStorage"
+                              "name": "FireShooter"
                             }
                           }
                         ]
@@ -164,7 +152,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "RunIntakeLimitSwitch"
+                  "name": "IntakeNote"
                 }
               },
               {

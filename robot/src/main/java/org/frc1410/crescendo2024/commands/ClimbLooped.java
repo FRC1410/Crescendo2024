@@ -1,33 +1,28 @@
 package org.frc1410.crescendo2024.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import org.frc1410.crescendo2024.subsystems.Climb;
+import org.frc1410.crescendo2024.subsystems.Climber;
 import org.frc1410.framework.control.Axis;
 
 public class ClimbLooped extends Command {
-
-	private final Climb climb;
+	private final Climber climber;
 
 	private final Axis leftYAxis;
 	private final Axis rightYAxis;
 
-	public ClimbLooped(Climb climb, Axis leftYAxis, Axis rightYAxis) {
-		this.climb = climb;
+	public ClimbLooped(Climber climber, Axis leftYAxis, Axis rightYAxis) {
+		this.climber = climber;
 
 		this.leftYAxis = leftYAxis;
 		this.rightYAxis = rightYAxis;
-		addRequirements(climb);
-	}
 
-	@Override
-	public void initialize() {
-
+		this.addRequirements(climber);
 	}
 
 	@Override
 	public void execute() {
-		climb.setLeftClimberSpeed(leftYAxis.get());
-		climb.setRightClimberSpeed(rightYAxis.get());
+		this.climber.setLeftClimberSpeed(this.leftYAxis.get());
+		this.climber.setRightClimberSpeed(this.rightYAxis.get());
 	}
 
 	@Override
@@ -37,7 +32,7 @@ public class ClimbLooped extends Command {
 
 	@Override
 	public void end(boolean interrupted) {
-		climb.setLeftClimberSpeed(0);
-		climb.setRightClimberSpeed(0);
+		this.climber.setLeftClimberSpeed(0);
+		this.climber.setRightClimberSpeed(0);
 	}
 }

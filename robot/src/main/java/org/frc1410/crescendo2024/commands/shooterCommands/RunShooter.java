@@ -3,21 +3,22 @@ package org.frc1410.crescendo2024.commands.shooterCommands;
 import org.frc1410.crescendo2024.subsystems.Shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import org.frc1410.crescendo2024.subsystems.Storage;
 
-public class RunShooterLooped extends Command {
+public class RunShooter extends Command {
 	private final Shooter shooter;
-	private final double shooterRPM;
 
-	public RunShooterLooped(Shooter shooter, double shooterRPM) {
+	private final double rpm;
+
+	public RunShooter(Shooter shooter, double rpm) {
 		this.shooter = shooter;
-		this.shooterRPM = shooterRPM;
-		addRequirements(shooter);
+		this.rpm = rpm;
+
+		this.addRequirements(shooter);
 	}
 
 	@Override
 	public void initialize() {
-		shooter.setRPM(shooterRPM + shooter.rpmAdjustment);
+		this.shooter.setRPM(this.rpm + this.shooter.rpmAdjustment);
 	}
 
 	@Override

@@ -68,14 +68,10 @@ public class Drivetrain implements TickedSubsystem {
 
     private final AHRS gyro = new AHRS(SerialPort.Port.kUSB);
 
-	private LEDs leds = new LEDs();
-
     // Misc
     private final SwerveDrivePoseEstimator poseEstimator;
 
 	private double previousPipelineTimestamp = 0;
-
-	public boolean teleopIsFieldRelative = true;
 
 	private Rotation2d fieldRelativeOffset = new Rotation2d();
 
