@@ -41,29 +41,45 @@ import static org.frc1410.crescendo2024.util.Constants.*;
 public final class Robot extends PhaseDrivenRobot {
 
 	public Robot() {
-		NamedCommands.registerCommand("ShootNote", new ShootNote(drivetrain, shooter, storage, intake, leds, AUTO_SPEAKER_SHOOTER_RPM, AUTO_SPEAKER_STORAGE_RPM));
-		NamedCommands.registerCommand("RunShooter", new RunShooter(shooter, AUTO_SPEAKER_SHOOTER_RPM));
-		NamedCommands.registerCommand("IntakeNote", new IntakeNote(intake, storage));
-		NamedCommands.registerCommand("FireShooter", new FireShooter(storage, intake));
-		NamedCommands.registerCommand("FlipIntake", new FlipIntake(intake));
+		NamedCommands.registerCommand("ShootNote", new ShootNote(
+			this.drivetrain, 
+			this.shooter, 
+			this.storage, 
+			this.intake, 
+			this.leds, 
+			AUTO_SPEAKER_SHOOTER_RPM, 
+			AUTO_SPEAKER_STORAGE_RPM
+		));
+		NamedCommands.registerCommand("RunShooter", new RunShooter(this.shooter, AUTO_SPEAKER_SHOOTER_RPM));
+		NamedCommands.registerCommand("IntakeNote", new IntakeNote(this.intake, this.storage));
+		NamedCommands.registerCommand("FireShooter", new FireShooter(this.storage, this.intake));
+		NamedCommands.registerCommand("FlipIntake", new FlipIntake(this.intake));
 	}
 
-	private final Controller driverController = new Controller(scheduler, DRIVER_CONTROLLER, 0.1 );
-	private final Controller operatorController = new Controller(scheduler, OPERATOR_CONTROLLER,  0.1);
+	private final Controller driverController = new Controller(this.scheduler, DRIVER_CONTROLLER, 0.1 );
+	private final Controller operatorController = new Controller(this.scheduler, OPERATOR_CONTROLLER,  0.1);
 
-	private final Drivetrain drivetrain = subsystems.track(new Drivetrain(subsystems));
+	private final Drivetrain drivetrain = subsystems.track(new Drivetrain(this.subsystems));
 	private final Shooter shooter = subsystems.track(new Shooter());
 	private final Storage storage = subsystems.track(new Storage());
 	private final Intake intake = subsystems.track(new Intake());
-	private final Climber climb = new Climber();
+	private final Climber climer = new Climber();
 	private final LEDs leds = new LEDs();
 
 	private final NetworkTableInstance nt = NetworkTableInstance.getDefault();
-	private final NetworkTable table = nt.getTable("Auto");
+	private final NetworkTable table = this.nt.getTable("Auto");
 
 	private final AutoSelector autoSelector = new AutoSelector()
 		.add("0", () -> new InstantCommand())
-		.add("1", () -> new ShootNote(drivetrain, shooter, storage, intake, leds, AUTO_SPEAKER_SHOOTER_RPM, AUTO_SPEAKER_STORAGE_RPM))
+		.add("1", () -> new ShootNote(
+			this.drivetrain, 
+			this.shooter,
+			this.storage, 
+			this.intake, 
+			this.leds, 
+			AUTO_SPEAKER_SHOOTER_RPM, 
+			AUTO_SPEAKER_STORAGE_RPM
+		))
 		.add("1 intake",() -> new PathPlannerAuto("1 piece intake"))
 		.add("1 drive", () -> new PathPlannerAuto("1.5 source side auto"))
 		.add("3", () -> new PathPlannerAuto("3 piece mid sub"))
@@ -100,47 +116,51 @@ public final class Robot extends PhaseDrivenRobot {
 	@Override
 	public void teleopSequence() {
 		// Drivetrain
-		scheduler.scheduleDefaultCommand(new DriveLooped(
-			drivetrain, 
-			driverController.LEFT_X_AXIS, 
-			driverController.LEFT_Y_AXIS, 
-			driverController.RIGHT_X_AXIS, 
-			driverController.LEFT_TRIGGER
+		this.scheduler.scheduleDefaultCommand(new DriveLooped(
+			this.drivetrain, 
+			this.driverController.LEFT_X_AXIS, 
+			this.driverController.LEFT_Y_AXIS, 
+			this.driverController.RIGHT_X_AXIS, 
+			this.driverController.LEFT_TRIGGER
 		), TaskPersistence.EPHEMERAL);
 
-		driverController.Y.whenPressed(new InstantCommand(
-			() -> drivetrain.zeroYaw()
+		this.driverController.Y.whenPressed(new InstantCommand(
+			() -> this.drivetrain.zeroYaw()
 		), TaskPersistence.GAMEPLAY);
 
 		// Shooter
-		driverController.RIGHT_TRIGGER.button().whileHeldOnce(new AutoScoreSpeaker(
-			drivetrain, 
-			shooter, 
-			storage, 
-			intake, 
-			leds
+		this.driverController.RIGHT_TRIGGER.button().whileHeldOnce(new AutoScoreSpeaker(
+			this.drivetrain, 
+			this.shooter, 
+			this.storage, 
+			this.intake, 
+			this.leds
 		), TaskPersistence.GAMEPLAY, LockPriority.HIGHEST);
 
-		driverController.RIGHT_BUMPER.whileHeld(new RunShooter(shooter, MANUAL_SHOOTER_RPM), TaskPersistence.GAMEPLAY);
-		driverController.LEFT_BUMPER.whileHeld(new FireShooter(storage, intake), TaskPersistence.GAMEPLAY);
+		this.driverController.RIGHT_BUMPER.whileHeld(new RunShooter(this.shooter, MANUAL_SHOOTER_RPM), TaskPersistence.GAMEPLAY);
+		this.driverController.LEFT_BUMPER.whileHeld(new FireShooter(this.storage, this.intake), TaskPersistence.GAMEPLAY);
 
-		operatorController.RIGHT_BUMPER.whileHeldOnce(new RunStorage(storage, MANUAL_STORAGE_RPM), TaskPersistence.GAMEPLAY);
-		operatorController.LEFT_BUMPER.whileHeldOnce(new RunShooter(shooter, MANUAL_SHOOTER_RPM), TaskPersistence.GAMEPLAY);
+		this.operatorController.RIGHT_BUMPER.whileHeldOnce(new RunStorage(this.storage, MANUAL_STORAGE_RPM), TaskPersistence.GAMEPLAY);
+		this.operatorController.LEFT_BUMPER.whileHeldOnce(new RunShooter(this.shooter, MANUAL_SHOOTER_RPM), TaskPersistence.GAMEPLAY);
 
-		operatorController.LEFT_TRIGGER.button().whileHeld(new OuttakeNote(intake, storage, shooter), TaskPersistence.GAMEPLAY);
+		this.operatorController.LEFT_TRIGGER.button().whileHeld(new OuttakeNote(this.intake, this.storage, this.shooter), TaskPersistence.GAMEPLAY);
 
-		operatorController.A.whenPressed(new AdjustShooterRPM(shooter, SHOOTER_RPM_ADJUSTMENT_MAGNITUDE), TaskPersistence.GAMEPLAY);
-		operatorController.B.whenPressed(new AdjustShooterRPM(shooter, -SHOOTER_RPM_ADJUSTMENT_MAGNITUDE), TaskPersistence.GAMEPLAY);
+		this.operatorController.A.whenPressed(new AdjustShooterRPM(this.shooter, SHOOTER_RPM_ADJUSTMENT_MAGNITUDE), TaskPersistence.GAMEPLAY);
+		this.operatorController.B.whenPressed(new AdjustShooterRPM(this.shooter, -SHOOTER_RPM_ADJUSTMENT_MAGNITUDE), TaskPersistence.GAMEPLAY);
 
 		// Intake
-		operatorController.RIGHT_TRIGGER.button().whileHeldOnce(new IntakeNote(intake, storage), TaskPersistence.GAMEPLAY);
+		this.operatorController.RIGHT_TRIGGER.button().whileHeldOnce(new IntakeNote(this.intake, this.storage), TaskPersistence.GAMEPLAY);
 
-		operatorController.X.whenPressed(new FlipIntake(intake), TaskPersistence.GAMEPLAY);
+		this.operatorController.X.whenPressed(new FlipIntake(this.intake), TaskPersistence.GAMEPLAY);
 
-		scheduler.scheduleDefaultCommand(new SetIntakeStateLEDColor(intake, leds), TaskPersistence.EPHEMERAL);
+		this.scheduler.scheduleDefaultCommand(new SetIntakeStateLEDColor(this.intake, this.leds), TaskPersistence.EPHEMERAL);
 
 		// Climber
-		scheduler.scheduleDefaultCommand(new ClimbLooped(climb, operatorController.LEFT_Y_AXIS, operatorController.RIGHT_Y_AXIS), TaskPersistence.EPHEMERAL);
+		this.scheduler.scheduleDefaultCommand(new ClimbLooped(
+			this.climer, 
+			this.operatorController.LEFT_Y_AXIS, 
+			this.operatorController.RIGHT_Y_AXIS
+		), TaskPersistence.EPHEMERAL);
 	}
 
 	@Override
