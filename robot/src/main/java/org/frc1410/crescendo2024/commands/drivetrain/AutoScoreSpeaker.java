@@ -90,7 +90,7 @@ public class AutoScoreSpeaker extends Command {
 
 		this.followPathCommand.initialize();
 
-		this.leds.changeLEDsColor(Color.LIMELIGHT_GREEN);
+		this.leds.setColor(Color.LIMELIGHT_GREEN);
 
 		this.shooter.setRPM(nearestPosition.shooterRPM);
 	}

@@ -20,7 +20,7 @@ public class SetIntakeStateLEDColor extends Command {
 
     @Override
     public void execute() {
-        this.leds.changeLEDsColor(
+        this.leds.setColor(
             this.intake.getLimitSwitch() ? Color.PRANCING_PONY_PINK : Color.OCEAN_BREEZE
         );
     }

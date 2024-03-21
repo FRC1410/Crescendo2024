@@ -60,7 +60,7 @@ public interface Constants {
 	HolonomicPathFollowerConfig HOLONOMIC_AUTO_CONFIG = new HolonomicPathFollowerConfig(
 		AUTO_TRANSLATION_CONSTANTS,
 		AUTO_ROTATION_CONSTANTS,
-		3.2,
+		4,
 		0.426562165692177,
 		new ReplanningConfig()
 	);
@@ -76,7 +76,8 @@ public interface Constants {
 
 	double SHOOTER_OUTTAKE_RPM = 500;
 
-	double INTAKE_BAR_SPEED = 0.7;
+	double INTAKE_BAR_SPEED_DOWN = 0.7;
+	double INTAKE_BAR_SPEED_UP = 1;
 
 	double AUTO_SPEAKER_SHOOTER_RPM = 3300;
 	double AUTO_SPEAKER_STORAGE_RPM = 700;
@@ -92,7 +93,7 @@ public interface Constants {
 	double FRONT_LEFT_STEER_ENCODER_OFFSET = -1.549321;
 	double FRONT_RIGHT_STEER_ENCODER_OFFSET = -0.207087;
 	double BACK_LEFT_STEER_ENCODER_OFFSET = 0.520019;
-	double BACK_RIGHT_STEER_ENCODER_OFFSET = -2.412952;
+	double BACK_RIGHT_STEER_ENCODER_OFFSET = 1.869923;
 
 	boolean FRONT_LEFT_DRIVE_MOTOR_INVERTED = true;
 	boolean FRONT_LEFT_STEER_MOTOR_INVERTED = true;

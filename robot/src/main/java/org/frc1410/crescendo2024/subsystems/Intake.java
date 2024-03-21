@@ -4,6 +4,7 @@ import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.XboxController;
 
 import static org.frc1410.crescendo2024.util.IDs.*;
 import static org.frc1410.crescendo2024.util.Constants.*;
@@ -39,6 +40,8 @@ public class Intake implements TickedSubsystem {
 		this.barMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
 
 		this.barMotor.setSmartCurrentLimit(30);
+
+
 	}
 
 	public void setSpeed(double speed) {
@@ -66,9 +69,9 @@ public class Intake implements TickedSubsystem {
 	@Override
 	public void periodic() {
 		if (this.isExtended && this.encoder.get() < INTAKE_BAR_ENCODER_RANGE - 20) {
-			this.barMotor.set(INTAKE_BAR_SPEED);
+			this.barMotor.set(INTAKE_BAR_SPEED_DOWN);
 		} else if (!this.isExtended && this.encoder.get() > 20) {
-			this.barMotor.set(-INTAKE_BAR_SPEED);
+			this.barMotor.set(-INTAKE_BAR_SPEED_UP);
 		} else {
 			this.barMotor.set(0);
 		}

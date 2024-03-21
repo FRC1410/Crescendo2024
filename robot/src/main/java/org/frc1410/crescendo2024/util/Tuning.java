@@ -26,7 +26,7 @@ public interface Tuning {
 
 	// Auto
 	PIDConstants AUTO_TRANSLATION_CONSTANTS = new PIDConstants(5, 0, 0);
-	PIDConstants AUTO_ROTATION_CONSTANTS = new PIDConstants(1, 0, 0);
+	PIDConstants AUTO_ROTATION_CONSTANTS = new PIDConstants(4, 0, 0);
 
 	// Path following
 	PIDConstants PATH_FOLLOWING_TRANSLATION_CONSTANTS = new PIDConstants(6,0, 0);

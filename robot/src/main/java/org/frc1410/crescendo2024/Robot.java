@@ -51,7 +51,7 @@ public final class Robot extends PhaseDrivenRobot {
 			AUTO_SPEAKER_STORAGE_RPM
 		));
 		NamedCommands.registerCommand("RunShooter", new RunShooter(this.shooter, AUTO_SPEAKER_SHOOTER_RPM));
-		NamedCommands.registerCommand("IntakeNote", new IntakeNote(this.intake, this.storage));
+		NamedCommands.registerCommand("IntakeNote", new IntakeNote(this.intake, this.storage, this.driverController, this.operatorController));
 		NamedCommands.registerCommand("FireShooter", new FireShooter(this.storage, this.intake));
 		NamedCommands.registerCommand("FlipIntake", new FlipIntake(this.intake));
 	}
@@ -84,6 +84,7 @@ public final class Robot extends PhaseDrivenRobot {
 		.add("1 drive", () -> new PathPlannerAuto("1.5 source side auto"))
 		.add("3", () -> new PathPlannerAuto("3 piece mid sub"))
 		.add("3 amp",() -> new PathPlannerAuto("3 piece amp side auto"))
+		.add("3 source", () -> new PathPlannerAuto("3 piece source side auto"))
 		.add("4", () -> new PathPlannerAuto("4 piece mid sub"))
 		.add("5", () -> new PathPlannerAuto("5 piece mid sub"));
 
@@ -104,7 +105,7 @@ public final class Robot extends PhaseDrivenRobot {
 
 	@Override
 	public void autonomousSequence() {
-		this.leds.changeLEDsColor(LEDs.Color.VIVACIOUS_VIOLENT_VIOLET);
+		this.leds.setColor(LEDs.Color.VIVACIOUS_VIOLENT_VIOLET);
 
 		NetworkTables.SetPersistence(this.autoPublisher.getTopic(), true);
 		String autoProfile = this.autoSubscriber.get();
@@ -149,7 +150,7 @@ public final class Robot extends PhaseDrivenRobot {
 		this.operatorController.B.whenPressed(new AdjustShooterRPM(this.shooter, -SHOOTER_RPM_ADJUSTMENT_MAGNITUDE), TaskPersistence.GAMEPLAY);
 
 		// Intake
-		this.operatorController.RIGHT_TRIGGER.button().whileHeldOnce(new IntakeNote(this.intake, this.storage), TaskPersistence.GAMEPLAY);
+		this.operatorController.RIGHT_TRIGGER.button().whileHeldOnce(new IntakeNote(this.intake, this.storage, this.driverController, this.operatorController), TaskPersistence.GAMEPLAY);
 
 		this.operatorController.X.whenPressed(new FlipIntake(this.intake), TaskPersistence.GAMEPLAY);
 

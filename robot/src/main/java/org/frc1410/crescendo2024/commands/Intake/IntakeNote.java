@@ -2,7 +2,9 @@ package org.frc1410.crescendo2024.commands.Intake;
 
 import org.frc1410.crescendo2024.subsystems.Intake;
 import org.frc1410.crescendo2024.subsystems.Storage;
+import org.frc1410.framework.control.Controller;
 
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import static org.frc1410.crescendo2024.util.Constants.INTAKE_SPEED;
@@ -14,9 +16,15 @@ public class IntakeNote extends Command {
 
 	private boolean limitSwitchAlreadyHit;
 
-	public IntakeNote(Intake intake, Storage storage) {
+	private final Controller driverController;
+	private final Controller operatorController;
+
+	public IntakeNote(Intake intake, Storage storage, Controller driverController, Controller operatorController) {
 		this.intake = intake;
 		this.storage = storage;
+
+		this.driverController = driverController;
+		this.operatorController = operatorController;
 
 		this.addRequirements(intake, storage);
 	}
@@ -44,5 +52,10 @@ public class IntakeNote extends Command {
 		this.intake.setExtended(false);
 		this.intake.setSpeed(0); 
 		this.storage.setSpeed(0);
+		
+		if (!interrupted) {
+			driverController.rumble(500);
+			operatorController.rumble(500);
+		}
 	}
 }
