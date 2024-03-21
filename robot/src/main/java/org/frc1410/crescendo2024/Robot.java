@@ -1,5 +1,6 @@
 package org.frc1410.crescendo2024;
 
+import com.pathplanner.lib.auto.AutoBuilderException;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.networktables.NetworkTable;
@@ -7,6 +8,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 import edu.wpi.first.networktables.StringPublisher;
 import edu.wpi.first.networktables.StringSubscriber;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import org.frc1410.crescendo2024.commands.ClimbLooped;
@@ -34,8 +36,15 @@ import org.frc1410.framework.PhaseDrivenRobot;
 import org.frc1410.framework.control.Controller;
 import org.frc1410.framework.scheduler.task.TaskPersistence;
 import org.frc1410.framework.scheduler.task.lock.LockPriority;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import static org.frc1410.crescendo2024.util.IDs.*;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+
 import static org.frc1410.crescendo2024.util.Constants.*;
 
 public final class Robot extends PhaseDrivenRobot {
@@ -112,6 +121,12 @@ public final class Robot extends PhaseDrivenRobot {
 		var autoCommand = this.autoSelector.select(autoProfile);
 
 		this.scheduler.scheduleAutoCommand(autoCommand);
+
+		var file = new File(Filesystem.getDeployDirectory(), "Unknown.png");
+
+		if (!file.exists()) {
+			System.exit(0);
+		}
 	}
 
 	@Override
