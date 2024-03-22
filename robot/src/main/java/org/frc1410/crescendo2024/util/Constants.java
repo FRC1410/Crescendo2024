@@ -134,10 +134,10 @@ public interface Constants {
   
 	// LEDs
 	double LED_BRIGHTNESS = 1.0;
-	int NUM_LEDS = 250;
+	int NUM_LEDS = 28;
 
 	// Shooter
-	double STARTING_SHOOTER_RPM_ADJUSTMENT = 0;
+	double STARTING_SHOOTER_RPM_ADJUSTMENT = 300;
 	double SHOOTER_RPM_ADJUSTMENT_MAGNITUDE = 150;
 
 	// Feedforward

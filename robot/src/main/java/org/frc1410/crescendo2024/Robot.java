@@ -3,11 +3,18 @@ package org.frc1410.crescendo2024;
 import com.pathplanner.lib.auto.AutoBuilderException;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 import edu.wpi.first.networktables.StringPublisher;
 import edu.wpi.first.networktables.StringSubscriber;
+import edu.wpi.first.util.datalog.ProtobufLogEntry;
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.util.datalog.DoubleLogEntry;
+import edu.wpi.first.util.datalog.StringLogEntry;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
@@ -48,8 +55,9 @@ import java.io.FileReader;
 import static org.frc1410.crescendo2024.util.Constants.*;
 
 public final class Robot extends PhaseDrivenRobot {
-
 	public Robot() {
+		DataLogManager.start();
+
 		NamedCommands.registerCommand("ShootNote", new ShootNote(
 			this.drivetrain, 
 			this.shooter, 
@@ -91,6 +99,7 @@ public final class Robot extends PhaseDrivenRobot {
 		))
 		.add("1 intake",() -> new PathPlannerAuto("1 piece intake"))
 		.add("1 drive", () -> new PathPlannerAuto("1.5 source side auto"))
+		.add("2 source", () -> new PathPlannerAuto("2 piece source side auto"))
 		.add("3", () -> new PathPlannerAuto("3 piece mid sub"))
 		.add("3 amp",() -> new PathPlannerAuto("3 piece amp side auto"))
 		.add("3 source", () -> new PathPlannerAuto("3 piece source side auto"))
@@ -122,11 +131,11 @@ public final class Robot extends PhaseDrivenRobot {
 
 		this.scheduler.scheduleAutoCommand(autoCommand);
 
-		var file = new File(Filesystem.getDeployDirectory(), "Unknown.png");
+		// var file = new File(Filesystem.getDeployDirectory(), "Unknown.png");
 
-		if (!file.exists()) {
-			System.exit(0);
-		}
+		// if (!file.exists()) {
+		// 	System.exit(0);
+		// }
 	}
 
 	@Override
@@ -156,8 +165,8 @@ public final class Robot extends PhaseDrivenRobot {
 		this.driverController.RIGHT_BUMPER.whileHeld(new RunShooter(this.shooter, MANUAL_SHOOTER_RPM), TaskPersistence.GAMEPLAY);
 		this.driverController.LEFT_BUMPER.whileHeld(new FireShooter(this.storage, this.intake), TaskPersistence.GAMEPLAY);
 
-		this.operatorController.RIGHT_BUMPER.whileHeldOnce(new RunStorage(this.storage, MANUAL_STORAGE_RPM), TaskPersistence.GAMEPLAY);
-		this.operatorController.LEFT_BUMPER.whileHeldOnce(new RunShooter(this.shooter, MANUAL_SHOOTER_RPM), TaskPersistence.GAMEPLAY);
+		this.operatorController.RIGHT_BUMPER.whileHeld(new RunStorage(this.storage, MANUAL_STORAGE_RPM), TaskPersistence.GAMEPLAY);
+		this.operatorController.LEFT_BUMPER.whileHeld(new RunShooter(this.shooter, MANUAL_SHOOTER_RPM), TaskPersistence.GAMEPLAY);
 
 		this.operatorController.LEFT_TRIGGER.button().whileHeld(new OuttakeNote(this.intake, this.storage, this.shooter), TaskPersistence.GAMEPLAY);
 
@@ -168,6 +177,10 @@ public final class Robot extends PhaseDrivenRobot {
 		this.operatorController.RIGHT_TRIGGER.button().whileHeldOnce(new IntakeNote(this.intake, this.storage, this.driverController, this.operatorController), TaskPersistence.GAMEPLAY);
 
 		this.operatorController.X.whenPressed(new FlipIntake(this.intake), TaskPersistence.GAMEPLAY);
+
+		this.operatorController.START.whenPressed(new InstantCommand(
+			() -> this.intake.zeroBarEncoder()
+		), TaskPersistence.GAMEPLAY);
 
 		this.scheduler.scheduleDefaultCommand(new SetIntakeStateLEDColor(this.intake, this.leds), TaskPersistence.EPHEMERAL);
 

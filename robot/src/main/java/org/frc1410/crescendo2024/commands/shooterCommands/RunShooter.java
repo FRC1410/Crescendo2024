@@ -22,6 +22,11 @@ public class RunShooter extends Command {
 	}
 
 	@Override
+	public void execute() {
+		this.shooter.setRPM(this.rpm + this.shooter.rpmAdjustment);
+	}
+
+	@Override
 	public boolean isFinished() {
 		return false;
 	}

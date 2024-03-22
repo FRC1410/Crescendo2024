@@ -12,6 +12,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 
 import edu.wpi.first.wpilibj.SerialPort;
@@ -58,6 +59,12 @@ public class Drivetrain implements TickedSubsystem {
     private final DoublePublisher pitch = NetworkTables.PublisherFactory(this.table, "pitch", 0);
     private final DoublePublisher roll = NetworkTables.PublisherFactory(this.table, "roll", 0);
 
+    private final StructPublisher<Pose2d> posePublisher = NetworkTableInstance.getDefault()
+        .getStructTopic("pose", Pose2d.struct).publish();
+
+    private final StructPublisher<Pose2d> encoderOnlyPosePublisher = NetworkTableInstance.getDefault()
+        .getStructTopic("encoderOnlyPose", Pose2d.struct).publish();
+
     // Subsystems
     private final SwerveModule frontLeft;
     private final SwerveModule frontRight;
@@ -70,6 +77,8 @@ public class Drivetrain implements TickedSubsystem {
 
     // Misc
     private final SwerveDrivePoseEstimator poseEstimator;
+
+    private final SwerveDrivePoseEstimator encoderOnlyPoseEstimator;
 
 	private double previousPipelineTimestamp = 0;
 
@@ -150,6 +159,13 @@ public class Drivetrain implements TickedSubsystem {
             this.getSwerveModulePositions(),
             new Pose2d()
         );
+
+        this.encoderOnlyPoseEstimator = new SwerveDrivePoseEstimator(
+            SWERVE_DRIVE_KINEMATICS, 
+            this.getGyroYaw(), 
+            this.getSwerveModulePositions(), 
+            new Pose2d()
+        );
     }
 
     public void drive(ChassisSpeeds chassisSpeeds) {
@@ -190,7 +206,6 @@ public class Drivetrain implements TickedSubsystem {
     }
 
     public void resetPose(Pose2d pose) {
-        System.out.println("RESET POSE TO: " + pose);
         this.poseEstimator.resetPosition(
             this.getGyroYaw(),
             this.getSwerveModulePositions(),
@@ -211,24 +226,32 @@ public class Drivetrain implements TickedSubsystem {
             this.getSwerveModulePositions()
         );
 
-		var estimatedPose = camera.getEstimatedPose();
+        this.encoderOnlyPoseEstimator.update(
+            this.getGyroYaw(), 
+            this.getSwerveModulePositions()
+        );
+
+		var estimatedPose = this.camera.getEstimatedPose();
 
 		if(estimatedPose.isPresent()) {
 		 	var resultTimestamp = estimatedPose.get().timestampSeconds;
 
-		 	if(resultTimestamp != previousPipelineTimestamp) {
-				previousPipelineTimestamp = resultTimestamp;
-				poseEstimator.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), resultTimestamp);
+		 	if(resultTimestamp != this.previousPipelineTimestamp) {
+				this.previousPipelineTimestamp = resultTimestamp;
+				this.poseEstimator.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), resultTimestamp);
 		 	}
 		}
 
-		poseX.set(this.getEstimatedPosition().getX());
-		poseY.set(this.getEstimatedPosition().getY());
-		heading.set(this.getEstimatedPosition().getRotation().getDegrees());
+		this.poseX.set(this.getEstimatedPosition().getX());
+		this.poseY.set(this.getEstimatedPosition().getY());
+		this.heading.set(this.getEstimatedPosition().getRotation().getDegrees());
 
-		yaw.set(this.getGyroYaw().getDegrees());
-		pitch.set(this.gyro.getPitch());
-		roll.set(this.gyro.getRoll());
+		this.yaw.set(this.getGyroYaw().getDegrees());
+		this.pitch.set(this.gyro.getPitch());
+		this.roll.set(this.gyro.getRoll());
+
+        this.posePublisher.set(this.getEstimatedPosition());
+        this.encoderOnlyPosePublisher.set(this.encoderOnlyPoseEstimator.getEstimatedPosition());
     }
 
     private SwerveModulePosition[] getSwerveModulePositions() {
