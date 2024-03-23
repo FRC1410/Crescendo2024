@@ -1,4 +1,4 @@
-package org.frc1410.crescendo2024.commands.shooterCommands;
+package org.frc1410.crescendo2024.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;

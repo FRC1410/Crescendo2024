@@ -1,62 +1,50 @@
 package org.frc1410.crescendo2024;
 
-import com.pathplanner.lib.auto.AutoBuilderException;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
-import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-
 import edu.wpi.first.networktables.StringPublisher;
 import edu.wpi.first.networktables.StringSubscriber;
-import edu.wpi.first.util.datalog.ProtobufLogEntry;
-import edu.wpi.first.util.datalog.DataLog;
-import edu.wpi.first.util.datalog.DoubleLogEntry;
-import edu.wpi.first.util.datalog.StringLogEntry;
-import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import org.frc1410.crescendo2024.commands.ClimbLooped;
 import org.frc1410.crescendo2024.commands.RunStorage;
-import org.frc1410.crescendo2024.commands.Intake.FlipIntake;
-import org.frc1410.crescendo2024.commands.Intake.OuttakeNote;
-import org.frc1410.crescendo2024.commands.Intake.SetIntakeStateLEDColor;
-import org.frc1410.crescendo2024.commands.Intake.IntakeNote;
 import org.frc1410.crescendo2024.commands.drivetrain.AutoScoreSpeaker;
 import org.frc1410.crescendo2024.commands.drivetrain.DriveLooped;
-import org.frc1410.crescendo2024.commands.shooterCommands.ShootNote;
+import org.frc1410.crescendo2024.commands.intake.FlipIntake;
+import org.frc1410.crescendo2024.commands.intake.IntakeNote;
+import org.frc1410.crescendo2024.commands.intake.OuttakeNote;
+import org.frc1410.crescendo2024.commands.intake.SetIntakeStateLEDColor;
+import org.frc1410.crescendo2024.commands.shooter.AdjustShooterRPM;
+import org.frc1410.crescendo2024.commands.shooter.FireShooter;
+import org.frc1410.crescendo2024.commands.shooter.RunShooter;
+import org.frc1410.crescendo2024.commands.shooter.ShootNote;
 import org.frc1410.crescendo2024.subsystems.Climber;
 import org.frc1410.crescendo2024.subsystems.Drivetrain;
 import org.frc1410.crescendo2024.subsystems.Intake;
 import org.frc1410.crescendo2024.subsystems.LEDs;
 import org.frc1410.crescendo2024.subsystems.Shooter;
 import org.frc1410.crescendo2024.subsystems.Storage;
-import org.frc1410.crescendo2024.commands.shooterCommands.AdjustShooterRPM;
-import org.frc1410.crescendo2024.commands.shooterCommands.FireShooter;
-import org.frc1410.crescendo2024.commands.shooterCommands.RunShooter;
 import org.frc1410.crescendo2024.util.NetworkTables;
-import org.frc1410.framework.AutoSelector;
 
+import org.frc1410.framework.AutoSelector;
 import org.frc1410.framework.PhaseDrivenRobot;
 import org.frc1410.framework.control.Controller;
 import org.frc1410.framework.scheduler.task.TaskPersistence;
 import org.frc1410.framework.scheduler.task.lock.LockPriority;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 
 import static org.frc1410.crescendo2024.util.IDs.*;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-
 import static org.frc1410.crescendo2024.util.Constants.*;
 
 public final class Robot extends PhaseDrivenRobot {
 	public Robot() {
-		DataLogManager.start();
+		// TODO: re-enable
+		// DataLogManager.start();
 
 		NamedCommands.registerCommand("ShootNote", new ShootNote(
 			this.drivetrain, 
@@ -73,7 +61,7 @@ public final class Robot extends PhaseDrivenRobot {
 		NamedCommands.registerCommand("FlipIntake", new FlipIntake(this.intake));
 	}
 
-	private final Controller driverController = new Controller(this.scheduler, DRIVER_CONTROLLER, 0.1 );
+	private final Controller driverController = new Controller(this.scheduler, DRIVER_CONTROLLER, 0.1);
 	private final Controller operatorController = new Controller(this.scheduler, OPERATOR_CONTROLLER,  0.1);
 
 	private final Drivetrain drivetrain = subsystems.track(new Drivetrain(this.subsystems));
@@ -150,7 +138,13 @@ public final class Robot extends PhaseDrivenRobot {
 		), TaskPersistence.EPHEMERAL);
 
 		this.driverController.Y.whenPressed(new InstantCommand(
-			() -> this.drivetrain.zeroYaw()
+			() -> {
+				if (DriverStation.getAlliance().get() == Alliance.Blue) {
+					this.drivetrain.setYaw(Rotation2d.fromDegrees(180));
+				} else {
+					this.drivetrain.setYaw(Rotation2d.fromDegrees(0));
+				}
+			}
 		), TaskPersistence.GAMEPLAY);
 
 		// Shooter

@@ -33,7 +33,7 @@ public interface Constants {
 
 	int INTAKE_BAR_ENCODER_RANGE = 648;
 
-	Transform3d CAMERA_POSE = new Transform3d(new Translation3d(0.3683,0,0.559), new Rotation3d(0,Units.degreesToRadians(-27),0));
+	Transform3d CAMERA_POSE = new Transform3d(new Translation3d(0.3683,0,0.559), new Rotation3d(0, Units.degreesToRadians(-27), 0));
 
 	// Constraints
 	double DRIVE_MOTOR_FREE_SPEED_RPM = 5676;

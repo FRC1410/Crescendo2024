@@ -180,6 +180,7 @@ public class Drivetrain implements TickedSubsystem {
 
     public void driveFieldRelative(ChassisSpeeds chassisSpeeds) {
         Rotation2d angle;
+        // TODO: what
         if (DriverStation.getAlliance().isPresent()) {
             angle = DriverStation.getAlliance().get() == Alliance.Blue 
                 ? this.getGyroYaw().minus(this.fieldRelativeOffset)
@@ -212,11 +213,21 @@ public class Drivetrain implements TickedSubsystem {
             pose
         );
 
+        this.encoderOnlyPoseEstimator.resetPosition(
+            this.getGyroYaw(), 
+            this.getSwerveModulePositions(), 
+            pose
+        );
+
 		this.fieldRelativeOffset = this.getGyroYaw().minus(pose.getRotation());
     }
 
-    public void zeroYaw() {
-        this.resetPose(new Pose2d(this.getEstimatedPosition().getTranslation(), new Rotation2d()));
+    // public void zeroYaw() {
+    //     this.resetPose(new Pose2d(this.getEstimatedPosition().getTranslation(), new Rotation2d()));
+    // }
+
+    public void setYaw(Rotation2d yaw) {
+        this.resetPose(new Pose2d(this.getEstimatedPosition().getTranslation(), yaw));
     }
 
     @Override
@@ -236,7 +247,9 @@ public class Drivetrain implements TickedSubsystem {
 		if(estimatedPose.isPresent()) {
 		 	var resultTimestamp = estimatedPose.get().timestampSeconds;
 
-		 	if(resultTimestamp != this.previousPipelineTimestamp) {
+            // var b = estimatedPose.get().targetsUsed.stream().filter((elm) -> List.of(7, 8, 3, 4).contains(elm.getFiducialId())).count() >= 1;
+
+		 	if((resultTimestamp != this.previousPipelineTimestamp)) {
 				this.previousPipelineTimestamp = resultTimestamp;
 				this.poseEstimator.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), resultTimestamp);
 		 	}

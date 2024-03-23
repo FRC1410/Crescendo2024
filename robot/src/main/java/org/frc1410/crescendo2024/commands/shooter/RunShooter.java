@@ -1,4 +1,4 @@
-package org.frc1410.crescendo2024.commands.shooterCommands;
+package org.frc1410.crescendo2024.commands.shooter;
 
 import org.frc1410.crescendo2024.subsystems.Shooter;
 

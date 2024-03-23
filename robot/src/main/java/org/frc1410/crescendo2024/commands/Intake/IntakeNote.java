@@ -1,10 +1,9 @@
-package org.frc1410.crescendo2024.commands.Intake;
+package org.frc1410.crescendo2024.commands.intake;
 
 import org.frc1410.crescendo2024.subsystems.Intake;
 import org.frc1410.crescendo2024.subsystems.Storage;
 import org.frc1410.framework.control.Controller;
 
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import static org.frc1410.crescendo2024.util.Constants.INTAKE_SPEED;
@@ -16,6 +15,7 @@ public class IntakeNote extends Command {
 
 	private boolean limitSwitchAlreadyHit;
 
+	// Used for rumble
 	private final Controller driverController;
 	private final Controller operatorController;
 

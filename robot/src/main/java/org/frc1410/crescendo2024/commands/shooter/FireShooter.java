@@ -1,10 +1,10 @@
-package org.frc1410.crescendo2024.commands.shooterCommands;
+package org.frc1410.crescendo2024.commands.shooter;
 
 import static org.frc1410.crescendo2024.util.Constants.MANUAL_INTAKE_SPEED;
 import static org.frc1410.crescendo2024.util.Constants.MANUAL_STORAGE_RPM;
 
 import org.frc1410.crescendo2024.commands.RunStorage;
-import org.frc1410.crescendo2024.commands.Intake.RunIntake;
+import org.frc1410.crescendo2024.commands.intake.RunIntake;
 import org.frc1410.crescendo2024.subsystems.Intake;
 import org.frc1410.crescendo2024.subsystems.Storage;
 
