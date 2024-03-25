@@ -4,19 +4,22 @@ import org.frc1410.crescendo2024.subsystems.Shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
-public class IncrementShooterRPM extends Command {
+public class AdjustShooterRPM extends Command {
 	private final Shooter shooter;
-	private final double increment;
 
-	public IncrementShooterRPM(Shooter shooter, double increment) {
+	private final double adjustment;
+
+	public AdjustShooterRPM(Shooter shooter, double adjustment) {
 		this.shooter = shooter;
-		this.increment = increment;
-		addRequirements(this.shooter);
+		this.adjustment = adjustment;
+
+		this.addRequirements(shooter);
 	}
 
 	@Override
 	public void initialize() {
-		shooter.rpmAdjustment += increment;
+		this.shooter.rpmAdjustment += this.adjustment;
+
 		System.out.println("RPM ADJUSTMENT: " + shooter.rpmAdjustment);
 	}
 

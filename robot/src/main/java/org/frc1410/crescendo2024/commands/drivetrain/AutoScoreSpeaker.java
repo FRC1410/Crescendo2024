@@ -7,8 +7,12 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 
-import org.frc1410.crescendo2024.subsystems.*;
-import org.frc1410.crescendo2024.subsystems.LEDs.Colors;
+import org.frc1410.crescendo2024.subsystems.Drivetrain;
+import org.frc1410.crescendo2024.subsystems.Intake;
+import org.frc1410.crescendo2024.subsystems.LEDs;
+import org.frc1410.crescendo2024.subsystems.Shooter;
+import org.frc1410.crescendo2024.subsystems.Storage;
+import org.frc1410.crescendo2024.subsystems.LEDs.Color;
 import org.frc1410.crescendo2024.util.ShootingPosition;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -30,14 +34,14 @@ public class AutoScoreSpeaker extends Command {
 
 	private FollowPathHolonomic followPathCommand = null;
 
-	public AutoScoreSpeaker(Drivetrain drivetrain, Storage storage, Intake intake, Shooter shooter, LEDs leds) {
+	public AutoScoreSpeaker(Drivetrain drivetrain, Shooter shooter, Storage storage, Intake intake, LEDs leds) {
 		this.drivetrain = drivetrain;
-		this.storage = storage;
 		this.shooter = shooter;
+		this.storage = storage;
 		this.intake = intake;
 		this.leds = leds;
 
-		addRequirements(drivetrain, storage, shooter, intake, leds);
+		this.addRequirements(drivetrain, shooter, storage, intake, leds);
 	}
 
 	@Override
@@ -70,7 +74,7 @@ public class AutoScoreSpeaker extends Command {
 				this.drivetrain.getEstimatedPosition(),
 				nearestPosition.pose
 			),
-			PATH_FIND_CONSTRAINTS,
+			PATH_FOLLOWING_CONSTRAINTS,
 			new GoalEndState(0, nearestPosition.pose.getRotation())
 		);
 
@@ -79,14 +83,14 @@ public class AutoScoreSpeaker extends Command {
 			drivetrain::getEstimatedPosition, 
 			drivetrain::getChassisSpeeds, 
 			drivetrain::drive, 
-			PATH_FIND_FOLLOWER_CONFIG,
+			HOLONOMIC_PATH_FOLLOWING_CONFIG,
 			() -> false, 
 			drivetrain
 		);
 
 		this.followPathCommand.initialize();
 
-		this.leds.changeLEDsColor(Colors.LIMELIGHT_GREEN);
+		this.leds.setColor(Color.LIMELIGHT_GREEN);
 
 		this.shooter.setRPM(nearestPosition.shooterRPM);
 	}
@@ -118,6 +122,7 @@ public class AutoScoreSpeaker extends Command {
 		if(this.followPathCommand != null) {
 			followPathCommand.end(interrupted);
 		}
+
 		this.storage.setRPM(0);
 		this.shooter.setRPM(0);
 		this.intake.setSpeed(0);

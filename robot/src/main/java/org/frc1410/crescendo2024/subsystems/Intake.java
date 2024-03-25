@@ -2,59 +2,52 @@ package org.frc1410.crescendo2024.subsystems;
 
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
-import edu.wpi.first.networktables.DoublePublisher;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.XboxController;
 
 import static org.frc1410.crescendo2024.util.IDs.*;
 import static org.frc1410.crescendo2024.util.Constants.*;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import org.frc1410.crescendo2024.util.NetworkTables;
 import org.frc1410.framework.scheduler.subsystem.TickedSubsystem;
 
 public class Intake implements TickedSubsystem {
+	private final CANSparkMax frontMotor = new CANSparkMax(INTAKE_FRONT_MOTOR_ID, MotorType.kBrushless);
+	private final CANSparkMax backMotor = new CANSparkMax(INTAKE_BACK_MOTOR_ID, MotorType.kBrushless);
+	private final CANSparkMax extendedMotor = new CANSparkMax(INTAKE_EXTENDED_MOTOR_ID, MotorType.kBrushless);
+	private final CANSparkMax barMotor = new CANSparkMax(INTAKE_BAR_MOTOR_ID, MotorType.kBrushless);
 
-	private final CANSparkMax intakeMotorFront = new CANSparkMax(INTAKE_FRONT_MOTOR_ID, MotorType.kBrushless);
+	private final Encoder barEncoder = new Encoder(INTAKE_BAR_ENCODER_CHANNEL_A, INTAKE_BAR_ENCODER_CHANNEL_B, true);
 
-	private final CANSparkMax intakeMotorBack = new CANSparkMax(INTAKE_BACK_MOTOR_ID, MotorType.kBrushless);
-
-	private final CANSparkMax intakeBarMotor = new CANSparkMax(INTAKE_BAR_MOTOR_ID, MotorType.kBrushless);
-
-	private final CANSparkMax intakeExtendedMotor = new CANSparkMax(INTAKE_EXTENDED_MOTOR_ID, MotorType.kBrushless);
-
-	private final NetworkTable table = NetworkTableInstance.getDefault().getTable("Intake");
-
-	private final DoublePublisher encoderCounter = NetworkTables.PublisherFactory(table, "encoder", 0);
-
-	private final Encoder encoder = new Encoder(1, 2, true);
-	private final DigitalInput lowerLimitSwitch = new DigitalInput(INTAKE_LIMIT_SWITCH_ID);
+	private final DigitalInput limitSwitch = new DigitalInput(INTAKE_LIMIT_SWITCH_ID);
 
 	private boolean isExtended = false;
 
+	private double barEncoderOffset = 0;
+
 	public Intake() {
-		intakeMotorFront.restoreFactoryDefaults();
-		intakeMotorBack.restoreFactoryDefaults();
-		intakeBarMotor.restoreFactoryDefaults();
-		intakeExtendedMotor.restoreFactoryDefaults();
+		this.frontMotor.restoreFactoryDefaults();
+		this.backMotor.restoreFactoryDefaults();
+		this.extendedMotor.restoreFactoryDefaults();
+		this.barMotor.restoreFactoryDefaults();
 
-		intakeMotorFront.setInverted(INTAKE_FRONT_MOTOR_INVERTED);
-		intakeMotorBack.setInverted(INTAKE_BACK_MOTOR_INVERTED);
-		intakeBarMotor.setInverted(INTAKE_BAR_MOTOR_INVERTED);
-		intakeBarMotor.setInverted(INTAKE_EXTENDED_MOTOR_INVERTED);
+		this.frontMotor.setInverted(INTAKE_FRONT_MOTOR_INVERTED);
+		this.backMotor.setInverted(INTAKE_BACK_MOTOR_INVERTED);
+		this.extendedMotor.setInverted(INTAKE_EXTENDED_MOTOR_INVERTED);
+		this.barMotor.setInverted(INTAKE_BAR_MOTOR_INVERTED);
 
-		intakeMotorFront.setIdleMode(CANSparkBase.IdleMode.kBrake);
-		intakeMotorBack.setIdleMode(CANSparkBase.IdleMode.kBrake);
+		this.frontMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
+		this.backMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
+		this.extendedMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
+		this.barMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
 
-		intakeBarMotor.setInverted(true);
-		intakeBarMotor.setSmartCurrentLimit(30);
+		this.barMotor.setSmartCurrentLimit(30);
 	}
 
 	public void setSpeed(double speed) {
-		intakeMotorFront.set(speed);
-		intakeMotorBack.set(speed);
-		intakeExtendedMotor.set(speed);
+		this.frontMotor.set(speed);
+		this.backMotor.set(speed);
+		this.extendedMotor.set(speed);
 	}
 
 	public void setExtended(boolean isExtended) {
@@ -62,7 +55,7 @@ public class Intake implements TickedSubsystem {
 	}
 
 	public void extend(double speed) {
-		intakeBarMotor.set(speed);
+		this.barMotor.set(speed);
 	}
 
 	public boolean isExtended() {
@@ -70,19 +63,25 @@ public class Intake implements TickedSubsystem {
 	}
 
 	public boolean getLimitSwitch() {
-		return !lowerLimitSwitch.get();
+		return !this.limitSwitch.get();
+	}
+
+	public void zeroBarEncoder() {
+		this.barEncoderOffset = -INTAKE_BAR_ENCODER_RANGE;
+	}
+
+	private double getBarEncoder() {
+		return this.barEncoder.get() - this.barEncoderOffset;
 	}
 
 	@Override
 	public void periodic() {
-		if (this.isExtended && this.encoder.get() < INTAKE_BAR_ENCODER_RANGE - 20) {
-			this.intakeBarMotor.set(1);
-		} else if (!this.isExtended && this.encoder.get() > 20) {
-			this.intakeBarMotor.set(-1);
+		if (this.isExtended && this.getBarEncoder() < INTAKE_BAR_ENCODER_RANGE - 20) {
+			this.barMotor.set(INTAKE_BAR_SPEED_DOWN);
+		} else if (!this.isExtended && this.getBarEncoder() > 20) {
+			this.barMotor.set(-INTAKE_BAR_SPEED_UP);
 		} else {
-			this.intakeBarMotor.set(0);
+			this.barMotor.set(0);
 		}
-
-		encoderCounter.set(encoder.get());
 	}
 }

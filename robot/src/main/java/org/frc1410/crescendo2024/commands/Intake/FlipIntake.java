@@ -15,7 +15,7 @@ public class FlipIntake extends Command {
 
     @Override
     public void initialize() {
-        this.intake.setExtended(this.intake.isExtended());
+        this.intake.setExtended(!this.intake.isExtended());
     }
 
     @Override

@@ -1,12 +1,11 @@
 package org.frc1410.crescendo2024.util;
 
 public interface IDs {
-
-	//Controller ID's
+	//Controller
 	int DRIVER_CONTROLLER = 0;
 	int OPERATOR_CONTROLLER = 1;
 
-	//Drivetrain ID's
+	//Drivetrain
 	int FRONT_LEFT_DRIVE_MOTOR = 3;
 	int FRONT_LEFT_STEER_MOTOR = 4;
 	int FRONT_RIGHT_DRIVE_MOTOR = 1;
@@ -15,32 +14,32 @@ public interface IDs {
 	int BACK_LEFT_STEER_MOTOR = 6;
 	int BACK_RIGHT_DRIVE_MOTOR = 7;
 	int BACK_RIGHT_STEER_MOTOR = 8;
-
-	// Encoder ID's
 	int FRONT_LEFT_STEER_ENCODER = 1;
 	int FRONT_RIGHT_STEER_ENCODER = 0;
 	int BACK_LEFT_STEER_ENCODER = 2;
 	int BACK_RIGHT_STEER_ENCODER = 3;
 
-
-	// Shooter ID's
+	// Shooter
 	int SHOOTER_RIGHT_MOTOR_ID = 10;
 	int SHOOTER_LEFT_MOTOR_ID = 9;
 
+	// Intake
 	int INTAKE_FRONT_MOTOR_ID = 13;
 	int INTAKE_BACK_MOTOR_ID = 14;
+	int INTAKE_EXTENDED_MOTOR_ID = 17;
+	int INTAKE_BAR_MOTOR_ID = 18;
+	int INTAKE_LIMIT_SWITCH_ID = 0;
+	int INTAKE_BAR_ENCODER_CHANNEL_A = 1;
+	int INTAKE_BAR_ENCODER_CHANNEL_B = 2;
 
+	// Storage
 	int STORAGE_LEFT_MOTOR_ID = 11;
 	int STORAGE_RIGHT_MOTOR_ID = 12;
 
-	int CLIMB_LEFT_MOTOR_ID = 15;
-	int CLIMB_RIGHT_MOTOR_ID = 16;
+	// Climber
+	int CLIMBER_LEFT_MOTOR_ID = 15;
+	int CLIMBER_RIGHT_MOTOR_ID = 16;
 
+	// LEDs
 	int LED_ID = 29;
-
-	int INTAKE_LIMIT_SWITCH_ID = 0;
-
-	int INTAKE_BAR_MOTOR_ID = 18;
-
-	int INTAKE_EXTENDED_MOTOR_ID = 17;
 }

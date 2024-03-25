@@ -1,14 +1,16 @@
 package org.frc1410.crescendo2024.subsystems;
 
-
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
-import com.revrobotics.*;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkPIDController;
+import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkBase;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -20,21 +22,14 @@ import static org.frc1410.crescendo2024.util.Tuning.*;
 import org.frc1410.framework.scheduler.subsystem.TickedSubsystem;
 
 public class SwerveModule implements TickedSubsystem {
-
 	private final CANSparkMax driveMotor;
 	private final CANSparkMax steerMotor;
 
 	private final RelativeEncoder driveEncoder;
 	private final CANcoder steerEncoder;
 
-	// TODO: Change PID controller to Spark max PID controller
-//	private final PIDController drivePIDController = new PIDController(SWERVE_DRIVE_P, SWERVE_DRIVE_I, SWERVE_DRIVE_D);
-
-	private final SimpleMotorFeedforward driveFeedForwardController = new SimpleMotorFeedforward(DRIVE_MOTOR_KS, DRIVE_MOTOR_KV);
-
 	private final SparkPIDController drivePIDController;
 
-	// radians
 	private final PIDController steeringPIDController = new PIDController(
 		SWERVE_STEERING_P,
 		SWERVE_STEERING_I,
@@ -61,21 +56,21 @@ public class SwerveModule implements TickedSubsystem {
 		DoublePublisher actualVel, 
 		DoublePublisher actualAngle
 	) {
-		this.driveMotor = new CANSparkMax(driveMotorID, CANSparkLowLevel.MotorType.kBrushless);
+		this.driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
 		this.driveMotor.restoreFactoryDefaults();
 		this.driveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 		this.driveMotor.setInverted(driveMotorInverted);
 		this.driveMotor.setSmartCurrentLimit(40);
 
-		this.steerMotor = new CANSparkMax(steeringMotorID, CANSparkLowLevel.MotorType.kBrushless);
+		this.steerMotor = new CANSparkMax(steeringMotorID, MotorType.kBrushless);
 		this.steerMotor.restoreFactoryDefaults();
 		this.steerMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 		this.steerMotor.setInverted(steerMotorInverted);
 		this.steerMotor.setSmartCurrentLimit(30);
 
-		this.driveEncoder = driveMotor.getEncoder();
+		this.driveEncoder = this.driveMotor.getEncoder();
 
-		drivePIDController = driveMotor.getPIDController();
+		drivePIDController = this.driveMotor.getPIDController();
 
 		drivePIDController.setP(SWERVE_DRIVE_P);
 		drivePIDController.setI(SWERVE_DRIVE_I);
@@ -108,23 +103,29 @@ public class SwerveModule implements TickedSubsystem {
 
 		this.desiredState = optimized;
 
-		this.drivePIDController.setReference(metersPerSecondToEncoderRPM(optimized.speedMetersPerSecond), CANSparkBase.ControlType.kVelocity);
+		this.drivePIDController.setReference(SwerveModule.metersPerSecondToEncoderRPM(optimized.speedMetersPerSecond), CANSparkBase.ControlType.kVelocity);
 	}
 
 	public SwerveModuleState getState() {
-		return new SwerveModuleState(this.getDriveVelocityMetersPerSecond(), this.getSteerPosition());
+		return new SwerveModuleState(
+			this.getDriveVelocityMetersPerSecond(),
+			this.getSteerPosition()
+		);
 	}
 
 	public SwerveModulePosition getPosition() {
 		return new SwerveModulePosition(
-			this.getDrivePositionMeters(), this.getSteerPosition()
+			this.getDrivePositionMeters(),
+			this.getSteerPosition()
 		);
 	}
 
 	@Override
 	public void periodic() {
-
-		double steerPIDOutput = this.steeringPIDController.calculate(this.getSteerPosition().getRadians(), MathUtil.angleModulus(this.desiredState.angle.getRadians()));
+		double steerPIDOutput = this.steeringPIDController.calculate(
+			this.getSteerPosition().getRadians(),
+			MathUtil.angleModulus(this.desiredState.angle.getRadians())
+		);
 
 		this.steerMotor.setVoltage(steerPIDOutput);
 
@@ -136,10 +137,7 @@ public class SwerveModule implements TickedSubsystem {
 	}
 
 	private Rotation2d getSteerPosition() {
-		var b = this.steerEncoder.getAbsolutePosition().getValue();
-		var a = Rotation2d.fromRotations(b);
-		// System.out.println(b);
-		return a;
+		return Rotation2d.fromRotations(this.steerEncoder.getAbsolutePosition().getValue());
 	}
 
 	private double getDriveVelocityMetersPerSecond() {
