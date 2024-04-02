@@ -104,7 +104,8 @@ public final class Robot extends PhaseDrivenRobot {
 		.add("3 amp",() -> new PathPlannerAuto("3 piece amp side auto"))
 		.add("3 source", () -> new PathPlannerAuto("3 piece source side auto"))
 		.add("4", () -> new PathPlannerAuto("4 piece mid sub"))
-		.add("5", () -> new PathPlannerAuto("5 piece mid sub"));
+		.add("5", () -> new PathPlannerAuto("5 piece mid sub"))
+		.add("D source", () -> new PathPlannerAuto("Source DEFENCE"));
 
 	{
 		var profiles = new String[this.autoSelector.getProfiles().size()];
