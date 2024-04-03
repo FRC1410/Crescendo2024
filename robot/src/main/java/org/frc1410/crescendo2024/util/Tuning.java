@@ -1,13 +1,9 @@
 package org.frc1410.crescendo2024.util;
 
-import static org.frc1410.crescendo2024.util.Constants.*;
+import com.pathplanner.lib.util.PIDConstants;
 
 public interface Tuning {
-
-//    double SWERVE_DRIVE_P = 0.5;
-//	double SWERVE_DRIVE_I = 0;
-//	double SWERVE_DRIVE_D = 0.05;
-
+	// Drivetrai 
 	double SWERVE_DRIVE_P = 0;
 	double SWERVE_DRIVE_I = 0;
 	double SWERVE_DRIVE_D = 0;
@@ -17,6 +13,7 @@ public interface Tuning {
 	double SWERVE_STEERING_I = 0;
 	double SWERVE_STEERING_D = 0;
 
+	// Shooter
 	double SHOOTER_LEFT_P = 0;
 	double SHOOTER_LEFT_I = 0;
 	double SHOOTER_LEFT_D = 0;
@@ -27,17 +24,11 @@ public interface Tuning {
 	double SHOOTER_RIGHT_D = 0;	
 	double SHOOTER_RIGHT_FF = 1;
 
-	double AMP_P = 0;
-	double AMP_I = 0;
-	double AMP_D = 0;
-	double AMP_TOLERANCE = 0;
+	// Auto
+	PIDConstants AUTO_TRANSLATION_CONSTANTS = new PIDConstants(5, 0, 0);
+	PIDConstants AUTO_ROTATION_CONSTANTS = new PIDConstants(4, 0, 0);
 
-	// Auto PID Constants
-	double AUTO_DRIVE_P = 5;
-	double AUTO_DRIVE_I = 0;
-	double AUTO_DRIVE_D = 0;
-
-	double AUTO_TURN_P = 1;
-	double AUTO_TURN_I = 0;
-	double AUTO_TURN_D = 0;
+	// Path following
+	PIDConstants PATH_FOLLOWING_TRANSLATION_CONSTANTS = new PIDConstants(6,0, 0);
+	PIDConstants PATH_FOLLOWING_ROTATION_CONSTANTS = new PIDConstants(2, 0, 0);
 }

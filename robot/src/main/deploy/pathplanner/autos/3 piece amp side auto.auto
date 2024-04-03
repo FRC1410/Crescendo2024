@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.75,
-      "y": 6.68
+      "x": 0.8,
+      "y": 6.65
     },
     "rotation": -120.0
   },
@@ -12,25 +12,19 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "PreloadShoot"
-          }
-        },
-        {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "Amp side sub to A"
+                  "name": "ShootNote"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "RunIntakeLimitSwitch"
+                  "name": "FlipIntake"
                 }
               }
             ]
@@ -43,7 +37,39 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "RunIntake"
+                  "name": "IntakeNote"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Amp side sub to A"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.8
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunShooter"
                 }
               },
               {
@@ -63,19 +89,13 @@
                           {
                             "type": "wait",
                             "data": {
-                              "waitTime": 0.5
+                              "waitTime": 0.3
                             }
                           },
                           {
                             "type": "named",
                             "data": {
-                              "name": "RunIntake"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "RunStorage"
+                              "name": "FireShooter"
                             }
                           }
                         ]
@@ -92,15 +112,28 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "named",
                 "data": {
-                  "pathName": "Amp side sub to 1"
+                  "name": "IntakeNote"
                 }
               },
               {
-                "type": "named",
+                "type": "sequential",
                 "data": {
-                  "name": "RunIntakeLimitSwitch"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "Amp side sub to 1"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.8
+                      }
+                    }
+                  ]
                 }
               }
             ]
@@ -113,7 +146,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ShooterManual"
+                  "name": "RunShooter"
                 }
               },
               {
@@ -133,67 +166,16 @@
                           {
                             "type": "wait",
                             "data": {
-                              "waitTime": 0.5
+                              "waitTime": 0.3
                             }
                           },
                           {
                             "type": "named",
                             "data": {
-                              "name": "RunIntake"
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "RunStorage"
+                              "name": "FireShooter"
                             }
                           }
                         ]
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Amp side sub to 2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunIntakeLimitSwitch"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "ShooterManual"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "2 to amp side sub"
                       }
                     }
                   ]

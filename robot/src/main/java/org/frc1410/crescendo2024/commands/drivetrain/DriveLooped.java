@@ -1,4 +1,4 @@
-package org.frc1410.crescendo2024.commands.drivetrainCommands;
+package org.frc1410.crescendo2024.commands.drivetrain;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -31,28 +31,20 @@ public class DriveLooped extends Command {
 	}
 
 	@Override
-	public void initialize() {}
-
-	@Override
 	public void execute() {
-		var xVelocity = -yAxis.get() * SWERVE_DRIVE_MAX_SPEED;
-		var yVelocity = -xAxis.get() * SWERVE_DRIVE_MAX_SPEED;
-		var rotation = -rotationAxis.get() * SWERVE_DRIVE_MAX_ANGULAR_VELOCITY;
+		var xVelocity = -this.yAxis.get() * SWERVE_DRIVE_MAX_SPEED;
+		var yVelocity = -this.xAxis.get() * SWERVE_DRIVE_MAX_SPEED;
+		var angularVelocity = -this.rotationAxis.get() * SWERVE_DRIVE_MAX_ANGULAR_VELOCITY;
 
-		if (trigger.button().isActive()) {
-			drivetrain.drive(new ChassisSpeeds(-xVelocity, yVelocity, rotation));
+		if (this.trigger.button().isActive()) {
+			this.drivetrain.drive(new ChassisSpeeds(-xVelocity, -yVelocity, angularVelocity));
 		} else {
-			drivetrain.driveFieldRelative(new ChassisSpeeds(xVelocity, yVelocity, rotation));
+			this.drivetrain.driveFieldRelative(new ChassisSpeeds(xVelocity, yVelocity, angularVelocity));
 		}
 	}
 
 	@Override
 	public boolean isFinished() {
 		return false;
-	}
-
-	@Override
-	public void end(boolean interrupted) {
-
 	}
 }
