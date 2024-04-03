@@ -86,6 +86,8 @@ public interface Constants {
 	double MANUAL_STORAGE_RPM = 575;
 	double MANUAL_INTAKE_SPEED = 0.75;
 
+	double APM_SHOOTER_RPM = 450;
+
 	// Timings
 	double SHOOTING_TIME = 0.3;
 
@@ -128,6 +130,8 @@ public interface Constants {
 		new ShootingPosition(new Pose2d(FIELD_LENGTH - 1.12, 6.76, Rotation2d.fromDegrees(-43)), 1850, 575),
 		new ShootingPosition(new Pose2d(FIELD_LENGTH - 1.12, 4.34, Rotation2d.fromDegrees(43)), 1850, 575)
 	);
+
+	Pose2d AMP_SCORING_POSITION = new Pose2d();
 
 	// Camera
 	String CAMERA_NAME = "Arducam_OV9281_USB_Camera";

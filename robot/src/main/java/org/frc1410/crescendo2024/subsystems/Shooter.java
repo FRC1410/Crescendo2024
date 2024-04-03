@@ -9,13 +9,23 @@ import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 import static org.frc1410.crescendo2024.util.IDs.*;
 import static org.frc1410.crescendo2024.util.Tuning.*;
+
+import org.frc1410.crescendo2024.util.NetworkTables;
+import org.frc1410.framework.scheduler.subsystem.TickedSubsystem;
+
 import static org.frc1410.crescendo2024.util.Constants.*;
 
-public class Shooter implements Subsystem {
+public class Shooter implements TickedSubsystem {
+	private final NetworkTable table = NetworkTableInstance.getDefault().getTable("Shooter");
+
+    private final DoublePublisher rpmPub = NetworkTables.PublisherFactory(this.table, "Shooter RPM", 0);
+
 	private final CANSparkMax leftMotor = new CANSparkMax(SHOOTER_LEFT_MOTOR_ID, MotorType.kBrushless);
 	private final CANSparkMax rightMotor = new CANSparkMax(SHOOTER_RIGHT_MOTOR_ID, MotorType.kBrushless);
 
@@ -68,5 +78,10 @@ public class Shooter implements Subsystem {
 		double rightRPM = this.rightEncoder.getVelocity();
 
 		return (leftRPM + rightRPM) / 2;
+	}
+
+	@Override
+	public void periodic() {
+		this.rpmPub.set(this.getRPM());
 	}
 }
