@@ -18,6 +18,8 @@ import org.frc1410.crescendo2024.commands.RunStorage;
 import org.frc1410.crescendo2024.commands.drivetrain.AutoScoreAmp;
 import org.frc1410.crescendo2024.commands.drivetrain.AutoScoreSpeaker;
 import org.frc1410.crescendo2024.commands.drivetrain.DriveLooped;
+import org.frc1410.crescendo2024.commands.drivetrain.FeedForwardCharacterization;
+import org.frc1410.crescendo2024.commands.drivetrain.FeedForwardCharacterization.FeedForwardCharacterizationData;
 import org.frc1410.crescendo2024.commands.intake.FlipIntake;
 import org.frc1410.crescendo2024.commands.intake.IntakeNote;
 import org.frc1410.crescendo2024.commands.intake.OuttakeNote;
@@ -37,7 +39,9 @@ import org.frc1410.crescendo2024.util.NetworkTables;
 import org.frc1410.framework.AutoSelector;
 import org.frc1410.framework.PhaseDrivenRobot;
 import org.frc1410.framework.control.Controller;
+import org.frc1410.framework.scheduler.task.Observer;
 import org.frc1410.framework.scheduler.task.TaskPersistence;
+import org.frc1410.framework.scheduler.task.impl.CommandTask;
 import org.frc1410.framework.scheduler.task.lock.LockPriority;
 
 import static org.frc1410.crescendo2024.util.IDs.*;
@@ -119,12 +123,6 @@ public final class Robot extends PhaseDrivenRobot {
 		var autoCommand = this.autoSelector.select(autoProfile);
 
 		this.scheduler.scheduleAutoCommand(autoCommand);
-
-		// var file = new File(Filesystem.getDeployDirectory(), "Unknown.png");
-
-		// if (!file.exists()) {
-		// 	System.exit(0);
-		// }
 	}
 
 	@Override
@@ -191,7 +189,15 @@ public final class Robot extends PhaseDrivenRobot {
 
 	@Override
 	public void testSequence() {
+		var characterizationCommand = new FeedForwardCharacterization(
+            drivetrain,
+            true,
+            new FeedForwardCharacterizationData("drive"),
+            drivetrain::driveVolts,
+            drivetrain::getAverageModuleDriveVelocity
+		);
 
+		this.scheduler.scheduleDefaultCommand(characterizationCommand, TaskPersistence.EPHEMERAL);
 	}
 
 	@Override

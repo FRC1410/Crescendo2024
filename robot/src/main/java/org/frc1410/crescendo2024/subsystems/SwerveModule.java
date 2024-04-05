@@ -114,6 +114,11 @@ public class SwerveModule implements TickedSubsystem {
 		// this.drivePIDController.
 	}
 
+	public void driveVolts(double volts) {
+		this.desiredState.angle = new Rotation2d();
+		this.driveMotor.setVoltage(volts);
+	}
+
 	public SwerveModuleState getState() {
 		return new SwerveModuleState(
 			this.getDriveVelocityMetersPerSecond(),
@@ -148,7 +153,7 @@ public class SwerveModule implements TickedSubsystem {
 		return Rotation2d.fromRotations(this.steerEncoder.getAbsolutePosition().getValue());
 	}
 
-	private double getDriveVelocityMetersPerSecond() {
+	public double getDriveVelocityMetersPerSecond() {
 		return ((driveMotor.getVelocity().getValue()) * WHEEL_CIRCUMFERENCE) / DRIVE_GEAR_RATIO;
 	}
 

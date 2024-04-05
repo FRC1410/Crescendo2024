@@ -59,6 +59,8 @@ public class Drivetrain implements TickedSubsystem {
     private final DoublePublisher pitch = NetworkTables.PublisherFactory(this.table, "pitch", 0);
     private final DoublePublisher roll = NetworkTables.PublisherFactory(this.table, "roll", 0);
 
+    private final DoublePublisher characterizationVolts = NetworkTables.PublisherFactory(this.table, "characterization volts", 0);
+
     private final StructPublisher<Pose2d> posePublisher = NetworkTableInstance.getDefault()
         .getStructTopic("pose", Pose2d.struct).publish();
 
@@ -193,6 +195,14 @@ public class Drivetrain implements TickedSubsystem {
 		this.drive(robotRelativeChassisSpeeds);
     }
 
+    public void driveVolts(double volts) {
+        this.characterizationVolts.set(volts);
+		frontLeft.driveVolts(volts);
+		frontRight.driveVolts(volts);
+		backLeft.driveVolts(volts);
+		backRight.driveVolts(volts);
+    }
+
     public ChassisSpeeds getChassisSpeeds() {
         return SWERVE_DRIVE_KINEMATICS.toChassisSpeeds(
         	this.frontLeft.getState(),
@@ -221,10 +231,6 @@ public class Drivetrain implements TickedSubsystem {
 
 		this.fieldRelativeOffset = this.getGyroYaw().minus(pose.getRotation());
     }
-
-    // public void zeroYaw() {
-    //     this.resetPose(new Pose2d(this.getEstimatedPosition().getTranslation(), new Rotation2d()));
-    // }
 
     public void setYaw(Rotation2d yaw) {
         this.resetPose(new Pose2d(this.getEstimatedPosition().getTranslation(), yaw));
@@ -279,6 +285,15 @@ public class Drivetrain implements TickedSubsystem {
 	private Rotation2d getGyroYaw() {
 		return Rotation2d.fromDegrees(-this.gyro.getYaw());
 	}
+
+    public double getAverageModuleDriveVelocity() {
+        return (
+            frontLeft.getDriveVelocityMetersPerSecond() +
+            frontRight.getDriveVelocityMetersPerSecond() + 
+            backLeft.getDriveVelocityMetersPerSecond() +
+            backRight.getDriveVelocityMetersPerSecond()
+        ) / 4;
+    }
 
     public void alignWheels() {
         frontLeft.setDesiredState(new SwerveModuleState(0, new Rotation2d()));
