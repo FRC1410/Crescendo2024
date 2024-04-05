@@ -1,7 +1,7 @@
 package org.frc1410.crescendo2024.commands.drivetrain;
 
 import static org.frc1410.crescendo2024.util.Constants.AMP_SCORING_POSITION;
-import static org.frc1410.crescendo2024.util.Constants.APM_SHOOTER_RPM;
+import static org.frc1410.crescendo2024.util.Constants.APM_SHOOTER_SPEED;
 import static org.frc1410.crescendo2024.util.Constants.HOLONOMIC_PATH_FOLLOWING_CONFIG;
 import static org.frc1410.crescendo2024.util.Constants.PATH_FOLLOWING_CONSTRAINTS;
 
@@ -44,7 +44,7 @@ public class AutoScoreAmp extends SequentialCommandGroup {
         this.addCommands(
             new ParallelRaceGroup(
                 followPathCommand,
-                new RunShooter(shooter, APM_SHOOTER_RPM)
+                new RunShooter(shooter, APM_SHOOTER_SPEED)
             ),
             new ParallelRaceGroup(
                 new WaitCommand(2),

@@ -7,7 +7,7 @@ import org.frc1410.framework.control.Controller;
 import edu.wpi.first.wpilibj2.command.Command;
 
 import static org.frc1410.crescendo2024.util.Constants.INTAKE_SPEED;
-import static org.frc1410.crescendo2024.util.Constants.STORAGE_INTAKE_RPM;
+import static org.frc1410.crescendo2024.util.Constants.STORAGE_INTAKE_SPEED;
 
 public class IntakeNote extends Command {
 	private final Intake intake;
@@ -39,7 +39,7 @@ public class IntakeNote extends Command {
 
 		this.intake.setExtended(true);
 		this.intake.setSpeed(INTAKE_SPEED);
-		this.storage.setRPM(STORAGE_INTAKE_RPM);
+		this.storage.setRPM(STORAGE_INTAKE_SPEED);
 	}
 
 	@Override

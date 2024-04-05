@@ -6,7 +6,15 @@ import com.pathplanner.lib.util.ReplanningConfig;
 import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.util.Units;
+import static edu.wpi.first.math.util.Units.degreesToRadians;
+
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Time;
+import edu.wpi.first.units.Velocity;
+
+import static edu.wpi.first.units.Units.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,11 +22,11 @@ import java.util.List;
 import static org.frc1410.crescendo2024.util.Tuning.*;
 
 public interface Constants {
-	// Physical constatns
+	// Physical robot constatns
 	double DRIVE_GEAR_RATIO = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
 
-	double WHEEL_RADIUS = 0.0508;
-	double WHEEL_CIRCUMFERENCE = 2 * Math.PI * WHEEL_RADIUS;
+	Measure<Distance> WHEEL_RADIUS = Inches.of(2);
+	Measure<Distance> WHEEL_CIRCUMFERENCE = WHEEL_RADIUS.times(2 * Math.PI);
 
 	Translation2d FRONT_LEFT_SWERVE_MODULE_LOCATION = new Translation2d(0.2985, 0.2985);
 	Translation2d FRONT_RIGHT_SWERVE_MODULE_LOCATION = new Translation2d(0.2985, -0.2985);
@@ -32,24 +40,25 @@ public interface Constants {
 		BACK_RIGHT_SWERVE_MODULE_LOCATION
 	);
 
+	// TODO: units
 	int INTAKE_BAR_ENCODER_RANGE = 648;
 
-	Transform3d CAMERA_POSE = new Transform3d(new Translation3d(0.3683,0,0.559), new Rotation3d(0, Units.degreesToRadians(-27), 0));
+	Transform3d CAMERA_POSE = new Transform3d(new Translation3d(0.3683,0,0.559), new Rotation3d(0, degreesToRadians(-27), 0));
 
 	// Constraints
-	double DRIVE_MOTOR_FREE_SPEED_RPM = 5676;
-	double DRIVE_MOTOR_FREE_SPEED_RPS = DRIVE_MOTOR_FREE_SPEED_RPM / 60;
-	double DRIVE_WHEEL_FREE_SPEED_METERS_PER_SECOND = ((DRIVE_MOTOR_FREE_SPEED_RPS * WHEEL_CIRCUMFERENCE) / DRIVE_GEAR_RATIO);
+	// double DRIVE_MOTOR_FREE_SPEED_RPM = 5676;
+	// double DRIVE_MOTOR_FREE_SPEED_RPS = DRIVE_MOTOR_FREE_SPEED_RPM / 60;
+	// double DRIVE_WHEEL_FREE_SPEED_METERS_PER_SECOND = ((DRIVE_MOTOR_FREE_SPEED_RPS * WHEEL_CIRCUMFERENCE) / DRIVE_GEAR_RATIO);
 
 	// TODO: new value: 5.5m/s
-	double SWERVE_DRIVE_MAX_SPEED = 4.2;
-	double SWERVE_DRIVE_MAX_ANGULAR_VELOCITY = 10;
+	Measure<Velocity<Distance>> SWERVE_DRIVE_MAX_SPEED = MetersPerSecond.of(4.2);
+	Measure<Velocity<Angle>> SWERVE_DRIVE_MAX_ANGULAR_VELOCITY = DegreesPerSecond.of(570);
 
 	PathConstraints PATH_FOLLOWING_CONSTRAINTS = new PathConstraints(
 		2.2,
 		2.0,
-		Units.degreesToRadians(150), 
-		Units.degreesToRadians(150));
+		degreesToRadians(150), 
+		degreesToRadians(150));
 
 	HolonomicPathFollowerConfig HOLONOMIC_PATH_FOLLOWING_CONFIG = new HolonomicPathFollowerConfig(
 		PATH_FOLLOWING_TRANSLATION_CONSTANTS,
@@ -67,31 +76,31 @@ public interface Constants {
 		new ReplanningConfig()
 	);
 
-	double MAX_SHOOTER_RPM = 5800;
+	Measure<Velocity<Angle>> MAX_SHOOTER_SPEED = RPM.of(5800);
 
 	// Speeds
 	double INTAKE_SPEED = 0.75;
 	double OUTTAKE_SPEED = 0.75;
 
-	double STORAGE_INTAKE_RPM = 300;
-	double STORAGE_OUTTAKE_RPM = 400;
+	Measure<Velocity<Angle>> STORAGE_INTAKE_SPEED = RPM.of(300);
+	Measure<Velocity<Angle>> STORAGE_OUTTAKE_SPEED = RPM.of(400);
 
-	double SHOOTER_OUTTAKE_RPM = 500;
+	Measure<Velocity<Angle>> SHOOTER_OUTTAKE_SPEED = RPM.of(500);
 
 	double INTAKE_BAR_SPEED_DOWN = 0.7;
 	double INTAKE_BAR_SPEED_UP = 1;
 
-	double AUTO_SPEAKER_SHOOTER_RPM = 3300;
-	double AUTO_SPEAKER_STORAGE_RPM = 700;
+	Measure<Velocity<Angle>> AUTO_SPEAKER_SHOOTER_SPEED = RPM.of(3300);
+	Measure<Velocity<Angle>> AUTO_SPEAKER_STORAGE_SPEED = RPM.of(700);
 
-	double MANUAL_SHOOTER_RPM = 2400;
-	double MANUAL_STORAGE_RPM = 575;
+	Measure<Velocity<Angle>> MANUAL_SHOOTER_SPEED = RPM.of(2400);
+	Measure<Velocity<Angle>> MANUAL_STORAGE_SPEED = RPM.of(575);
 	double MANUAL_INTAKE_SPEED = 0.75;
 
-	double APM_SHOOTER_RPM = 450;
+	Measure<Velocity<Angle>> APM_SHOOTER_SPEED = RPM.of(450);
 
 	// Timings
-	double SHOOTING_TIME = 0.3;
+	Measure<Time> SHOOTING_TIME = Second.of(0.3);
 
 	// Offsets / inversions
 	double FRONT_LEFT_STEER_ENCODER_OFFSET = -1.549321;
