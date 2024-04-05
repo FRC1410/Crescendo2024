@@ -16,6 +16,7 @@ public class RunShooter extends Command {
 		this.addRequirements(shooter);
 	}
 
+	// TODO: add back adjustment
 	@Override
 	public void initialize() {
 		this.shooter.setRPM(this.rpm);
