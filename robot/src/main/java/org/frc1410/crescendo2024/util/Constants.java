@@ -45,11 +45,6 @@ public interface Constants {
 
 	Transform3d CAMERA_POSE = new Transform3d(new Translation3d(0.3683,0,0.559), new Rotation3d(0, degreesToRadians(-27), 0));
 
-	// Constraints
-	// double DRIVE_MOTOR_FREE_SPEED_RPM = 5676;
-	// double DRIVE_MOTOR_FREE_SPEED_RPS = DRIVE_MOTOR_FREE_SPEED_RPM / 60;
-	// double DRIVE_WHEEL_FREE_SPEED_METERS_PER_SECOND = ((DRIVE_MOTOR_FREE_SPEED_RPS * WHEEL_CIRCUMFERENCE) / DRIVE_GEAR_RATIO);
-
 	// TODO: new value: 5.5m/s
 	Measure<Velocity<Distance>> SWERVE_DRIVE_MAX_SPEED = MetersPerSecond.of(4.2);
 	Measure<Velocity<Angle>> SWERVE_DRIVE_MAX_ANGULAR_VELOCITY = DegreesPerSecond.of(570);

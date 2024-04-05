@@ -155,10 +155,6 @@ public class SwerveModule implements TickedSubsystem {
 		return Rotation2d.fromRotations(this.steerEncoder.getAbsolutePosition().getValue());
 	}
 
-	// private double getDriveVelocityMetersPerSecond() {
-	// 	return ((driveMotor.getVelocity().getValue()) * WHEEL_CIRCUMFERENCE) / DRIVE_GEAR_RATIO;
-	// }
-
 	private Measure<Velocity<Distance>> getDriveVelocity() {
 		return MetersPerSecond.of(driveMotor.getVelocity().getValue() * WHEEL_CIRCUMFERENCE.in(Meters)).divide(DRIVE_GEAR_RATIO);
 	}
@@ -166,10 +162,6 @@ public class SwerveModule implements TickedSubsystem {
 	private Measure<Distance> getDrivePosition() {
 		return Meters.of(driveMotor.getPosition().getValue() * WHEEL_CIRCUMFERENCE.in(Meters)).divide(DRIVE_GEAR_RATIO);
 	}
-
-	// private static double metersPerSecondToEncoderRPS(double metersPerSecond) {
-	// 	return ((metersPerSecond) / WHEEL_CIRCUMFERENCE) * DRIVE_GEAR_RATIO;
-	// }
 
 	private static Measure<Velocity<Angle>> moduleVelocityToMotorAngularVelocity(Measure<Velocity<Distance>> linearVelocity) {
 		return RotationsPerSecond.of(linearVelocity.in(MetersPerSecond) / WHEEL_CIRCUMFERENCE.in(Meters));
