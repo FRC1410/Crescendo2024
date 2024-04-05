@@ -1,5 +1,6 @@
 package org.frc1410.crescendo2024.util;
 
+import com.pathplanner.lib.util.GeometryUtil;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.ReplanningConfig;
 import com.pathplanner.lib.path.PathConstraints;
@@ -40,6 +41,7 @@ public interface Constants {
 	double DRIVE_MOTOR_FREE_SPEED_RPS = DRIVE_MOTOR_FREE_SPEED_RPM / 60;
 	double DRIVE_WHEEL_FREE_SPEED_METERS_PER_SECOND = ((DRIVE_MOTOR_FREE_SPEED_RPS * WHEEL_CIRCUMFERENCE) / DRIVE_GEAR_RATIO);
 
+	// TODO: new value: 5.5m/s
 	double SWERVE_DRIVE_MAX_SPEED = 4.2;
 	double SWERVE_DRIVE_MAX_ANGULAR_VELOCITY = 10;
 
@@ -131,7 +133,7 @@ public interface Constants {
 		new ShootingPosition(new Pose2d(FIELD_LENGTH - 1.12, 4.34, Rotation2d.fromDegrees(43)), 1850, 575)
 	);
 
-	Pose2d AMP_SCORING_POSITION = new Pose2d();
+	Pose2d AMP_SCORING_POSITION = GeometryUtil.flipFieldPose(new Pose2d(1.83, 7.82, Rotation2d.fromDegrees(90)));
 
 	// Camera
 	String CAMERA_NAME = "Arducam_OV9281_USB_Camera";

@@ -18,12 +18,12 @@ public class RunShooter extends Command {
 
 	@Override
 	public void initialize() {
-		this.shooter.setRPM(this.rpm + this.shooter.rpmAdjustment);
+		this.shooter.setRPM(this.rpm);
 	}
 
 	@Override
 	public void execute() {
-		this.shooter.setRPM(this.rpm + this.shooter.rpmAdjustment);
+		this.shooter.setRPM(this.rpm);
 	}
 
 	@Override

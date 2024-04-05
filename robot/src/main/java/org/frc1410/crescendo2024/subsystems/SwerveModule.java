@@ -1,8 +1,14 @@
 package org.frc1410.crescendo2024.subsystems;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
@@ -22,13 +28,10 @@ import static org.frc1410.crescendo2024.util.Tuning.*;
 import org.frc1410.framework.scheduler.subsystem.TickedSubsystem;
 
 public class SwerveModule implements TickedSubsystem {
-	private final CANSparkMax driveMotor;
+	private final TalonFX driveMotor;
 	private final CANSparkMax steerMotor;
 
-	private final RelativeEncoder driveEncoder;
 	private final CANcoder steerEncoder;
-
-	private final SparkPIDController drivePIDController;
 
 	private final PIDController steeringPIDController = new PIDController(
 		SWERVE_STEERING_P,
@@ -56,11 +59,22 @@ public class SwerveModule implements TickedSubsystem {
 		DoublePublisher actualVel, 
 		DoublePublisher actualAngle
 	) {
-		this.driveMotor = new CANSparkMax(driveMotorID, MotorType.kBrushless);
-		this.driveMotor.restoreFactoryDefaults();
-		this.driveMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
-		this.driveMotor.setInverted(driveMotorInverted);
-		this.driveMotor.setSmartCurrentLimit(40);
+		this.driveMotor = new TalonFX(driveMotorID);
+
+		var driveMotorConfig = new TalonFXConfiguration();
+
+		// TODO
+        driveMotorConfig.Slot0.kS = 0;
+        driveMotorConfig.Slot0.kV = 0.0192;
+
+        driveMotorConfig.Slot0.kP = SWERVE_DRIVE_P;
+        driveMotorConfig.Slot0.kI = SWERVE_DRIVE_I;
+        driveMotorConfig.Slot0.kD = SWERVE_DRIVE_D;
+
+		driveMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+		driveMotorConfig.MotorOutput.Inverted = driveMotorInverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
+
+		this.driveMotor.getConfigurator().apply(driveMotorConfig);
 
 		this.steerMotor = new CANSparkMax(steeringMotorID, MotorType.kBrushless);
 		this.steerMotor.restoreFactoryDefaults();
@@ -68,23 +82,14 @@ public class SwerveModule implements TickedSubsystem {
 		this.steerMotor.setInverted(steerMotorInverted);
 		this.steerMotor.setSmartCurrentLimit(30);
 
-		this.driveEncoder = this.driveMotor.getEncoder();
-
-		drivePIDController = this.driveMotor.getPIDController();
-
-		drivePIDController.setP(SWERVE_DRIVE_P);
-		drivePIDController.setI(SWERVE_DRIVE_I);
-		drivePIDController.setD(SWERVE_DRIVE_D);
-		drivePIDController.setFF(SWERVE_DRIVE_FF);
-
 		this.steerEncoder = new CANcoder(steeringEncoderID);
 		var configurator = this.steerEncoder.getConfigurator();
 
-		var config = new CANcoderConfiguration();
-		config.MagnetSensor.MagnetOffset = -Rotation2d.fromRadians(offset).getRotations();
+		var steerEncoderConfig = new CANcoderConfiguration();
+		steerEncoderConfig.MagnetSensor.MagnetOffset = -Rotation2d.fromRadians(offset).getRotations();
 
-		config.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
-		configurator.apply(config);
+		steerEncoderConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+		configurator.apply(steerEncoderConfig);
 
 		this.steeringPIDController.enableContinuousInput(-Math.PI, Math.PI);
 
@@ -103,7 +108,14 @@ public class SwerveModule implements TickedSubsystem {
 
 		this.desiredState = optimized;
 
-		this.drivePIDController.setReference(SwerveModule.metersPerSecondToEncoderRPM(optimized.speedMetersPerSecond), CANSparkBase.ControlType.kVelocity);
+		// this.drivePIDController.setReference(SwerveModule.metersPerSecondToEncoderRPM(optimized.speedMetersPerSecond), CANSparkBase.ControlType.kVelocity);
+
+		var request = new VelocityVoltage(SwerveModule.metersPerSecondToEncoderRPS(optimized.speedMetersPerSecond));
+
+		this.driveMotor.setControl(request);
+
+
+		// this.drivePIDController.
 	}
 
 	public SwerveModuleState getState() {
@@ -141,14 +153,14 @@ public class SwerveModule implements TickedSubsystem {
 	}
 
 	private double getDriveVelocityMetersPerSecond() {
-		return ((driveEncoder.getVelocity() / 60) * WHEEL_CIRCUMFERENCE) / DRIVE_GEAR_RATIO;
+		return ((driveMotor.getVelocity().getValue()) * WHEEL_CIRCUMFERENCE) / DRIVE_GEAR_RATIO;
 	}
 
 	private double getDrivePositionMeters() {
-		return (driveEncoder.getPosition() * WHEEL_CIRCUMFERENCE) / DRIVE_GEAR_RATIO;
+		return (driveMotor.getPosition().getValue() * WHEEL_CIRCUMFERENCE) / DRIVE_GEAR_RATIO;
 	}
 
-	private static double metersPerSecondToEncoderRPM(double metersPerSecond) {
-		return ((metersPerSecond * 60) / WHEEL_CIRCUMFERENCE) * DRIVE_GEAR_RATIO;
+	private static double metersPerSecondToEncoderRPS(double metersPerSecond) {
+		return ((metersPerSecond) / WHEEL_CIRCUMFERENCE) * DRIVE_GEAR_RATIO;
 	}
 }

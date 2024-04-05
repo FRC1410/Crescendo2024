@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import org.frc1410.crescendo2024.commands.ClimbLooped;
 import org.frc1410.crescendo2024.commands.RunStorage;
+import org.frc1410.crescendo2024.commands.drivetrain.AutoScoreAmp;
 import org.frc1410.crescendo2024.commands.drivetrain.AutoScoreSpeaker;
 import org.frc1410.crescendo2024.commands.drivetrain.DriveLooped;
 import org.frc1410.crescendo2024.commands.intake.FlipIntake;
@@ -160,8 +161,9 @@ public final class Robot extends PhaseDrivenRobot {
 		this.driverController.LEFT_BUMPER.whileHeld(new FireShooter(this.storage, this.intake), TaskPersistence.GAMEPLAY);
 
 		this.operatorController.RIGHT_BUMPER.whileHeld(new RunStorage(this.storage, MANUAL_STORAGE_RPM), TaskPersistence.GAMEPLAY);
-		this.operatorController.Y.whileHeld(new RunShooter(this.shooter, APM_SHOOTER_RPM), TaskPersistence.GAMEPLAY);
-		this.operatorController.LEFT_BUMPER.whileHeld(new RunShooter(this.shooter, MANUAL_SHOOTER_RPM), TaskPersistence.GAMEPLAY);
+		this.operatorController.LEFT_BUMPER.whileHeld(new RunShooter(this.shooter, APM_SHOOTER_RPM), TaskPersistence.GAMEPLAY);
+		this.operatorController.Y.whileHeld(new AutoScoreAmp(drivetrain, shooter, storage, intake), TaskPersistence.GAMEPLAY);
+		// this.operatorController.LEFT_BUMPER.whileHeld(new RunShooter(this.shooter, MANUAL_SHOOTER_RPM), TaskPersistence.GAMEPLAY);
 
 		this.operatorController.LEFT_TRIGGER.button().whileHeld(new OuttakeNote(this.intake, this.storage, this.shooter), TaskPersistence.GAMEPLAY);
 
