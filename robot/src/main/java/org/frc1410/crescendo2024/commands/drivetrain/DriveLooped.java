@@ -17,7 +17,7 @@ public class DriveLooped extends Command {
 
 	private final Axis rotationAxis;
 
-	private final Axis trigger;
+	private final Axis robotRelativeTrigger;
 	
 	public DriveLooped(Drivetrain drivetrain, Axis xAxis, Axis yAxis, Axis rotationAxis, Axis trigger) {
 		this.drivetrain = drivetrain;
@@ -25,19 +25,20 @@ public class DriveLooped extends Command {
 		this.xAxis = xAxis;
 		this.yAxis = yAxis;
 		this.rotationAxis = rotationAxis;
-		this.trigger = trigger;
+		this.robotRelativeTrigger = trigger;
 
 		this.addRequirements(drivetrain);
 	}
 
 	@Override
 	public void execute() {
-		var xVelocity = -this.yAxis.get() * SWERVE_DRIVE_MAX_SPEED;
-		var yVelocity = -this.xAxis.get() * SWERVE_DRIVE_MAX_SPEED;
-		var angularVelocity = -this.rotationAxis.get() * SWERVE_DRIVE_MAX_ANGULAR_VELOCITY;
+		// TODO: these shouldn't be flipped here
+		var xVelocity = SWERVE_DRIVE_MAX_SPEED.times(this.yAxis.get()).negate();
+		var yVelocity = SWERVE_DRIVE_MAX_SPEED.times(this.xAxis.get()).negate();
+		var angularVelocity = SWERVE_DRIVE_MAX_ANGULAR_VELOCITY.times(this.rotationAxis.get()).negate();
 
-		if (this.trigger.button().isActive()) {
-			this.drivetrain.drive(new ChassisSpeeds(-xVelocity, -yVelocity, angularVelocity));
+		if (this.robotRelativeTrigger.button().isActive()) {
+			this.drivetrain.drive(new ChassisSpeeds(xVelocity.negate(), yVelocity.negate(), angularVelocity));
 		} else {
 			this.drivetrain.driveFieldRelative(new ChassisSpeeds(xVelocity, yVelocity, angularVelocity));
 		}

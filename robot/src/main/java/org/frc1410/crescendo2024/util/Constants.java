@@ -41,7 +41,7 @@ public interface Constants {
 	);
 
 	// TODO: units
-	int INTAKE_BAR_ENCODER_RANGE = 648;
+	Measure<Angle> INTAKE_BAR_ENCODER_RANGE = Degrees.of(114);
 
 	Transform3d CAMERA_POSE = new Transform3d(new Translation3d(0.3683,0,0.559), new Rotation3d(0, degreesToRadians(-27), 0));
 
@@ -76,37 +76,37 @@ public interface Constants {
 		new ReplanningConfig()
 	);
 
-	Measure<Velocity<Angle>> MAX_SHOOTER_SPEED = RPM.of(5800);
+	Measure<Velocity<Angle>> MAX_SHOOTER_VELOCITY = RPM.of(5800);
 
 	// Speeds
 	double INTAKE_SPEED = 0.75;
 	double OUTTAKE_SPEED = 0.75;
 
-	Measure<Velocity<Angle>> STORAGE_INTAKE_SPEED = RPM.of(300);
-	Measure<Velocity<Angle>> STORAGE_OUTTAKE_SPEED = RPM.of(400);
+	Measure<Velocity<Angle>> STORAGE_INTAKE_VELOCITY = RPM.of(300);
+	Measure<Velocity<Angle>> STORAGE_OUTTAKE_VELOCITY = RPM.of(400);
 
-	Measure<Velocity<Angle>> SHOOTER_OUTTAKE_SPEED = RPM.of(500);
+	Measure<Velocity<Angle>> SHOOTER_OUTTAKE_VELOCITY = RPM.of(500);
 
 	double INTAKE_BAR_SPEED_DOWN = 0.7;
 	double INTAKE_BAR_SPEED_UP = 1;
 
-	Measure<Velocity<Angle>> AUTO_SPEAKER_SHOOTER_SPEED = RPM.of(3300);
-	Measure<Velocity<Angle>> AUTO_SPEAKER_STORAGE_SPEED = RPM.of(700);
+	Measure<Velocity<Angle>> AUTO_SPEAKER_SHOOTER_VELOCITY = RPM.of(3300);
+	Measure<Velocity<Angle>> AUTO_SPEAKER_STORAGE_VELOCITY = RPM.of(700);
 
-	Measure<Velocity<Angle>> MANUAL_SHOOTER_SPEED = RPM.of(2400);
-	Measure<Velocity<Angle>> MANUAL_STORAGE_SPEED = RPM.of(575);
+	Measure<Velocity<Angle>> MANUAL_SHOOTER_VELOCITY = RPM.of(2400);
+	Measure<Velocity<Angle>> MANUAL_STORAGE_VELOCITY = RPM.of(575);
 	double MANUAL_INTAKE_SPEED = 0.75;
 
-	Measure<Velocity<Angle>> APM_SHOOTER_SPEED = RPM.of(450);
+	Measure<Velocity<Angle>> APM_SHOOTER_VELOCITY = RPM.of(450);
 
 	// Timings
-	Measure<Time> SHOOTING_TIME = Second.of(0.3);
+	Measure<Time> SHOOTING_TIME = Seconds.of(0.3);
 
 	// Offsets / inversions
-	double FRONT_LEFT_STEER_ENCODER_OFFSET = -1.549321;
-	double FRONT_RIGHT_STEER_ENCODER_OFFSET = -0.207087;
-	double BACK_LEFT_STEER_ENCODER_OFFSET = 0.520019;
-	double BACK_RIGHT_STEER_ENCODER_OFFSET = 1.869923;
+	Measure<Angle> FRONT_LEFT_STEER_ENCODER_OFFSET = Degrees.of(0);
+	Measure<Angle> FRONT_RIGHT_STEER_ENCODER_OFFSET = Degrees.of(0);
+	Measure<Angle> BACK_LEFT_STEER_ENCODER_OFFSET = Degrees.of(0);
+	Measure<Angle> BACK_RIGHT_STEER_ENCODER_OFFSET = Degrees.of(0);
 
 	boolean FRONT_LEFT_DRIVE_MOTOR_INVERTED = true;
 	boolean FRONT_LEFT_STEER_MOTOR_INVERTED = true;
@@ -130,19 +130,29 @@ public interface Constants {
 	boolean SHOOTER_RIGHT_MOTOR_INVERTED = true;
 
 	// Field
-	double FIELD_LENGTH = 16.54;
-
 	List<ShootingPosition> SHOOTING_POSITIONS_BLUE = Arrays.asList(
-		new ShootingPosition(new Pose2d(1.12, 6.76, Rotation2d.fromDegrees(-133)), 1850, 575),
-		new ShootingPosition(new Pose2d(1.12, 4.34, Rotation2d.fromDegrees(137)), 1850, 575)
+		new ShootingPosition(new Pose2d(1.12, 6.76, Rotation2d.fromDegrees(-133)), RPM.of(1850), RPM.of(575)),
+		new ShootingPosition(new Pose2d(1.12, 4.34, Rotation2d.fromDegrees(137)), RPM.of(1850), RPM.of(575))
 	);
 
-	List<ShootingPosition> SHOOTING_POSITIONS_RED = Arrays.asList(
-		new ShootingPosition(new Pose2d(FIELD_LENGTH - 1.12, 6.76, Rotation2d.fromDegrees(-43)), 1850, 575),
-		new ShootingPosition(new Pose2d(FIELD_LENGTH - 1.12, 4.34, Rotation2d.fromDegrees(43)), 1850, 575)
-	);
+	// List<ShootingPosition> SHOOTING_POSITIONS_RED = Arrays.asList(
+	// 	new ShootingPosition(new Pose2d(FIELD_LENGTH - 1.12, 6.76, Rotation2d.fromDegrees(-43)), 1850, 575),
+	// 	new ShootingPosition(new Pose2d(FIELD_LENGTH - 1.12, 4.34, Rotation2d.fromDegrees(43)), 1850, 575)
+	// );
 
-	Pose2d AMP_SCORING_POSITION = GeometryUtil.flipFieldPose(new Pose2d(1.83, 7.82, Rotation2d.fromDegrees(90)));
+	List<ShootingPosition> SHOOTING_POSITIONS_RED = SHOOTING_POSITIONS_BLUE
+		.stream()
+		.map((position) ->
+			new ShootingPosition(
+				GeometryUtil.flipFieldPose(position.pose), 
+				position.shooterVelocity, 
+				position.storageVelocity
+			)
+		)
+		.toList();
+
+	Pose2d AMP_SCORING_POSITION_BLUE = new Pose2d(1.83, 7.82, Rotation2d.fromDegrees(90));
+	Pose2d AMP_SCORING_POSITION_RED = GeometryUtil.flipFieldPose(AMP_SCORING_POSITION_BLUE);
 
 	// Camera
 	String CAMERA_NAME = "Arducam_OV9281_USB_Camera";
@@ -152,8 +162,8 @@ public interface Constants {
 	int NUM_LEDS = 28;
 
 	// Shooter
-	double STARTING_SHOOTER_RPM_ADJUSTMENT = 300;
-	double SHOOTER_RPM_ADJUSTMENT_MAGNITUDE = 150;
+	Measure<Velocity<Angle>> STARTING_SHOOTER_VELOCITY_ADJUSTMENT = RPM.of(300);
+	Measure<Velocity<Angle>> SHOOTER_VELOCITY_ADJUSTMENT_MAGNITUDE = RPM.of(150);
 
 	// Feedforward
 	double DRIVE_MOTOR_KS = 0.45245;
