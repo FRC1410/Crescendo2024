@@ -15,7 +15,7 @@ import static org.frc1410.crescendo2024.util.Tuning.*;
 
 public interface Constants {
 	// Physical constatns
-	double DRIVE_GEAR_RATIO = (50.0 / 14.0) * (17.0 / 27.0) * (45.0 / 15.0);
+	double DRIVE_GEAR_RATIO = (50.0 / 16.0) * (17.0 / 27.0) * (45.0 / 15.0);
 
 	double WHEEL_RADIUS = 0.0508;
 	double WHEEL_CIRCUMFERENCE = 2 * Math.PI * WHEEL_RADIUS;
@@ -42,7 +42,7 @@ public interface Constants {
 	double DRIVE_WHEEL_FREE_SPEED_METERS_PER_SECOND = ((DRIVE_MOTOR_FREE_SPEED_RPS * WHEEL_CIRCUMFERENCE) / DRIVE_GEAR_RATIO);
 
 	// TODO: new value: 5.5m/s
-	double SWERVE_DRIVE_MAX_SPEED = 4.2;
+	double SWERVE_DRIVE_MAX_SPEED = 5;
 	double SWERVE_DRIVE_MAX_ANGULAR_VELOCITY = 10;
 
 	PathConstraints PATH_FOLLOWING_CONSTRAINTS = new PathConstraints(
@@ -84,7 +84,7 @@ public interface Constants {
 	double AUTO_SPEAKER_SHOOTER_RPM = 3300;
 	double AUTO_SPEAKER_STORAGE_RPM = 700;
 
-	double MANUAL_SHOOTER_RPM = 2400;
+	double MANUAL_SHOOTER_RPM = 2400; 
 	double MANUAL_STORAGE_RPM = 575;
 	double MANUAL_INTAKE_SPEED = 0.75;
 
@@ -94,18 +94,19 @@ public interface Constants {
 	double SHOOTING_TIME = 0.3;
 
 	// Offsets / inversions
-	double FRONT_LEFT_STEER_ENCODER_OFFSET = -1.549321;
-	double FRONT_RIGHT_STEER_ENCODER_OFFSET = -0.207087;
-	double BACK_LEFT_STEER_ENCODER_OFFSET = 0.520019;
-	double BACK_RIGHT_STEER_ENCODER_OFFSET = 1.869923;
+	double FRONT_LEFT_STEER_ENCODER_OFFSET = -12.041016 + 90;
+	double FRONT_RIGHT_STEER_ENCODER_OFFSET = 88.154297 - 90;
+	double BACK_LEFT_STEER_ENCODER_OFFSET = 116.279297 - 90;
+	double BACK_RIGHT_STEER_ENCODER_OFFSET = 18.984375 + 90;
 
-	boolean FRONT_LEFT_DRIVE_MOTOR_INVERTED = true;
-	boolean FRONT_LEFT_STEER_MOTOR_INVERTED = true;
+	boolean FRONT_LEFT_DRIVE_MOTOR_INVERTED = false;
 	boolean FRONT_RIGHT_DRIVE_MOTOR_INVERTED = true;
-	boolean FRONT_RIGHT_STEER_MOTOR_INVERTED = true;
 	boolean BACK_LEFT_DRIVE_MOTOR_INVERTED = false;
-	boolean BACK_LEFT_STEER_MOTOR_INVERTED = false;
 	boolean BACK_RIGHT_DRIVE_MOTOR_INVERTED = true;
+
+	boolean FRONT_LEFT_STEER_MOTOR_INVERTED = true;
+	boolean FRONT_RIGHT_STEER_MOTOR_INVERTED = true;
+	boolean BACK_LEFT_STEER_MOTOR_INVERTED = false;
 	boolean BACK_RIGHT_STEER_MOTOR_INVERTED = true;
 
 	boolean STORAGE_LEFT_MOTOR_INVERTED = false;

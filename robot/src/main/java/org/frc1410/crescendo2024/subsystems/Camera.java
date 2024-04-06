@@ -1,8 +1,12 @@
 package org.frc1410.crescendo2024.subsystems;
 
+import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Quaternion;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -12,6 +16,7 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import static org.frc1410.crescendo2024.util.Constants.*;
@@ -27,7 +32,7 @@ public class Camera implements Subsystem {
 	public Camera() {
 		AprilTagFieldLayout layout;
 
-		// layout = new AprilTagFieldLayout(List.of(new AprilTag(10, new Pose3d(1.8415, 8.2042, 1.355852, new Rotation3d(new Quaternion(-0.7071067811865475, 0, 0, 0.7071067811865476))))), 16.541, 8.211);
+		// layout = new AprilTagFieldLayout(List.of(new AprilTag(4, new Pose3d(16.579342,  5.547867999999999, 1.4511020000000001, new Rotation3d(new Quaternion(6.123233995736766e-17, 0, 0, 1))))), 16.541, 8.211);
 
 		try {
 			layout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
@@ -49,6 +54,7 @@ public class Camera implements Subsystem {
 			var pose = this.photonPoseEstimator.update();
 
 			if (pose.isPresent()) {
+				System.out.println("Pose is present");
 				this.visionOnlyPosePublisher.set(pose.get().estimatedPose.toPose2d());
 			} else {
 				this.visionOnlyPosePublisher.set(null);

@@ -14,7 +14,7 @@ import org.frc1410.crescendo2024.util.PolynomialRegression;
 public class FeedForwardCharacterization extends Command {
     private static final double startDelaySecs = 2.0;
     private static final double rampRateVoltsPerSec = 1;
-    private static final double maxVolts = 5;
+    private static final double maxVolts = 6.5;
 
     private final boolean forwards;
     private final boolean isDrive;

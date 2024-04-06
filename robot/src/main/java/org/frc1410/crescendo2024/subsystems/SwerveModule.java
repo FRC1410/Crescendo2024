@@ -60,12 +60,15 @@ public class SwerveModule implements TickedSubsystem {
 		var driveMotorConfig = new TalonFXConfiguration();
 
 		// TODO
-        driveMotorConfig.Slot0.kS = 0;
-        driveMotorConfig.Slot0.kV = 0.0192;
+        driveMotorConfig.Slot0.kS = 0.31720;
+        driveMotorConfig.Slot0.kV = 0.12280;
 
         driveMotorConfig.Slot0.kP = SWERVE_DRIVE_P;
         driveMotorConfig.Slot0.kI = SWERVE_DRIVE_I;
         driveMotorConfig.Slot0.kD = SWERVE_DRIVE_D;
+
+		driveMotorConfig.CurrentLimits.SupplyCurrentLimit = 40;
+		driveMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 
 		driveMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 		driveMotorConfig.MotorOutput.Inverted = driveMotorInverted ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
@@ -82,7 +85,7 @@ public class SwerveModule implements TickedSubsystem {
 		var configurator = this.steerEncoder.getConfigurator();
 
 		var steerEncoderConfig = new CANcoderConfiguration();
-		steerEncoderConfig.MagnetSensor.MagnetOffset = -Rotation2d.fromRadians(offset).getRotations();
+		steerEncoderConfig.MagnetSensor.MagnetOffset = -Rotation2d.fromDegrees(offset).getRotations();
 
 		steerEncoderConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
 		configurator.apply(steerEncoderConfig);
@@ -104,14 +107,12 @@ public class SwerveModule implements TickedSubsystem {
 
 		this.desiredState = optimized;
 
-		// this.drivePIDController.setReference(SwerveModule.metersPerSecondToEncoderRPM(optimized.speedMetersPerSecond), CANSparkBase.ControlType.kVelocity);
-
-		var request = new VelocityVoltage(SwerveModule.metersPerSecondToEncoderRPS(optimized.speedMetersPerSecond));
+		var request = new VelocityVoltage(
+			SwerveModule.metersPerSecondToEncoderRPS(optimized.speedMetersPerSecond)
+		)
+		.withEnableFOC(true);
 
 		this.driveMotor.setControl(request);
-
-
-		// this.drivePIDController.
 	}
 
 	public void driveVolts(double volts) {
@@ -145,12 +146,16 @@ public class SwerveModule implements TickedSubsystem {
 		this.desiredVel.set(this.desiredState.speedMetersPerSecond);
 		this.actualVel.set(this.getDriveVelocityMetersPerSecond());
 		
-		this.desiredAngle.set(this.desiredState.angle.getRadians());
-		this.actualAngle.set(this.getSteerPosition().getRadians());
+		this.desiredAngle.set(this.desiredState.angle.getDegrees());
+		this.actualAngle.set(this.getSteerPosition().getDegrees());
 	}
 
 	private Rotation2d getSteerPosition() {
 		return Rotation2d.fromRotations(this.steerEncoder.getAbsolutePosition().getValue());
+	}
+
+	public double a() {
+		return driveMotor.getVelocity().getValue();
 	}
 
 	public double getDriveVelocityMetersPerSecond() {

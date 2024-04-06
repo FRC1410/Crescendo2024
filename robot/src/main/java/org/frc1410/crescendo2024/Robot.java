@@ -80,6 +80,7 @@ public final class Robot extends PhaseDrivenRobot {
 	private final NetworkTable table = this.nt.getTable("Auto");
 
 	private final AutoSelector autoSelector = new AutoSelector()
+	.add("4", () -> new PathPlannerAuto("4 piece mid sub"))
 		.add("0", () -> new InstantCommand())
 		.add("1", () -> new ShootNote(
 			this.drivetrain, 
@@ -96,7 +97,6 @@ public final class Robot extends PhaseDrivenRobot {
 		.add("3", () -> new PathPlannerAuto("3 piece mid sub"))
 		.add("3 amp",() -> new PathPlannerAuto("3 piece amp side auto"))
 		.add("3 source", () -> new PathPlannerAuto("3 piece source side auto"))
-		.add("4", () -> new PathPlannerAuto("4 piece mid sub"))
 		.add("5", () -> new PathPlannerAuto("5 piece mid sub"));
 
 	{
@@ -123,6 +123,16 @@ public final class Robot extends PhaseDrivenRobot {
 		var autoCommand = this.autoSelector.select(autoProfile);
 
 		this.scheduler.scheduleAutoCommand(autoCommand);
+
+		// var characterizationCommand = new FeedForwardCharacterization(
+        //     drivetrain,
+        //     true,
+        //     new FeedForwardCharacterizationData("drive"),
+        //     drivetrain::driveVolts,
+        //     drivetrain::getAverageModuleDriveVelocity
+		// );
+
+		// this.scheduler.scheduleAutoCommand(characterizationCommand);
 	}
 
 	@Override

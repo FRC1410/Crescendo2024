@@ -50,7 +50,8 @@ public class Intake implements TickedSubsystem {
 	}
 
 	public void setExtended(boolean isExtended) {
-		this.isExtended = isExtended;
+		// this.isExtended = isExtended;
+		this.isExtended = false;
 	}
 
 	public void extend(double speed) {

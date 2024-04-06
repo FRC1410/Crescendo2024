@@ -243,10 +243,10 @@ public class Drivetrain implements TickedSubsystem {
             this.getSwerveModulePositions()
         );
 
-        this.encoderOnlyPoseEstimator.update(
-            this.getGyroYaw(), 
-            this.getSwerveModulePositions()
-        );
+        // this.encoderOnlyPoseEstimator.update(
+        //     this.getGyroYaw(), 
+        //     this.getSwerveModulePositions()
+        // );
 
 		var estimatedPose = this.camera.getEstimatedPose();
 
@@ -256,8 +256,11 @@ public class Drivetrain implements TickedSubsystem {
             // var b = estimatedPose.get().targetsUsed.stream().filter((elm) -> List.of(7, 8, 3, 4).contains(elm.getFiducialId())).count() >= 1;
 
 		 	if((resultTimestamp != this.previousPipelineTimestamp)) {
+                
 				this.previousPipelineTimestamp = resultTimestamp;
+                System.out.println(estimatedPose.get().estimatedPose.toPose2d());
 				this.poseEstimator.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), resultTimestamp);
+                System.out.println(this.getEstimatedPosition());
 		 	}
 		}
 
@@ -288,10 +291,10 @@ public class Drivetrain implements TickedSubsystem {
 
     public double getAverageModuleDriveVelocity() {
         return (
-            frontLeft.getDriveVelocityMetersPerSecond() +
-            frontRight.getDriveVelocityMetersPerSecond() + 
-            backLeft.getDriveVelocityMetersPerSecond() +
-            backRight.getDriveVelocityMetersPerSecond()
+            frontLeft.a() +
+            frontRight.a() + 
+            backLeft.a() +
+            backRight.a()
         ) / 4;
     }
 
