@@ -25,8 +25,9 @@ public interface Tuning {
 	double SHOOTER_RIGHT_FF = 1;
 
 	// Auto
-	PIDConstants AUTO_TRANSLATION_CONSTANTS = new PIDConstants(5, 0, 0);
-	PIDConstants AUTO_ROTATION_CONSTANTS = new PIDConstants(4, 0, 0);
+	// TODO: old 5, 4
+	PIDConstants AUTO_TRANSLATION_CONSTANTS = new PIDConstants(6.5, 0, 0);
+	PIDConstants AUTO_ROTATION_CONSTANTS = new PIDConstants(4.5, 0, 0);
 
 	// Path following
 	PIDConstants PATH_FOLLOWING_TRANSLATION_CONSTANTS = new PIDConstants(6,0, 0);

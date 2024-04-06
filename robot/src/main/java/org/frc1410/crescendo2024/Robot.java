@@ -80,7 +80,7 @@ public final class Robot extends PhaseDrivenRobot {
 	private final NetworkTable table = this.nt.getTable("Auto");
 
 	private final AutoSelector autoSelector = new AutoSelector()
-	.add("4", () -> new PathPlannerAuto("4 piece mid sub"))
+		.add("4", () -> new PathPlannerAuto("4 piece mid sub"))
 		.add("0", () -> new InstantCommand())
 		.add("1", () -> new ShootNote(
 			this.drivetrain, 

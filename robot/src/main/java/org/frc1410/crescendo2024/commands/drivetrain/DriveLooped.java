@@ -32,9 +32,15 @@ public class DriveLooped extends Command {
 
 	@Override
 	public void execute() {
+//		var xVelocity = (Math.pow(-this.yAxis.get(), 2) * -this.yAxis.get()) * SWERVE_DRIVE_MAX_SPEED;
+//		var yVelocity = (Math.pow(-this.xAxis.get(), 2) * -this.xAxis.get()) * SWERVE_DRIVE_MAX_SPEED;
+//		var angularVelocity = (Math.pow(-this.rotationAxis.get(), 2) * -this.rotationAxis.get()) * SWERVE_DRIVE_MAX_ANGULAR_VELOCITY;
+
 		var xVelocity = -this.yAxis.get() * SWERVE_DRIVE_MAX_SPEED;
 		var yVelocity = -this.xAxis.get() * SWERVE_DRIVE_MAX_SPEED;
 		var angularVelocity = -this.rotationAxis.get() * SWERVE_DRIVE_MAX_ANGULAR_VELOCITY;
+
+
 
 		if (this.trigger.button().isActive()) {
 			this.drivetrain.drive(new ChassisSpeeds(-xVelocity, -yVelocity, angularVelocity));

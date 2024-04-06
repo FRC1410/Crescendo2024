@@ -258,9 +258,9 @@ public class Drivetrain implements TickedSubsystem {
 		 	if((resultTimestamp != this.previousPipelineTimestamp)) {
                 
 				this.previousPipelineTimestamp = resultTimestamp;
-                System.out.println(estimatedPose.get().estimatedPose.toPose2d());
+                System.out.println("Encoder: " + estimatedPose.get().estimatedPose.toPose2d());
 				this.poseEstimator.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), resultTimestamp);
-                System.out.println(this.getEstimatedPosition());
+                System.out.println("Vision: " + this.getEstimatedPosition());
 		 	}
 		}
 
