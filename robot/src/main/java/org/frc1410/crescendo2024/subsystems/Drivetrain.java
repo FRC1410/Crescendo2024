@@ -278,34 +278,36 @@ public class Drivetrain implements TickedSubsystem {
     }
 
     private boolean validateVisionPose(EstimatedRobotPose pose) {
-		var minAmbiguity = pose
-			.targetsUsed
-			.stream()
-			.mapToDouble((target) ->
-				target.getPoseAmbiguity()
-			)
-			.min();
+        return true;
+        
+		// var minAmbiguity = pose
+		// 	.targetsUsed
+		// 	.stream()
+		// 	.mapToDouble((target) ->
+		// 		target.getPoseAmbiguity()
+		// 	)
+		// 	.min();
 
-        var estimatedPosition = this.getEstimatedPosition();
+        // var estimatedPosition = this.getEstimatedPosition();
 
-		var minDistance = pose
-			.targetsUsed
-			.stream()
-			.mapToDouble((target) ->
-                APRIL_TAG_FIELD_LAYOUT
-                    .getTagPose(target.getFiducialId())
-                    .get()
-                    .getTranslation()
-                    .toTranslation2d()
-                    .getDistance(estimatedPosition.getTranslation())
-			)
-			.min();
+		// var minDistance = pose
+		// 	.targetsUsed
+		// 	.stream()
+		// 	.mapToDouble((target) ->
+        //         APRIL_TAG_FIELD_LAYOUT
+        //             .getTagPose(target.getFiducialId())
+        //             .get()
+        //             .getTranslation()
+        //             .toTranslation2d()
+        //             .getDistance(estimatedPosition.getTranslation())
+		// 	)
+		// 	.min();
 
-		if (minAmbiguity.isEmpty() || minDistance.isEmpty()) {
-			return false;
-		}
+		// if (minAmbiguity.isEmpty() || minDistance.isEmpty()) {
+		// 	return false;
+		// }
 
-		return minAmbiguity.getAsDouble() < MAX_APRIL_TAG_AMBIGUITY && minDistance.getAsDouble() < MAX_APRIL_TAG_DISTANCE;
+		// return minAmbiguity.getAsDouble() < MAX_APRIL_TAG_AMBIGUITY && minDistance.getAsDouble() < MAX_APRIL_TAG_DISTANCE;
 	}
 
     private SwerveModulePosition[] getSwerveModulePositions() {
