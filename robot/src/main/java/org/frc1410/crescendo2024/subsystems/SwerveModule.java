@@ -17,7 +17,15 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Velocity;
 
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Rotations;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static org.frc1410.crescendo2024.util.Constants.*;
 import static org.frc1410.crescendo2024.util.Tuning.*;
 
@@ -49,7 +57,7 @@ public class SwerveModule implements TickedSubsystem {
 		int steeringEncoderID, 
 		boolean driveMotorInverted, 
 		boolean steerMotorInverted, 
-		double offset, 
+		Measure<Angle> offset, 
 		DoublePublisher desiredVel,
 		DoublePublisher desiredAngle, 
 		DoublePublisher actualVel, 
@@ -85,7 +93,7 @@ public class SwerveModule implements TickedSubsystem {
 		var configurator = this.steerEncoder.getConfigurator();
 
 		var steerEncoderConfig = new CANcoderConfiguration();
-		steerEncoderConfig.MagnetSensor.MagnetOffset = -Rotation2d.fromDegrees(offset).getRotations();
+		steerEncoderConfig.MagnetSensor.MagnetOffset = offset.negate().in(Rotations);
 
 		steerEncoderConfig.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
 		configurator.apply(steerEncoderConfig);
@@ -108,10 +116,11 @@ public class SwerveModule implements TickedSubsystem {
 		this.desiredState = optimized;
 
 		var request = new VelocityVoltage(
-			SwerveModule.metersPerSecondToEncoderRPS(optimized.speedMetersPerSecond)
-		)
-		.withEnableFOC(true);
-
+			SwerveModule.moduleVelocityToMotorAngularVelocity(
+				MetersPerSecond.of(optimized.speedMetersPerSecond)
+			)
+			.in(RotationsPerSecond)
+		);
 		this.driveMotor.setControl(request);
 	}
 
@@ -122,14 +131,14 @@ public class SwerveModule implements TickedSubsystem {
 
 	public SwerveModuleState getState() {
 		return new SwerveModuleState(
-			this.getDriveVelocityMetersPerSecond(),
+			this.getDriveVelocity(),
 			this.getSteerPosition()
 		);
 	}
 
 	public SwerveModulePosition getPosition() {
 		return new SwerveModulePosition(
-			this.getDrivePositionMeters(),
+			this.getDrivePosition(),
 			this.getSteerPosition()
 		);
 	}
@@ -144,7 +153,7 @@ public class SwerveModule implements TickedSubsystem {
 		this.steerMotor.setVoltage(steerPIDOutput);
 
 		this.desiredVel.set(this.desiredState.speedMetersPerSecond);
-		this.actualVel.set(this.getDriveVelocityMetersPerSecond());
+		this.actualVel.set(this.getDriveVelocity().in(MetersPerSecond));
 		
 		this.desiredAngle.set(this.desiredState.angle.getDegrees());
 		this.actualAngle.set(this.getSteerPosition().getDegrees());
@@ -154,19 +163,15 @@ public class SwerveModule implements TickedSubsystem {
 		return Rotation2d.fromRotations(this.steerEncoder.getAbsolutePosition().getValue());
 	}
 
-	public double a() {
-		return driveMotor.getVelocity().getValue();
+	private Measure<Velocity<Distance>> getDriveVelocity() {
+		return MetersPerSecond.of(driveMotor.getVelocity().getValue() * WHEEL_CIRCUMFERENCE.in(Meters)).divide(DRIVE_GEAR_RATIO);
 	}
 
-	public double getDriveVelocityMetersPerSecond() {
-		return ((driveMotor.getVelocity().getValue()) * WHEEL_CIRCUMFERENCE) / DRIVE_GEAR_RATIO;
+	private Measure<Distance> getDrivePosition() {
+		return Meters.of(driveMotor.getPosition().getValue() * WHEEL_CIRCUMFERENCE.in(Meters)).divide(DRIVE_GEAR_RATIO);
 	}
 
-	private double getDrivePositionMeters() {
-		return (driveMotor.getPosition().getValue() * WHEEL_CIRCUMFERENCE) / DRIVE_GEAR_RATIO;
-	}
-
-	private static double metersPerSecondToEncoderRPS(double metersPerSecond) {
-		return ((metersPerSecond) / WHEEL_CIRCUMFERENCE) * DRIVE_GEAR_RATIO;
+	private static Measure<Velocity<Angle>> moduleVelocityToMotorAngularVelocity(Measure<Velocity<Distance>> linearVelocity) {
+		return RotationsPerSecond.of(linearVelocity.in(MetersPerSecond) / WHEEL_CIRCUMFERENCE.in(Meters));
 	}
 }

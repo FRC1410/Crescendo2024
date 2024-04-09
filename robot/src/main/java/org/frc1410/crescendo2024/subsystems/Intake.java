@@ -2,10 +2,15 @@ package org.frc1410.crescendo2024.subsystems;
 
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
+
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Measure;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 
 import static org.frc1410.crescendo2024.util.IDs.*;
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Rotations;
 import static org.frc1410.crescendo2024.util.Constants.*;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import org.frc1410.framework.scheduler.subsystem.TickedSubsystem;
@@ -22,7 +27,7 @@ public class Intake implements TickedSubsystem {
 
 	private boolean isExtended = false;
 
-	private double barEncoderOffset = 0;
+	private Measure<Angle> barEncoderOffset = Degrees.zero();
 
 	public Intake() {
 		this.frontMotor.restoreFactoryDefaults();
@@ -67,18 +72,21 @@ public class Intake implements TickedSubsystem {
 	}
 
 	public void zeroBarEncoder() {
-		this.barEncoderOffset = -INTAKE_BAR_ENCODER_RANGE;
+		this.barEncoderOffset = INTAKE_BAR_ENCODER_RANGE.negate();
 	}
 
-	private double getBarEncoder() {
-		return this.barEncoder.get() - this.barEncoderOffset;
+	private Measure<Angle> getBarEncoder() {
+		return Rotations.of(
+			((double) this.barEncoder.get()) / 2048
+		)
+		.minus(this.barEncoderOffset);
 	}
 
 	@Override
 	public void periodic() {
-		if (this.isExtended && this.getBarEncoder() < INTAKE_BAR_ENCODER_RANGE - 20) {
+		if (this.isExtended && this.getBarEncoder().lt(INTAKE_BAR_ENCODER_RANGE.minus(Degrees.of(3.5)))) {
 			this.barMotor.set(INTAKE_BAR_SPEED_DOWN);
-		} else if (!this.isExtended && this.getBarEncoder() > 20) {
+		} else if (!this.isExtended && this.getBarEncoder().gt(Degrees.of(3.5))) {
 			this.barMotor.set(-INTAKE_BAR_SPEED_UP);
 		} else {
 			this.barMotor.set(0);
