@@ -4,7 +4,8 @@ import com.kauailabs.navx.frc.AHRS;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
-import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -23,6 +24,8 @@ import org.frc1410.framework.scheduler.subsystem.TickedSubsystem;
 import org.photonvision.EstimatedRobotPose;
 
 import static org.frc1410.crescendo2024.util.IDs.*;
+
+import java.util.Optional;
 
 import org.frc1410.crescendo2024.util.NetworkTables;
 
@@ -182,17 +185,13 @@ public class Drivetrain implements TickedSubsystem {
     }
 
     public void driveFieldRelative(ChassisSpeeds chassisSpeeds) {
-        Rotation2d angle;
-        // TODO: what
-        if (DriverStation.getAlliance().isPresent()) {
-            angle = DriverStation.getAlliance().get() == Alliance.Blue 
-                ? this.getGyroYaw().minus(this.fieldRelativeOffset)
-                : this.getGyroYaw().minus(this.fieldRelativeOffset).rotateBy(Rotation2d.fromDegrees(180));
-        } else {
-            angle = this.getGyroYaw().minus(this.fieldRelativeOffset);
+        Rotation2d angle = this.getGyroYaw().minus(this.fieldRelativeOffset);
+        if (DriverStation.getAlliance().equals(Optional.of(Alliance.Red))) {
+            angle = angle.rotateBy(Rotation2d.fromDegrees(180));
         }
 
         var robotRelativeChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(chassisSpeeds, angle);
+        
 		this.drive(robotRelativeChassisSpeeds);
     }
 
@@ -279,7 +278,7 @@ public class Drivetrain implements TickedSubsystem {
 
     private boolean validateVisionPose(EstimatedRobotPose pose) {
         return true;
-        
+
 		// var minAmbiguity = pose
 		// 	.targetsUsed
 		// 	.stream()
