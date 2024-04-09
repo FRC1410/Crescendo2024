@@ -21,6 +21,7 @@ import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Time;
 import edu.wpi.first.units.Velocity;
+import edu.wpi.first.wpilibj.DriverStation;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -136,7 +137,7 @@ public final class Constants {
 	public static final boolean SHOOTER_RIGHT_MOTOR_INVERTED = true;
 
 	// Field
-	List<ShootingPosition> SHOOTING_POSITIONS_BLUE = Arrays.asList(
+	public static final List<ShootingPosition> SHOOTING_POSITIONS_BLUE = Arrays.asList(
 		new ShootingPosition(new Pose2d(1.12, 6.76, Rotation2d.fromDegrees(-133)), RPM.of(1850), RPM.of(575)),
 		new ShootingPosition(new Pose2d(1.12, 4.34, Rotation2d.fromDegrees(137)), RPM.of(1850), RPM.of(575))
 	);
@@ -152,8 +153,8 @@ public final class Constants {
 		)
 		.toList();
 
-	Pose2d AMP_SCORING_POSITION_BLUE = new Pose2d(1.83, 7.82, Rotation2d.fromDegrees(90));
-	Pose2d AMP_SCORING_POSITION_RED = GeometryUtil.flipFieldPose(AMP_SCORING_POSITION_BLUE);
+	public static final Pose2d AMP_SCORING_POSITION_BLUE = new Pose2d(1.83, 7.82, Rotation2d.fromDegrees(90));
+	public static final Pose2d AMP_SCORING_POSITION_RED = GeometryUtil.flipFieldPose(AMP_SCORING_POSITION_BLUE);
 
 	public static final AprilTagFieldLayout APRIL_TAG_FIELD_LAYOUT;
 
