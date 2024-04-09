@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 import org.frc1410.framework.scheduler.subsystem.SubsystemStore;
 import org.frc1410.framework.scheduler.subsystem.TickedSubsystem;
+import org.photonvision.EstimatedRobotPose;
 
 import static org.frc1410.crescendo2024.util.IDs.*;
 
@@ -250,7 +251,7 @@ public class Drivetrain implements TickedSubsystem {
 
 		var estimatedPose = this.camera.getEstimatedPose();
 
-		if(estimatedPose.isPresent()) {
+		if(estimatedPose.isPresent() && this.validateVisionPose(estimatedPose.get())) {
 		 	var resultTimestamp = estimatedPose.get().timestampSeconds;
 
             // var b = estimatedPose.get().targetsUsed.stream().filter((elm) -> List.of(7, 8, 3, 4).contains(elm.getFiducialId())).count() >= 1;
@@ -275,6 +276,37 @@ public class Drivetrain implements TickedSubsystem {
         this.posePublisher.set(this.getEstimatedPosition());
         this.encoderOnlyPosePublisher.set(this.encoderOnlyPoseEstimator.getEstimatedPosition());
     }
+
+    private boolean validateVisionPose(EstimatedRobotPose pose) {
+		var minAmbiguity = pose
+			.targetsUsed
+			.stream()
+			.mapToDouble((target) ->
+				target.getPoseAmbiguity()
+			)
+			.min();
+
+        var estimatedPosition = this.getEstimatedPosition();
+
+		var minDistance = pose
+			.targetsUsed
+			.stream()
+			.mapToDouble((target) ->
+                APRIL_TAG_FIELD_LAYOUT
+                    .getTagPose(target.getFiducialId())
+                    .get()
+                    .getTranslation()
+                    .toTranslation2d()
+                    .getDistance(estimatedPosition.getTranslation())
+			)
+			.min();
+
+		if (minAmbiguity.isEmpty() || minDistance.isEmpty()) {
+			return false;
+		}
+
+		return minAmbiguity.getAsDouble() < MAX_APRIL_TAG_AMBIGUITY && minDistance.getAsDouble() < MAX_APRIL_TAG_DISTANCE;
+	}
 
     private SwerveModulePosition[] getSwerveModulePositions() {
         return new SwerveModulePosition[] {

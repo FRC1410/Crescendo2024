@@ -1,22 +1,13 @@
 package org.frc1410.crescendo2024.subsystems;
 
-import edu.wpi.first.apriltag.AprilTag;
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Quaternion;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 
-import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 
 import static org.frc1410.crescendo2024.util.Constants.*;
@@ -30,19 +21,19 @@ public class Camera implements Subsystem {
         .getStructTopic("visionOnlyPose", Pose2d.struct).publish();
 
 	public Camera() {
-		AprilTagFieldLayout layout;
+		// AprilTagFieldLayout layout;
 
-		// layout = new AprilTagFieldLayout(List.of(new AprilTag(4, new Pose3d(16.579342,  5.547867999999999, 1.4511020000000001, new Rotation3d(new Quaternion(6.123233995736766e-17, 0, 0, 1))))), 16.541, 8.211);
+		// // layout = new AprilTagFieldLayout(List.of(new AprilTag(4, new Pose3d(16.579342,  5.547867999999999, 1.4511020000000001, new Rotation3d(new Quaternion(6.123233995736766e-17, 0, 0, 1))))), 16.541, 8.211);
 
-		try {
-			layout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
-		} catch(IOException e) {
-			DriverStation.reportError("Failed to load AprilTagFieldLayout", e.getStackTrace());
-			layout = null;
-		}
+		// try {
+		// 	layout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
+		// } catch(IOException e) {
+		// 	DriverStation.reportError("Failed to load AprilTagFieldLayout", e.getStackTrace());
+		// 	layout = null;
+		// }
 
 		this.photonPoseEstimator = new PhotonPoseEstimator(
-			layout,
+			APRIL_TAG_FIELD_LAYOUT,
 			PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
 			this.photonCamera,
 			CAMERA_POSE
