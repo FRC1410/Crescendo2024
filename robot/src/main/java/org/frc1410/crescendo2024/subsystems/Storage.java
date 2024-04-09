@@ -10,12 +10,11 @@ import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
+import static org.frc1410.crescendo2024.util.Constants.*;
 import static org.frc1410.crescendo2024.util.IDs.*;
 
 import org.frc1410.crescendo2024.util.NetworkTables;
 import org.frc1410.framework.scheduler.subsystem.TickedSubsystem;
-
-import static org.frc1410.crescendo2024.util.Constants.*;
 
 public class Storage implements TickedSubsystem {
 	private final NetworkTable table = NetworkTableInstance.getDefault().getTable("Storage");
