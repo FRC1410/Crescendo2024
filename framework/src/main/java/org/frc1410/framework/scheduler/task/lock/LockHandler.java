@@ -2,7 +2,6 @@ package org.frc1410.framework.scheduler.task.lock;
 
 import org.frc1410.framework.scheduler.task.BoundTask;
 import org.frc1410.framework.scheduler.task.TaskScheduler;
-import org.frc1410.framework.util.log.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -15,7 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class LockHandler {
 
-	private static final Logger LOG = new Logger("LockHandler");
 	private final Map<Object, @NotNull BoundTask> owners = new ConcurrentHashMap<>();
 
 	/**

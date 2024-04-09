@@ -124,6 +124,8 @@ public class Loop {
 
 				scheduler.lockHandler.releaseLocks(task);
 			}
+
+			default -> {}
 		}
 	}
 }
