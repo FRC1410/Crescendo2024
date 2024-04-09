@@ -21,17 +21,6 @@ public class Camera implements Subsystem {
         .getStructTopic("visionOnlyPose", Pose2d.struct).publish();
 
 	public Camera() {
-		// AprilTagFieldLayout layout;
-
-		// // layout = new AprilTagFieldLayout(List.of(new AprilTag(4, new Pose3d(16.579342,  5.547867999999999, 1.4511020000000001, new Rotation3d(new Quaternion(6.123233995736766e-17, 0, 0, 1))))), 16.541, 8.211);
-
-		// try {
-		// 	layout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
-		// } catch(IOException e) {
-		// 	DriverStation.reportError("Failed to load AprilTagFieldLayout", e.getStackTrace());
-		// 	layout = null;
-		// }
-
 		this.photonPoseEstimator = new PhotonPoseEstimator(
 			APRIL_TAG_FIELD_LAYOUT,
 			PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
