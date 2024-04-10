@@ -39,11 +39,16 @@ import org.frc1410.crescendo2024.util.NetworkTables;
 import org.frc1410.framework.AutoSelector;
 import org.frc1410.framework.PhaseDrivenRobot;
 import org.frc1410.framework.control.Controller;
+import org.frc1410.framework.scheduler.task.Observer;
 import org.frc1410.framework.scheduler.task.TaskPersistence;
+import org.frc1410.framework.scheduler.task.impl.CommandTask;
 import org.frc1410.framework.scheduler.task.lock.LockPriority;
 
-import static org.frc1410.crescendo2024.util.IDs.*;
 import static org.frc1410.crescendo2024.util.Constants.*;
+import static org.frc1410.crescendo2024.util.IDs.*;
+
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Volts;
 
 public final class Robot extends PhaseDrivenRobot {
 	public Robot() {
@@ -121,16 +126,6 @@ public final class Robot extends PhaseDrivenRobot {
 		var autoCommand = this.autoSelector.select(autoProfile);
 
 		this.scheduler.scheduleAutoCommand(autoCommand);
-
-		// var characterizationCommand = new FeedForwardCharacterization(
-        //     drivetrain,
-        //     true,
-        //     new FeedForwardCharacterizationData("drive"),
-        //     drivetrain::driveVolts,
-        //     drivetrain::getAverageModuleDriveVelocity
-		// );
-
-		// this.scheduler.scheduleAutoCommand(characterizationCommand);
 	}
 
 	@Override
@@ -201,11 +196,16 @@ public final class Robot extends PhaseDrivenRobot {
             drivetrain,
             true,
             new FeedForwardCharacterizationData("drive"),
-            drivetrain::driveVolts,
-            drivetrain::getAverageModuleDriveVelocity
+            (volts) -> drivetrain.drive(Volts.of(volts)),
+			() -> drivetrain.getAverageDriveAngularVelocity().in(RotationsPerSecond)
 		);
 
-		this.scheduler.scheduleDefaultCommand(characterizationCommand, TaskPersistence.EPHEMERAL);
+		this.scheduler.schedule(
+			new CommandTask(characterizationCommand),
+			TaskPersistence.EPHEMERAL,
+			Observer.NO_OP,
+			LockPriority.NORMAL
+		);
 	}
 
 	@Override

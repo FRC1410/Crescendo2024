@@ -14,6 +14,10 @@ import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.DriverStation;
 
 import edu.wpi.first.wpilibj.SerialPort;
@@ -29,6 +33,7 @@ import java.util.Optional;
 
 import org.frc1410.crescendo2024.util.NetworkTables;
 
+import static edu.wpi.first.units.Units.Volts;
 import static org.frc1410.crescendo2024.util.Constants.*;
 
 public class Drivetrain implements TickedSubsystem {
@@ -195,12 +200,13 @@ public class Drivetrain implements TickedSubsystem {
 		this.drive(robotRelativeChassisSpeeds);
     }
 
-    public void driveVolts(double volts) {
-        this.characterizationVolts.set(volts);
-		frontLeft.driveVolts(volts);
-		frontRight.driveVolts(volts);
-		backLeft.driveVolts(volts);
-		backRight.driveVolts(volts);
+    public void drive(Measure<Voltage> voltage) {
+        this.characterizationVolts.set(voltage.in(Volts));
+        
+		frontLeft.drive(voltage);
+		frontRight.drive(voltage);
+		backLeft.drive(voltage);
+		backRight.drive(voltage);
     }
 
     public ChassisSpeeds getChassisSpeeds() {
@@ -322,13 +328,12 @@ public class Drivetrain implements TickedSubsystem {
 		return Rotation2d.fromDegrees(-this.gyro.getYaw());
 	}
 
-    public double getAverageModuleDriveVelocity() {
-        return (
-            frontLeft.a() +
-            frontRight.a() + 
-            backLeft.a() +
-            backRight.a()
-        ) / 4;
+    public Measure<Velocity<Angle>> getAverageDriveAngularVelocity() {
+        return this.frontLeft.getDriveAngularVelocity()
+            .plus(this.frontRight.getDriveAngularVelocity())
+            .plus(this.backLeft.getDriveAngularVelocity())
+            .plus(this.backRight.getDriveAngularVelocity())
+            .divide(4);
     }
 
     public void alignWheels() {

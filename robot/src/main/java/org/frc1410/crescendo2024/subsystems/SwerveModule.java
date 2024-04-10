@@ -21,11 +21,13 @@ import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
 
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Rotations;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Volts;
 import static org.frc1410.crescendo2024.util.Constants.*;
 import static org.frc1410.crescendo2024.util.Tuning.*;
 
@@ -124,9 +126,9 @@ public class SwerveModule implements TickedSubsystem {
 		this.driveMotor.setControl(request);
 	}
 
-	public void driveVolts(double volts) {
+	public void drive(Measure<Voltage> voltage) {
 		this.desiredState.angle = new Rotation2d();
-		this.driveMotor.setVoltage(volts);
+		this.driveMotor.setVoltage(voltage.in(Volts));
 	}
 
 	public SwerveModuleState getState() {
@@ -141,6 +143,10 @@ public class SwerveModule implements TickedSubsystem {
 			this.getDrivePosition(),
 			this.getSteerPosition()
 		);
+	}
+
+	public Measure<Velocity<Angle>> getDriveAngularVelocity() {
+		return RotationsPerSecond.of(this.driveMotor.getVelocity().getValue());
 	}
 
 	@Override
