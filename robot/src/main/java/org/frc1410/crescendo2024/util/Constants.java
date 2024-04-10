@@ -74,7 +74,7 @@ public final class Constants {
 	public static final HolonomicPathFollowerConfig HOLONOMIC_AUTO_CONFIG = new HolonomicPathFollowerConfig(
 		AUTO_TRANSLATION_CONSTANTS,
 		AUTO_ROTATION_CONSTANTS,
-		4,
+		5.2,
 		0.426562165692177,
 		new ReplanningConfig()
 	);

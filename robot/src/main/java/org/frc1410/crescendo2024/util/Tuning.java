@@ -27,9 +27,22 @@ public final class Tuning {
 	public static final double SHOOTER_RIGHT_FF = 1;
 
 	// Auto
-	// TODO: old 5, 4
-	public static final PIDConstants AUTO_TRANSLATION_CONSTANTS = new PIDConstants(6.5, 0, 0);
-	public static final PIDConstants AUTO_ROTATION_CONSTANTS = new PIDConstants(4.5, 0, 0);
+	/* PID CONSTANTS
+
+	OLD DRIVE: 5, 0, 0
+	OLD TURN: 4, 0, 0
+
+	CURRENT DRIVE: 6.5, 0, 0
+	CURRENT TURN: 4.5, 0, 0
+
+	TESTED: P: 4.5, 4(WORKS),  I: D
+
+	WORKS: P (6, 4)
+
+	 */
+
+	public static final PIDConstants AUTO_TRANSLATION_CONSTANTS = new PIDConstants(7.505, 0, 0);
+	public static final PIDConstants AUTO_ROTATION_CONSTANTS = new PIDConstants(4.105, 0, 0);
 
 	// Path following
 	public static final PIDConstants PATH_FOLLOWING_TRANSLATION_CONSTANTS = new PIDConstants(6,0, 0);

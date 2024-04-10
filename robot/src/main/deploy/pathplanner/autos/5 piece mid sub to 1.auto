@@ -265,7 +265,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Mid sub to 1"
+                        "pathName": "Mid sub to 3"
                       }
                     },
                     {
@@ -297,7 +297,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "1 to mid sub"
+                        "pathName": "3 to mid"
                       }
                     },
                     {

@@ -40,6 +40,7 @@ public class Intake implements TickedSubsystem {
 		this.extendedMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
 		this.barMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
 
+//		this.extendedMotor.setSmartCurrentLimit(20);
 		this.barMotor.setSmartCurrentLimit(30);
 	}
 
@@ -50,8 +51,8 @@ public class Intake implements TickedSubsystem {
 	}
 
 	public void setExtended(boolean isExtended) {
-//		this.isExtended = isExtended;
-		this.isExtended = false;
+		this.isExtended = isExtended;
+//		this.isExtended = false;
 	}
 
 	public void extend(double speed) {
