@@ -17,9 +17,11 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import org.frc1410.crescendo2024.commands.ClimbLooped;
 import org.frc1410.crescendo2024.commands.DefensiveAuto;
 import org.frc1410.crescendo2024.commands.RunStorage;
+import org.frc1410.crescendo2024.commands.drivetrain.AutoScoreAmp;
 import org.frc1410.crescendo2024.commands.drivetrain.AutoScoreSpeaker;
 import org.frc1410.crescendo2024.commands.drivetrain.DriveLooped;
 import org.frc1410.crescendo2024.commands.drivetrain.FeedForwardCharacterization;
+import org.frc1410.crescendo2024.commands.drivetrain.LockDrivetrain;
 import org.frc1410.crescendo2024.commands.drivetrain.FeedForwardCharacterization.FeedForwardCharacterizationData;
 import org.frc1410.crescendo2024.commands.intake.FlipIntake;
 import org.frc1410.crescendo2024.commands.intake.IntakeNote;
@@ -175,6 +177,8 @@ public final class Robot extends PhaseDrivenRobot {
 			}
 		), TaskPersistence.GAMEPLAY);
 
+		this.driverController.X.whileHeld(new LockDrivetrain(this.drivetrain), TaskPersistence.GAMEPLAY);
+
 		// Shooter
 		this.driverController.RIGHT_TRIGGER.button().whileHeldOnce(new AutoScoreSpeaker(
 			this.drivetrain, 
@@ -187,9 +191,10 @@ public final class Robot extends PhaseDrivenRobot {
 		this.driverController.RIGHT_BUMPER.whileHeld(new RunShooter(this.shooter, SPEAKER_SHOOTER_VELOCITY), TaskPersistence.GAMEPLAY);
 		this.driverController.LEFT_BUMPER.whileHeld(new ShootSpeakerLooped(this.storage, this.intake), TaskPersistence.GAMEPLAY);
 
+		this.driverController.A.whileHeld(new AutoScoreAmp(drivetrain, shooter, storage, intake), TaskPersistence.GAMEPLAY);
+
 		this.operatorController.DPAD_UP.whileHeld(new RunStorage(this.storage, SPEAKER_STORAGE_VELOCITY), TaskPersistence.GAMEPLAY);
-		this.operatorController.LEFT_BUMPER.whileHeld(new RunShooter(this.shooter, APM_SHOOTER_VELOCITY), TaskPersistence.GAMEPLAY);
-		// this.operatorController.Y.whileHeld(new AutoScoreAmp(drivetrain, shooter, storage, intake), TaskPersistence.GAMEPLAY);
+		this.operatorController.LEFT_BUMPER.whileHeld(new RunShooter(this.shooter, AMP_SHOOTER_VELOCITY), TaskPersistence.GAMEPLAY);
 		this.operatorController.RIGHT_BUMPER.whileHeld(new RunShooter(this.shooter, SPEAKER_SHOOTER_VELOCITY), TaskPersistence.GAMEPLAY);
 
 		this.operatorController.LEFT_TRIGGER.button().whileHeld(new OuttakeNote(this.intake, this.storage, this.shooter), TaskPersistence.GAMEPLAY);

@@ -3,12 +3,18 @@ package org.frc1410.crescendo2024.subsystems;
 import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.units.Angle;
 import edu.wpi.first.units.Measure;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Encoder;
 
 import static org.frc1410.crescendo2024.util.IDs.*;
+
+import org.frc1410.crescendo2024.util.NetworkTables;
+
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Rotations;
 import static org.frc1410.crescendo2024.util.Constants.*;
@@ -16,6 +22,10 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 import org.frc1410.framework.scheduler.subsystem.TickedSubsystem;
 
 public class Intake implements TickedSubsystem {
+	private final NetworkTable table = NetworkTableInstance.getDefault().getTable("Intake");
+
+    private final DoublePublisher barEncoderAngle = NetworkTables.PublisherFactory(this.table, "Bar Encoder Angle", 0);
+
 	private final CANSparkMax frontMotor = new CANSparkMax(INTAKE_FRONT_MOTOR_ID, MotorType.kBrushless);
 	private final CANSparkMax backMotor = new CANSparkMax(INTAKE_BACK_MOTOR_ID, MotorType.kBrushless);
 	private final CANSparkMax extendedMotor = new CANSparkMax(INTAKE_EXTENDED_MOTOR_ID, MotorType.kBrushless);
@@ -45,7 +55,6 @@ public class Intake implements TickedSubsystem {
 		this.extendedMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
 		this.barMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
 
-//		this.extendedMotor.setSmartCurrentLimit(20);
 		this.barMotor.setSmartCurrentLimit(30);
 	}
 
@@ -96,5 +105,7 @@ public class Intake implements TickedSubsystem {
 		} else {
 			this.barMotor.set(0);
 		}
+
+		this.barEncoderAngle.set(this.getBarEncoder().in(Degrees));
 	}
 }

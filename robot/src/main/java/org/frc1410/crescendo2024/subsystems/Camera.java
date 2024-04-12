@@ -1,8 +1,5 @@
 package org.frc1410.crescendo2024.subsystems;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
@@ -17,9 +14,6 @@ public class Camera implements Subsystem {
 
 	private final PhotonPoseEstimator photonPoseEstimator;
 
-	private final StructPublisher<Pose2d> visionOnlyPosePublisher = NetworkTableInstance.getDefault()
-        .getStructTopic("visionOnlyPose", Pose2d.struct).publish();
-
 	public Camera() {
 		this.photonPoseEstimator = new PhotonPoseEstimator(
 			APRIL_TAG_FIELD_LAYOUT,
@@ -32,12 +26,6 @@ public class Camera implements Subsystem {
 	public Optional<EstimatedRobotPose> getEstimatedPose() {
 		if(this.photonCamera.getLatestResult().hasTargets()) {
 			var pose = this.photonPoseEstimator.update();
-
-			if (pose.isPresent()) {
-				this.visionOnlyPosePublisher.set(pose.get().estimatedPose.toPose2d());
-			} else {
-				this.visionOnlyPosePublisher.set(null);
-			}
 
 			return pose;
 		} else {

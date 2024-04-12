@@ -106,7 +106,7 @@ public final class Constants {
 	public static final Measure<Velocity<Angle>> SPEAKER_STORAGE_VELOCITY = RPM.of(575);
 	public static final double SPEAKER_INTAKE_SPEED = 0.75;
 
-	public static final Measure<Velocity<Angle>> APM_SHOOTER_VELOCITY = RPM.of(450);
+	public static final Measure<Velocity<Angle>> AMP_SHOOTER_VELOCITY = RPM.of(450);
 
 	public static final Measure<Velocity<Angle>> SHOOTER_PLOP_VELOCITY = RPM.of(700);
 
