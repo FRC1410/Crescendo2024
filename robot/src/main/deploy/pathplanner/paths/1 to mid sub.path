@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.0,
-        "y": 7.35
+        "x": 7.74,
+        "y": 7.29
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.242258777898594,
-        "y": 7.122555926686094
+        "x": 6.982258777898594,
+        "y": 7.062555926686095
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "1 from mid sub"
     },
     {
       "anchor": {
-        "x": 1.3973572133190786,
-        "y": 5.477759506502913
+        "x": 1.5,
+        "y": 5.55
       },
       "prevControl": {
-        "x": 1.9352848963300804,
-        "y": 5.6258042478517885
+        "x": 2.037927683011002,
+        "y": 5.698044741348875
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "mid sub"
     }
   ],
   "rotationTargets": [
@@ -49,7 +49,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "To mid sub",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0

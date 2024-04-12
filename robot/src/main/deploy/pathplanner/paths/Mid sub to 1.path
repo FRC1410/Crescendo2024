@@ -12,20 +12,20 @@
         "y": 6.10924384639467
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "mid sub"
     },
     {
       "anchor": {
-        "x": 8.0,
-        "y": 7.35
+        "x": 7.74,
+        "y": 7.29
       },
       "prevControl": {
-        "x": 7.383201342431307,
-        "y": 7.188457494446294
+        "x": 5.5574952307351415,
+        "y": 6.681535027750907
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "1 from mid sub"
     }
   ],
   "rotationTargets": [],
@@ -39,11 +39,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -156.57130719125476,
+    "rotation": -165.51012682646018,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "To 1",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0

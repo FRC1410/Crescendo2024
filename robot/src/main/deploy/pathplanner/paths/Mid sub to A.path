@@ -12,20 +12,20 @@
         "y": 5.830215882256452
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "mid sub"
     },
     {
       "anchor": {
-        "x": 2.5626458151064453,
-        "y": 6.771363089022474
+        "x": 2.389793052635751,
+        "y": 6.6373944591860825
       },
       "prevControl": {
-        "x": 2.312989215614355,
-        "y": 6.5070208072073195
+        "x": 2.140136453143661,
+        "y": 6.373052177370928
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "A from mid sub"
     }
   ],
   "rotationTargets": [
@@ -49,7 +49,7 @@
     "rotateFast": true
   },
   "reversed": false,
-  "folder": null,
+  "folder": "To A",
   "previewStartingState": {
     "rotation": 180.0,
     "velocity": 0

@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.53,
-        "y": 4.16
+        "x": 2.457930940684577,
+        "y": 4.498692617952612
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3112979289643736,
-        "y": 4.362904920657785
+        "x": 2.239228869648951,
+        "y": 4.701597538610397
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "C from mid sub"
     },
     {
       "anchor": {
@@ -25,7 +25,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "mid sub"
     }
   ],
   "rotationTargets": [
@@ -49,9 +49,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "To mid sub",
   "previewStartingState": {
-    "rotation": 180.0,
+    "rotation": 153.42,
     "velocity": 0
   },
   "useDefaultConstraints": true

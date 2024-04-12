@@ -18,8 +18,9 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.frc1410.crescendo2024.util.Tuning.*;
 
@@ -104,6 +105,8 @@ public final class Constants {
 
 	public static final double APM_SHOOTER_RPM = 450;
 
+	public static final double SHOOTER_PLOP_RPM = 700;
+
 	// Timings
 	public static final double SHOOTING_TIME = 0.3;
 
@@ -138,17 +141,24 @@ public final class Constants {
 	// Field
 	public static final double FIELD_LENGTH = 16.54;
 
-	public static final List<ShootingPosition> SHOOTING_POSITIONS_BLUE = Arrays.asList(
+	public static final List<ShootingPosition> SHOOTING_POSITIONS_BLUE = List.of(
 		new ShootingPosition(new Pose2d(1.12, 6.76, Rotation2d.fromDegrees(-133)), 1850, 575),
 		new ShootingPosition(new Pose2d(1.12, 4.34, Rotation2d.fromDegrees(137)), 1850, 575)
 	);
 
-	public static final List<ShootingPosition> SHOOTING_POSITIONS_RED = Arrays.asList(
-		new ShootingPosition(new Pose2d(FIELD_LENGTH - 1.12, 6.76, Rotation2d.fromDegrees(-43)), 1850, 575),
-		new ShootingPosition(new Pose2d(FIELD_LENGTH - 1.12, 4.34, Rotation2d.fromDegrees(43)), 1850, 575)
-	);
+	public static final List<ShootingPosition> SHOOTING_POSITIONS_RED = SHOOTING_POSITIONS_BLUE
+		.stream()
+		.map((position) -> 
+			new ShootingPosition(
+				GeometryUtil.flipFieldPose(position.pose),
+				position.shooterRPM,
+				position.storageRPM
+			)
+		)
+		.toList();
 
-	public static final Pose2d AMP_SCORING_POSITION = GeometryUtil.flipFieldPose(new Pose2d(1.83, 7.82, Rotation2d.fromDegrees(90)));
+	public static final Pose2d AMP_SCORING_POSITION_BLUE = new Pose2d(1.83, 7.82, Rotation2d.fromDegrees(90));
+	public static final Pose2d AMP_SCORING_POSITION_RED = GeometryUtil.flipFieldPose(AMP_SCORING_POSITION_BLUE);
 
 	public static final AprilTagFieldLayout APRIL_TAG_FIELD_LAYOUT;
 
@@ -165,6 +175,24 @@ public final class Constants {
 		}
 
 		APRIL_TAG_FIELD_LAYOUT = layout;
+	}
+
+	public static final Map<String, Pose2d> DEFENSIVE_AUTO_STOPPING_POSITIONS_BLUE = Map.of(
+		"4", new Pose2d(7.92, 2, Rotation2d.fromDegrees(-135)),
+		"3", new Pose2d(7.92, 3.65, Rotation2d.fromDegrees(-135)),
+		"2", new Pose2d(7.92, 5.35, Rotation2d.fromDegrees(-135)),
+		"1", new Pose2d(7.92, 7, Rotation2d.fromDegrees(-135))
+	);
+
+	public static final Map<String, Pose2d> DEFENSIVE_AUTO_STOPPING_POSITIONS_RED = new HashMap<>();
+
+	static {
+		DEFENSIVE_AUTO_STOPPING_POSITIONS_BLUE.forEach((key, value) ->
+			DEFENSIVE_AUTO_STOPPING_POSITIONS_RED.put(
+				key,
+				GeometryUtil.flipFieldPose(value)
+			)
+		);
 	}
 
 	// Camera

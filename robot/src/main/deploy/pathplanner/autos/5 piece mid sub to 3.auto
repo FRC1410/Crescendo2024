@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.5,
+      "x": 1.4,
       "y": 5.55
     },
     "rotation": 180.0
@@ -202,7 +202,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "mid sub to 1"
+                        "pathName": "mid sub to 3"
                       }
                     },
                     {
@@ -222,7 +222,7 @@
                                 {
                                   "type": "path",
                                   "data": {
-                                    "pathName": "1 to mid sub"
+                                    "pathName": "3 to mid sub"
                                   }
                                 },
                                 {

@@ -18,7 +18,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ShootNote"
+                  "name": "SpinUpAndShootNote"
                 }
               },
               {
@@ -47,7 +47,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Amp side sub to A"
+                        "pathName": "amp sub to A"
                       }
                     },
                     {
@@ -79,7 +79,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "A to amp side sub"
+                        "pathName": "A to amp sub"
                       }
                     },
                     {
@@ -95,7 +95,7 @@
                           {
                             "type": "named",
                             "data": {
-                              "name": "FireShooter"
+                              "name": "ShootSpeakerLooped"
                             }
                           }
                         ]
@@ -124,7 +124,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Amp side sub to 1"
+                        "pathName": "amp sub to 1"
                       }
                     },
                     {
@@ -156,7 +156,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "1 to amp side sub"
+                        "pathName": "1 to amp sub"
                       }
                     },
                     {
@@ -172,7 +172,7 @@
                           {
                             "type": "named",
                             "data": {
-                              "name": "FireShooter"
+                              "name": "ShootSpeakerLooped"
                             }
                           }
                         ]

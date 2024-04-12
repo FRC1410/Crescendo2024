@@ -11,9 +11,11 @@ import edu.wpi.first.networktables.StringSubscriber;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import org.frc1410.crescendo2024.commands.ClimbLooped;
+import org.frc1410.crescendo2024.commands.DefensiveAuto;
 import org.frc1410.crescendo2024.commands.RunStorage;
 import org.frc1410.crescendo2024.commands.drivetrain.AutoScoreSpeaker;
 import org.frc1410.crescendo2024.commands.drivetrain.DriveLooped;
@@ -22,6 +24,7 @@ import org.frc1410.crescendo2024.commands.drivetrain.FeedForwardCharacterization
 import org.frc1410.crescendo2024.commands.intake.FlipIntake;
 import org.frc1410.crescendo2024.commands.intake.IntakeNote;
 import org.frc1410.crescendo2024.commands.intake.OuttakeNote;
+import org.frc1410.crescendo2024.commands.intake.RunIntake;
 import org.frc1410.crescendo2024.commands.intake.SetIntakeStateLEDColor;
 import org.frc1410.crescendo2024.commands.shooter.AdjustShooterRPM;
 import org.frc1410.crescendo2024.commands.shooter.ShootSpeakerLooped;
@@ -43,13 +46,17 @@ import org.frc1410.framework.scheduler.task.TaskPersistence;
 import org.frc1410.framework.scheduler.task.lock.LockPriority;
 
 import static org.frc1410.crescendo2024.util.IDs.*;
+
+import java.util.Optional;
+import java.util.function.Supplier;
+
 import static org.frc1410.crescendo2024.util.Constants.*;
 
 public final class Robot extends PhaseDrivenRobot {
 	public Robot() {
 		DataLogManager.start();
 
-		NamedCommands.registerCommand("ShootNote", new SpinUpAndShootNote(
+		NamedCommands.registerCommand("SpinUpAndShootNote", new SpinUpAndShootNote(
 			this.drivetrain, 
 			this.shooter, 
 			this.storage, 
@@ -60,9 +67,12 @@ public final class Robot extends PhaseDrivenRobot {
 		));
 		NamedCommands.registerCommand("RunShooter", new RunShooter(this.shooter, AUTO_SPEAKER_SHOOTER_RPM));
 		NamedCommands.registerCommand("IntakeNote", new IntakeNote(this.intake, this.storage, this.driverController, this.operatorController));
-		NamedCommands.registerCommand("FireShooter", new ShootSpeakerLooped(this.storage, this.intake));
+		NamedCommands.registerCommand("ShootSpeakerLooped", new ShootSpeakerLooped(this.storage, this.intake));
 		NamedCommands.registerCommand("ShootSpeaker", new ShootSpeaker(this.storage, this.intake));
 		NamedCommands.registerCommand("FlipIntake", new FlipIntake(this.intake));
+		NamedCommands.registerCommand("RunIntake", new RunIntake(this.intake, INTAKE_SPEED));
+		NamedCommands.registerCommand("RunStorage", new RunStorage(this.storage, STORAGE_INTAKE_RPM));
+		NamedCommands.registerCommand("PlopNote", new RunShooter(this.shooter, SHOOTER_PLOP_RPM));
 	}
 
 	private final Controller driverController = new Controller(this.scheduler, DRIVER_CONTROLLER, 0.1);
@@ -90,13 +100,15 @@ public final class Robot extends PhaseDrivenRobot {
 			AUTO_SPEAKER_SHOOTER_RPM, 
 			AUTO_SPEAKER_STORAGE_RPM
 		))
-		.add("1 intake",() -> new PathPlannerAuto("1 piece intake"))
-		.add("1 drive", () -> new PathPlannerAuto("1.5 source side auto"))
-		.add("2 source", () -> new PathPlannerAuto("2 piece source side auto"))
+		.add("2 source", () -> new PathPlannerAuto("2 piece source sub"))
 		.add("3", () -> new PathPlannerAuto("3 piece mid sub"))
-		.add("3 amp",() -> new PathPlannerAuto("3 piece amp side auto"))
-		.add("3 source", () -> new PathPlannerAuto("3 piece source side auto"))
-		.add("5", () -> new PathPlannerAuto("5 piece mid sub"));
+		.add("3 amp",() -> new PathPlannerAuto("3 piece amp sub"))
+		.add("3 source", () -> new PathPlannerAuto("3 piece source sub"))
+		.add("5", () -> new PathPlannerAuto("thread the needle"))
+		.add("d 4", this.defensiveAutoToNote("4"))
+		.add("d 3", this.defensiveAutoToNote("3"))
+		.add("d 2", this.defensiveAutoToNote("2"))
+		.add("d 1", this.defensiveAutoToNote("1"));
 
 	{
 		var profiles = new String[this.autoSelector.getProfiles().size()];
@@ -113,6 +125,19 @@ public final class Robot extends PhaseDrivenRobot {
 
 	private final StringSubscriber autoSubscriber = NetworkTables.SubscriberFactory(this.table, this.autoPublisher.getTopic());
 
+	private Supplier<Command> defensiveAutoToNote(String note) {
+		return () -> new DefensiveAuto(
+			this.drivetrain, 
+			this.intake, 
+			this.storage,
+			this.shooter, 
+			(DriverStation.getAlliance().equals(Optional.of(DriverStation.Alliance.Blue))
+				? DEFENSIVE_AUTO_STOPPING_POSITIONS_BLUE
+				: DEFENSIVE_AUTO_STOPPING_POSITIONS_RED
+			).get(note)
+		);
+	}
+
 	@Override
 	public void autonomousSequence() {
 		this.leds.setColor(LEDs.Color.VIVACIOUS_VIOLENT_VIOLET);
@@ -122,16 +147,6 @@ public final class Robot extends PhaseDrivenRobot {
 		var autoCommand = this.autoSelector.select(autoProfile);
 
 		this.scheduler.scheduleAutoCommand(autoCommand);
-
-		// var characterizationCommand = new FeedForwardCharacterization(
-        //     drivetrain,
-        //     true,
-        //     new FeedForwardCharacterizationData("drive"),
-        //     drivetrain::driveVolts,
-        //     drivetrain::getAverageModuleDriveVelocity
-		// );
-
-		// this.scheduler.scheduleAutoCommand(characterizationCommand);
 	}
 
 	@Override

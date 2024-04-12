@@ -1,11 +1,6 @@
 package org.frc1410.crescendo2024.commands.drivetrain;
 
-import static org.frc1410.crescendo2024.util.Constants.AMP_SCORING_POSITION;
-import static org.frc1410.crescendo2024.util.Constants.APM_SHOOTER_RPM;
-import static org.frc1410.crescendo2024.util.Constants.HOLONOMIC_PATH_FOLLOWING_CONFIG;
-import static org.frc1410.crescendo2024.util.Constants.PATH_FOLLOWING_CONSTRAINTS;
-
-import org.frc1410.crescendo2024.commands.shooter.FireShooter;
+import org.frc1410.crescendo2024.commands.shooter.ShootSpeakerLooped;
 import org.frc1410.crescendo2024.commands.shooter.RunShooter;
 import org.frc1410.crescendo2024.subsystems.Drivetrain;
 import org.frc1410.crescendo2024.subsystems.Intake;
@@ -16,19 +11,25 @@ import com.pathplanner.lib.commands.FollowPathHolonomic;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathPlannerPath;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
+import static org.frc1410.crescendo2024.util.Constants.*;
+
 public class AutoScoreAmp extends SequentialCommandGroup {
     public AutoScoreAmp(Drivetrain drivetrain, Shooter shooter, Storage storage, Intake intake) {
+		var alliance = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue);
+		var ampScoringPosition = (alliance == DriverStation.Alliance.Blue) ? AMP_SCORING_POSITION_BLUE : AMP_SCORING_POSITION_BLUE;
+
         var pathPlannerPath = new PathPlannerPath(
 			PathPlannerPath.bezierFromPoses(
 				drivetrain.getEstimatedPosition(),
-				AMP_SCORING_POSITION
+				ampScoringPosition
 			),
 			PATH_FOLLOWING_CONSTRAINTS,
-			new GoalEndState(0, AMP_SCORING_POSITION.getRotation())
+			new GoalEndState(0, ampScoringPosition.getRotation())
 		);
 
 		var followPathCommand = new FollowPathHolonomic(
@@ -48,7 +49,7 @@ public class AutoScoreAmp extends SequentialCommandGroup {
             ),
             new ParallelRaceGroup(
                 new WaitCommand(2),
-                new FireShooter(storage, intake)
+                new ShootSpeakerLooped(storage, intake)
             )
         );
     }

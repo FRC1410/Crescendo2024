@@ -1,0 +1,125 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.75,
+        "y": 4.11
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.5728589648668665,
+        "y": 4.739995352331131
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.7790159551950318,
+        "y": 4.819231801584171
+      },
+      "prevControl": {
+        "x": 3.6953045491064613,
+        "y": 4.753375895487341
+      },
+      "nextControl": {
+        "x": 2.0543799775542824,
+        "y": 4.871313164612145
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.5,
+        "y": 5.55
+      },
+      "prevControl": {
+        "x": 1.5,
+        "y": 5.1499999999999995
+      },
+      "nextControl": {
+        "x": 1.5,
+        "y": 5.95
+      },
+      "isLocked": false,
+      "linkedName": "mid sub"
+    },
+    {
+      "anchor": {
+        "x": 2.389793052635751,
+        "y": 6.6373944591860825
+      },
+      "prevControl": {
+        "x": 1.8261316983626874,
+        "y": 6.405825708814538
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "A from mid sub"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 2,
+      "rotationDegrees": 180.0,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 1.9,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "ShootSpeaker"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 2.0999999999999996,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "IntakeNote"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 5.5,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 250.0,
+    "maxAngularAcceleration": 400.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -151.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "To A",
+  "previewStartingState": {
+    "rotation": 180.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

@@ -3,9 +3,16 @@
   "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "To C",
+    "To amp sub",
+    "To 1",
+    "To 3",
+    "To 4",
+    "To 5",
     "To A",
-    "To B"
+    "To B",
+    "To C",
+    "To mid sub",
+    "To source sub"
   ],
   "autoFolders": [],
   "defaultMaxVel": 5.5,

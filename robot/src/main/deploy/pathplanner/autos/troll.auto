@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.72,
-      "y": 4.39
+      "x": 0.83,
+      "y": 4.46
     },
     "rotation": 120.0
   },
@@ -12,21 +12,15 @@
     "data": {
       "commands": [
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 2.0
-          }
-        },
-        {
           "type": "named",
           "data": {
-            "name": "ShootNote"
+            "name": "SpinUpAndShootNote"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "1.5 source auto"
+            "pathName": "source sub to 5"
           }
         }
       ]

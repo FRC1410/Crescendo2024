@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.43,
-        "y": 6.53
+        "x": 2.3,
+        "y": 5.55
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.441414260288271,
-        "y": 6.505757269117401
+        "x": 1.2931589760720945,
+        "y": 5.55
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "B from mid sub"
     },
     {
       "anchor": {
-        "x": 1.43,
-        "y": 6.53
+        "x": 1.5,
+        "y": 5.55
       },
       "prevControl": {
-        "x": 1.4267285779652068,
-        "y": 6.549814316086593
+        "x": 1.8431563994446458,
+        "y": 5.55
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "mid sub"
     }
   ],
   "rotationTargets": [],
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -155.7,
+    "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "To mid sub",
   "previewStartingState": {
-    "rotation": -155.7,
+    "rotation": 179.87,
     "velocity": 0
   },
   "useDefaultConstraints": true

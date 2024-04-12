@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootNote"
+            "name": "SpinUpAndShootNote"
           }
         },
         {
@@ -22,51 +22,13 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "IntakeNote"
-                }
-              },
-              {
                 "type": "sequential",
                 "data": {
                   "commands": [
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Mid sub to B"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.8
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "RunShooter"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "B mid sub"
+                        "pathName": "mid sub to B"
                       }
                     },
                     {
@@ -74,15 +36,28 @@
                       "data": {
                         "commands": [
                           {
-                            "type": "wait",
+                            "type": "named",
                             "data": {
-                              "waitTime": 0.3
+                              "name": "RunShooter"
                             }
                           },
                           {
-                            "type": "named",
+                            "type": "sequential",
                             "data": {
-                              "name": "FireShooter"
+                              "commands": [
+                                {
+                                  "type": "path",
+                                  "data": {
+                                    "pathName": "B to mid sub"
+                                  }
+                                },
+                                {
+                                  "type": "named",
+                                  "data": {
+                                    "name": "ShootSpeaker"
+                                  }
+                                }
+                              ]
                             }
                           }
                         ]
@@ -90,38 +65,12 @@
                     }
                   ]
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
+              },
               {
                 "type": "named",
                 "data": {
                   "name": "IntakeNote"
                 }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Mid sub to C"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.8
-                      }
-                    }
-                  ]
-                }
               }
             ]
           }
@@ -131,19 +80,13 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "RunShooter"
-                }
-              },
-              {
                 "type": "sequential",
                 "data": {
                   "commands": [
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "C to mid sub"
+                        "pathName": "mid sub to C"
                       }
                     },
                     {
@@ -151,15 +94,28 @@
                       "data": {
                         "commands": [
                           {
-                            "type": "wait",
+                            "type": "named",
                             "data": {
-                              "waitTime": 0.3
+                              "name": "RunShooter"
                             }
                           },
                           {
-                            "type": "named",
+                            "type": "sequential",
                             "data": {
-                              "name": "FireShooter"
+                              "commands": [
+                                {
+                                  "type": "path",
+                                  "data": {
+                                    "pathName": "C to mid sub"
+                                  }
+                                },
+                                {
+                                  "type": "named",
+                                  "data": {
+                                    "name": "ShootSpeaker"
+                                  }
+                                }
+                              ]
                             }
                           }
                         ]
@@ -167,38 +123,12 @@
                     }
                   ]
                 }
-              }
-            ]
-          }
-        },
-        {
-          "type": "race",
-          "data": {
-            "commands": [
+              },
               {
                 "type": "named",
                 "data": {
                   "name": "IntakeNote"
                 }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Mid sub to A"
-                      }
-                    },
-                    {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 0.8
-                      }
-                    }
-                  ]
-                }
               }
             ]
           }
@@ -208,19 +138,13 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "RunShooter"
-                }
-              },
-              {
                 "type": "sequential",
                 "data": {
                   "commands": [
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "A to sub"
+                        "pathName": "mid sub to A"
                       }
                     },
                     {
@@ -228,21 +152,40 @@
                       "data": {
                         "commands": [
                           {
-                            "type": "wait",
+                            "type": "named",
                             "data": {
-                              "waitTime": 0.3
+                              "name": "RunShooter"
                             }
                           },
                           {
-                            "type": "named",
+                            "type": "sequential",
                             "data": {
-                              "name": "FireShooter"
+                              "commands": [
+                                {
+                                  "type": "path",
+                                  "data": {
+                                    "pathName": "A to mid sub"
+                                  }
+                                },
+                                {
+                                  "type": "named",
+                                  "data": {
+                                    "name": "ShootSpeaker"
+                                  }
+                                }
+                              ]
                             }
                           }
                         ]
                       }
                     }
                   ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeNote"
                 }
               }
             ]

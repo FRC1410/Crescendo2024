@@ -50,9 +50,13 @@ public class Intake implements TickedSubsystem {
 		this.extendedMotor.set(speed);
 	}
 
+	public void setUnderBumperSpeed(double speed) {
+		this.frontMotor.set(speed);
+		this.backMotor.set(speed);
+	}
+
 	public void setExtended(boolean isExtended) {
 		this.isExtended = isExtended;
-//		this.isExtended = false;
 	}
 
 	public void extend(double speed) {

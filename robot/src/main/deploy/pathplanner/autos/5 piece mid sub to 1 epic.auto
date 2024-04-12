@@ -14,11 +14,11 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootNote"
+            "name": "SpinUpAndShootNote"
           }
         },
         {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
               {
@@ -28,7 +28,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Mid sub to B"
+                        "pathName": "mid sub to B"
                       }
                     },
                     {
@@ -48,7 +48,7 @@
                                 {
                                   "type": "path",
                                   "data": {
-                                    "pathName": "B mid sub"
+                                    "pathName": "B to mid sub"
                                   }
                                 },
                                 {
@@ -76,52 +76,13 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
               {
-                "type": "sequential",
+                "type": "path",
                 "data": {
-                  "commands": [
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Mid sub to C"
-                      }
-                    },
-                    {
-                      "type": "race",
-                      "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "RunShooter"
-                            }
-                          },
-                          {
-                            "type": "sequential",
-                            "data": {
-                              "commands": [
-                                {
-                                  "type": "path",
-                                  "data": {
-                                    "pathName": "C to mid sub"
-                                  }
-                                },
-                                {
-                                  "type": "named",
-                                  "data": {
-                                    "name": "ShootSpeaker"
-                                  }
-                                }
-                              ]
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  ]
+                  "pathName": "mid sub to C"
                 }
               },
               {
@@ -134,9 +95,21 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
+          "data": {
+            "pathName": "C to mid sub to A"
+          }
+        },
+        {
+          "type": "race",
           "data": {
             "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunShooter"
+                }
+              },
               {
                 "type": "sequential",
                 "data": {
@@ -144,55 +117,23 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Mid sub to A"
+                        "pathName": "A to mid sub"
                       }
                     },
                     {
-                      "type": "race",
+                      "type": "named",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "RunShooter"
-                            }
-                          },
-                          {
-                            "type": "sequential",
-                            "data": {
-                              "commands": [
-                                {
-                                  "type": "path",
-                                  "data": {
-                                    "pathName": "A to sub"
-                                  }
-                                },
-                                {
-                                  "type": "named",
-                                  "data": {
-                                    "name": "ShootSpeaker"
-                                  }
-                                }
-                              ]
-                            }
-                          }
-                        ]
+                        "name": "ShootSpeaker"
                       }
                     }
                   ]
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "IntakeNote"
                 }
               }
             ]
           }
         },
         {
-          "type": "parallel",
+          "type": "race",
           "data": {
             "commands": [
               {
@@ -202,7 +143,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Mid sub to 1"
+                        "pathName": "mid sub to 1"
                       }
                     },
                     {
