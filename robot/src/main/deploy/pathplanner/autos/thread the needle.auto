@@ -137,6 +137,12 @@
               }
             ]
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "mid sub to 3"
+          }
         }
       ]
     }

@@ -63,6 +63,7 @@ public class DefensiveAuto extends SequentialCommandGroup {
 			drivetrain
 		);
 
+		// keep a count of the number of notes, then run the intake -> shoot command n times and afterwards just intake and then leave.
         this.addCommands(
 			startFollowPathCommand,
 			new ParallelCommandGroup(
