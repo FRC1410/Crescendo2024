@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import org.frc1410.crescendo2024.commands.ClimbLooped;
 import org.frc1410.crescendo2024.commands.RunStorage;
-import org.frc1410.crescendo2024.commands.drivetrain.AutoScoreAmp;
 import org.frc1410.crescendo2024.commands.drivetrain.AutoScoreSpeaker;
 import org.frc1410.crescendo2024.commands.drivetrain.DriveLooped;
 import org.frc1410.crescendo2024.commands.drivetrain.FeedForwardCharacterization;
@@ -25,9 +24,10 @@ import org.frc1410.crescendo2024.commands.intake.IntakeNote;
 import org.frc1410.crescendo2024.commands.intake.OuttakeNote;
 import org.frc1410.crescendo2024.commands.intake.SetIntakeStateLEDColor;
 import org.frc1410.crescendo2024.commands.shooter.AdjustShooterRPM;
-import org.frc1410.crescendo2024.commands.shooter.FireShooter;
+import org.frc1410.crescendo2024.commands.shooter.ShootSpeakerLooped;
 import org.frc1410.crescendo2024.commands.shooter.RunShooter;
-import org.frc1410.crescendo2024.commands.shooter.ShootNote;
+import org.frc1410.crescendo2024.commands.shooter.ShootSpeaker;
+import org.frc1410.crescendo2024.commands.shooter.SpinUpAndShootNote;
 import org.frc1410.crescendo2024.subsystems.Climber;
 import org.frc1410.crescendo2024.subsystems.Drivetrain;
 import org.frc1410.crescendo2024.subsystems.Intake;
@@ -49,7 +49,7 @@ public final class Robot extends PhaseDrivenRobot {
 	public Robot() {
 		DataLogManager.start();
 
-		NamedCommands.registerCommand("ShootNote", new ShootNote(
+		NamedCommands.registerCommand("ShootNote", new SpinUpAndShootNote(
 			this.drivetrain, 
 			this.shooter, 
 			this.storage, 
@@ -60,7 +60,8 @@ public final class Robot extends PhaseDrivenRobot {
 		));
 		NamedCommands.registerCommand("RunShooter", new RunShooter(this.shooter, AUTO_SPEAKER_SHOOTER_RPM));
 		NamedCommands.registerCommand("IntakeNote", new IntakeNote(this.intake, this.storage, this.driverController, this.operatorController));
-		NamedCommands.registerCommand("FireShooter", new FireShooter(this.storage, this.intake));
+		NamedCommands.registerCommand("FireShooter", new ShootSpeakerLooped(this.storage, this.intake));
+		NamedCommands.registerCommand("ShootSpeaker", new ShootSpeaker(this.storage, this.intake));
 		NamedCommands.registerCommand("FlipIntake", new FlipIntake(this.intake));
 	}
 
@@ -80,7 +81,7 @@ public final class Robot extends PhaseDrivenRobot {
 	private final AutoSelector autoSelector = new AutoSelector()
 		.add("4", () -> new PathPlannerAuto("4 piece mid sub"))
 		.add("0", () -> new InstantCommand())
-		.add("1", () -> new ShootNote(
+		.add("1", () -> new SpinUpAndShootNote(
 			this.drivetrain, 
 			this.shooter,
 			this.storage, 
@@ -164,12 +165,12 @@ public final class Robot extends PhaseDrivenRobot {
 		), TaskPersistence.GAMEPLAY, LockPriority.HIGHEST);
 
 		this.driverController.RIGHT_BUMPER.whileHeld(new RunShooter(this.shooter, MANUAL_SHOOTER_RPM), TaskPersistence.GAMEPLAY);
-		this.driverController.LEFT_BUMPER.whileHeld(new FireShooter(this.storage, this.intake), TaskPersistence.GAMEPLAY);
+		this.driverController.LEFT_BUMPER.whileHeld(new ShootSpeakerLooped(this.storage, this.intake), TaskPersistence.GAMEPLAY);
 
-		this.operatorController.RIGHT_BUMPER.whileHeld(new RunStorage(this.storage, MANUAL_STORAGE_RPM), TaskPersistence.GAMEPLAY);
+		this.operatorController.DPAD_UP.whileHeld(new RunStorage(this.storage, MANUAL_STORAGE_RPM), TaskPersistence.GAMEPLAY);
 		this.operatorController.LEFT_BUMPER.whileHeld(new RunShooter(this.shooter, APM_SHOOTER_RPM), TaskPersistence.GAMEPLAY);
-		this.operatorController.Y.whileHeld(new AutoScoreAmp(drivetrain, shooter, storage, intake), TaskPersistence.GAMEPLAY);
-		// this.operatorController.LEFT_BUMPER.whileHeld(new RunShooter(this.shooter, MANUAL_SHOOTER_RPM), TaskPersistence.GAMEPLAY);
+		// this.operatorController.Y.whileHeld(new AutoScoreAmp(drivetrain, shooter, storage, intake), TaskPersistence.GAMEPLAY);
+		this.operatorController.RIGHT_BUMPER.whileHeld(new RunShooter(this.shooter, MANUAL_SHOOTER_RPM), TaskPersistence.GAMEPLAY);
 
 		this.operatorController.LEFT_TRIGGER.button().whileHeld(new OuttakeNote(this.intake, this.storage, this.shooter), TaskPersistence.GAMEPLAY);
 

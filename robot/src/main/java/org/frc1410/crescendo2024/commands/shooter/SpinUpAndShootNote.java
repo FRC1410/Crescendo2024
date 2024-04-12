@@ -13,8 +13,8 @@ import org.frc1410.crescendo2024.subsystems.LEDs;
 import org.frc1410.crescendo2024.subsystems.Shooter;
 import org.frc1410.crescendo2024.subsystems.Storage;
 
-public class ShootNote extends ParallelRaceGroup {
-	public ShootNote(Drivetrain drivetrain, Shooter shooter, Storage storage, Intake intake, LEDs leds, double shooterRPM, double storageRPM) {
+public class SpinUpAndShootNote extends ParallelRaceGroup {
+	public SpinUpAndShootNote(Drivetrain drivetrain, Shooter shooter, Storage storage, Intake intake, LEDs leds, double shooterRPM, double storageRPM) {
 		addCommands(
 			new RunShooter(shooter, shooterRPM),
 

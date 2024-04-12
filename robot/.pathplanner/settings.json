@@ -8,9 +8,9 @@
     "To B"
   ],
   "autoFolders": [],
-  "defaultMaxVel": 5.0,
+  "defaultMaxVel": 5.5,
   "defaultMaxAccel": 5.0,
-  "defaultMaxAngVel": 300.0,
-  "defaultMaxAngAccel": 500.0,
+  "defaultMaxAngVel": 250.0,
+  "defaultMaxAngAccel": 400.0,
   "maxModuleSpeed": 5.5
 }

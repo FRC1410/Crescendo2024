@@ -169,4 +169,8 @@ public class SwerveModule implements TickedSubsystem {
 	private static double metersPerSecondToEncoderRPS(double metersPerSecond) {
 		return ((metersPerSecond) / WHEEL_CIRCUMFERENCE) * DRIVE_GEAR_RATIO;
 	}
+
+	public double getDriveAcceleration() {
+		return this.driveMotor.getAcceleration().getValue() * WHEEL_CIRCUMFERENCE / DRIVE_GEAR_RATIO;
+	}
 }

@@ -32,10 +32,12 @@ public final class Constants {
 	public static final double WHEEL_RADIUS = 0.0508;
 	public static final double WHEEL_CIRCUMFERENCE = 2 * Math.PI * WHEEL_RADIUS;
 
-	public static final Translation2d FRONT_LEFT_SWERVE_MODULE_LOCATION = new Translation2d(0.2985, 0.2985);
-	public static final Translation2d FRONT_RIGHT_SWERVE_MODULE_LOCATION = new Translation2d(0.2985, -0.2985);
-	public static final Translation2d BACK_LEFT_SWERVE_MODULE_LOCATION = new Translation2d(-0.2985, 0.2985);
-	public static final Translation2d BACK_RIGHT_SWERVE_MODULE_LOCATION = new Translation2d(-0.2985, -0.2985);
+	public static final Translation2d FRONT_LEFT_SWERVE_MODULE_LOCATION = new Translation2d(0.301625, .301625);
+	public static final Translation2d FRONT_RIGHT_SWERVE_MODULE_LOCATION = new Translation2d(0.301625, -0.301625);
+	public static final Translation2d BACK_LEFT_SWERVE_MODULE_LOCATION = new Translation2d(-0.301625, 0.301625);
+	public static final Translation2d BACK_RIGHT_SWERVE_MODULE_LOCATION = new Translation2d(-0.301625, -0.301625);
+
+	public static final double DRIVE_BASE_RADIUS = 0.4265621658;
 
 	public static final SwerveDriveKinematics SWERVE_DRIVE_KINEMATICS = new SwerveDriveKinematics(
 		FRONT_LEFT_SWERVE_MODULE_LOCATION,
@@ -67,15 +69,15 @@ public final class Constants {
 		PATH_FOLLOWING_TRANSLATION_CONSTANTS,
 		PATH_FOLLOWING_ROTATION_CONSTANTS,
 		3,
-		0.37268062,
+		DRIVE_BASE_RADIUS,
 		new ReplanningConfig(true, true)
 	);
 
 	public static final HolonomicPathFollowerConfig HOLONOMIC_AUTO_CONFIG = new HolonomicPathFollowerConfig(
 		AUTO_TRANSLATION_CONSTANTS,
 		AUTO_ROTATION_CONSTANTS,
-		5.2,
-		0.426562165692177,
+		5.5,
+		DRIVE_BASE_RADIUS,
 		new ReplanningConfig()
 	);
 

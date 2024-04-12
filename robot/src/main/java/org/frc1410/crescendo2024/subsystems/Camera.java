@@ -34,7 +34,6 @@ public class Camera implements Subsystem {
 			var pose = this.photonPoseEstimator.update();
 
 			if (pose.isPresent()) {
-				System.out.println("Pose is present");
 				this.visionOnlyPosePublisher.set(pose.get().estimatedPose.toPose2d());
 			} else {
 				this.visionOnlyPosePublisher.set(null);

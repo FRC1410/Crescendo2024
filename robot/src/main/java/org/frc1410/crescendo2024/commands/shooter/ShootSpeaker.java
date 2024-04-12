@@ -2,6 +2,7 @@ package org.frc1410.crescendo2024.commands.shooter;
 
 import static org.frc1410.crescendo2024.util.Constants.MANUAL_INTAKE_SPEED;
 import static org.frc1410.crescendo2024.util.Constants.MANUAL_STORAGE_RPM;
+import static org.frc1410.crescendo2024.util.Constants.SHOOTING_TIME;
 
 import org.frc1410.crescendo2024.commands.RunStorage;
 import org.frc1410.crescendo2024.commands.intake.RunIntake;
@@ -9,12 +10,17 @@ import org.frc1410.crescendo2024.subsystems.Intake;
 import org.frc1410.crescendo2024.subsystems.Storage;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-public class FireShooter extends ParallelCommandGroup {
-    public FireShooter(Storage storage, Intake intake) {
+public class ShootSpeaker extends ParallelRaceGroup {
+    public ShootSpeaker(Storage storage, Intake intake) {
         this.addCommands(
-            new RunStorage(storage, MANUAL_STORAGE_RPM),
-            new RunIntake(intake, MANUAL_INTAKE_SPEED)
+            new WaitCommand(SHOOTING_TIME),
+            new ParallelCommandGroup(
+                new RunStorage(storage, MANUAL_STORAGE_RPM),
+                new RunIntake(intake, MANUAL_INTAKE_SPEED)
+            )
         );
     }
 }
