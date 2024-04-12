@@ -49,7 +49,7 @@ public class AutoScoreAmp extends SequentialCommandGroup {
         this.addCommands(
             new ParallelRaceGroup(
                 followPathCommand,
-                new RunShooter(shooter, AMP_SHOOTER_VELOCITY)
+                new RunShooter(shooter, AMP_SHOOTER_VELOCITY, false)
             ),
             new ParallelRaceGroup(
                 new WaitCommand(2),

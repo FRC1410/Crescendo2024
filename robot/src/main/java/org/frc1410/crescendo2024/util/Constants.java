@@ -38,6 +38,8 @@ public final class Constants {
 	// Physical constatns
 	public static final double DRIVE_GEAR_RATIO = (50.0 / 16.0) * (17.0 / 27.0) * (45.0 / 15.0);
 
+	public static final double STORAGE_GEAR_RATIO = 12;
+
 	public static final Measure<Distance> WHEEL_RADIUS = Inches.of(2);
 	public static final Measure<Distance> WHEEL_CIRCUMFERENCE = WHEEL_RADIUS.times(2 * Math.PI);
 
@@ -211,8 +213,8 @@ public final class Constants {
 	public static final Measure<Velocity<Angle>> SHOOTER_VELOCITY_ADJUSTMENT_MAGNITUDE = RPM.of(150);
 
 	// Feedforward
-	public static final double DRIVE_MOTOR_KS = 0.45245;
-	public static final double DRIVE_MOTOR_KV = 2.51455;
+	public static final double DRIVE_KS = 0.31720;
+	public static final double DRIVE_KV = 0.12280;
 
 	public static final double SHOOTER_LEFT_S = 0.07484;
 	public static final double SHOOTER_LEFT_V = 0.00207;

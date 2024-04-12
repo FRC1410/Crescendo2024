@@ -70,14 +70,14 @@ public class DefensiveAuto extends SequentialCommandGroup {
 				dynamicFollowPathCommand,
 				new RunIntake(intake, INTAKE_SPEED),
 				new RunStorage(storage, STORAGE_INTAKE_VELOCITY),
-				new RunShooter(shooter, SHOOTER_PLOP_VELOCITY)
+				new RunShooter(shooter, SHOOTER_PLOP_VELOCITY, false)
 			),
 			new ParallelRaceGroup(
 				new SequentialCommandGroup(
 					endFollowPathCommand,
 					new ShootSpeaker(storage, intake)
 				),
-				new RunShooter(shooter, AUTO_SPEAKER_SHOOTER_VELOCITY)
+				new RunShooter(shooter, AUTO_SPEAKER_SHOOTER_VELOCITY, true)
 			)
         );
     }

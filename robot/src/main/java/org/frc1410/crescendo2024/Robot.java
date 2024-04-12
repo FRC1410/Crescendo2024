@@ -49,7 +49,6 @@ import org.frc1410.framework.scheduler.task.TaskPersistence;
 import org.frc1410.framework.scheduler.task.impl.CommandTask;
 import org.frc1410.framework.scheduler.task.lock.LockPriority;
 
-
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -72,14 +71,14 @@ public final class Robot extends PhaseDrivenRobot {
 			AUTO_SPEAKER_SHOOTER_VELOCITY, 
 			AUTO_SPEAKER_STORAGE_VELOCITY
 		));
-		NamedCommands.registerCommand("RunShooter", new RunShooter(this.shooter, AUTO_SPEAKER_SHOOTER_VELOCITY));
+		NamedCommands.registerCommand("RunShooter", new RunShooter(this.shooter, AUTO_SPEAKER_SHOOTER_VELOCITY, true));
 		NamedCommands.registerCommand("IntakeNote", new IntakeNote(this.intake, this.storage, this.driverController, this.operatorController));
 		NamedCommands.registerCommand("ShootSpeakerLooped", new ShootSpeakerLooped(this.storage, this.intake));
 		NamedCommands.registerCommand("ShootSpeaker", new ShootSpeaker(this.storage, this.intake));
 		NamedCommands.registerCommand("FlipIntake", new FlipIntake(this.intake));
 		NamedCommands.registerCommand("RunIntake", new RunIntake(this.intake, INTAKE_SPEED));
 		NamedCommands.registerCommand("RunStorage", new RunStorage(this.storage, STORAGE_INTAKE_VELOCITY));
-		NamedCommands.registerCommand("PlopNote", new RunShooter(this.shooter, SHOOTER_PLOP_VELOCITY));
+		NamedCommands.registerCommand("PlopNote", new RunShooter(this.shooter, SHOOTER_PLOP_VELOCITY, false));
 	}
 
 	private final Controller driverController = new Controller(this.scheduler, DRIVER_CONTROLLER, 0.1);
@@ -188,14 +187,14 @@ public final class Robot extends PhaseDrivenRobot {
 			this.leds
 		), TaskPersistence.GAMEPLAY, LockPriority.HIGHEST);
 
-		this.driverController.RIGHT_BUMPER.whileHeld(new RunShooter(this.shooter, SPEAKER_SHOOTER_VELOCITY), TaskPersistence.GAMEPLAY);
+		this.driverController.RIGHT_BUMPER.whileHeld(new RunShooter(this.shooter, SPEAKER_SHOOTER_VELOCITY, true), TaskPersistence.GAMEPLAY);
 		this.driverController.LEFT_BUMPER.whileHeld(new ShootSpeakerLooped(this.storage, this.intake), TaskPersistence.GAMEPLAY);
 
 		this.driverController.A.whileHeld(new AutoScoreAmp(drivetrain, shooter, storage, intake), TaskPersistence.GAMEPLAY);
 
 		this.operatorController.DPAD_UP.whileHeld(new RunStorage(this.storage, SPEAKER_STORAGE_VELOCITY), TaskPersistence.GAMEPLAY);
-		this.operatorController.LEFT_BUMPER.whileHeld(new RunShooter(this.shooter, AMP_SHOOTER_VELOCITY), TaskPersistence.GAMEPLAY);
-		this.operatorController.RIGHT_BUMPER.whileHeld(new RunShooter(this.shooter, SPEAKER_SHOOTER_VELOCITY), TaskPersistence.GAMEPLAY);
+		this.operatorController.LEFT_BUMPER.whileHeld(new RunShooter(this.shooter, AMP_SHOOTER_VELOCITY, false), TaskPersistence.GAMEPLAY);
+		this.operatorController.RIGHT_BUMPER.whileHeld(new RunShooter(this.shooter, SPEAKER_SHOOTER_VELOCITY, true), TaskPersistence.GAMEPLAY);
 
 		this.operatorController.LEFT_TRIGGER.button().whileHeld(new OuttakeNote(this.intake, this.storage, this.shooter), TaskPersistence.GAMEPLAY);
 

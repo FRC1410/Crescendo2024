@@ -14,22 +14,32 @@ public class RunShooter extends Command {
 
 	private final Measure<Velocity<Angle>> velocity;
 
-	public RunShooter(Shooter shooter, Measure<Velocity<Angle>> velocity) {
+	private final boolean useAdjustment;
+
+	public RunShooter(Shooter shooter, Measure<Velocity<Angle>> velocity, boolean useAdjustment) {
 		this.shooter = shooter;
 		this.velocity = velocity;
+		this.useAdjustment = useAdjustment;
 
 		this.addRequirements(shooter);
 	}
 
-	// TODO: add back adjustment
 	@Override
 	public void initialize() {
-		this.shooter.setVelocity(this.velocity);
+		var velocity = this.useAdjustment
+			? this.velocity.plus(shooter.velocityAdjustment)
+			: this.velocity;
+		
+		this.shooter.setVelocity(velocity);
 	}
 
 	@Override
 	public void execute() {
-		this.shooter.setVelocity(this.velocity);
+		var velocity = this.useAdjustment
+			? this.velocity.plus(shooter.velocityAdjustment)
+			: this.velocity;
+		
+		this.shooter.setVelocity(velocity);
 	}
 
 	@Override

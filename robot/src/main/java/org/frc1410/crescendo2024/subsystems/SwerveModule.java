@@ -68,10 +68,9 @@ public class SwerveModule implements TickedSubsystem {
 		this.driveMotor = new TalonFX(driveMotorID);
 
 		var driveMotorConfig = new TalonFXConfiguration();
-
-		// TODO
-        driveMotorConfig.Slot0.kS = 0.31720;
-        driveMotorConfig.Slot0.kV = 0.12280;
+		
+        driveMotorConfig.Slot0.kS = DRIVE_KS;
+        driveMotorConfig.Slot0.kV = DRIVE_KV;
 
         driveMotorConfig.Slot0.kP = SWERVE_DRIVE_P;
         driveMotorConfig.Slot0.kI = SWERVE_DRIVE_I;
