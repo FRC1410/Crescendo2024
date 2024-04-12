@@ -12,16 +12,20 @@ import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import static org.frc1410.crescendo2024.util.Constants.*;
 
+import java.util.Optional;
+
 public class AutoScoreAmp extends SequentialCommandGroup {
     public AutoScoreAmp(Drivetrain drivetrain, Shooter shooter, Storage storage, Intake intake) {
-		var alliance = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue);
-		var ampScoringPosition = (alliance == DriverStation.Alliance.Blue) ? AMP_SCORING_POSITION_BLUE : AMP_SCORING_POSITION_BLUE;
+		var ampScoringPosition = (DriverStation.getAlliance() == Optional.of(Alliance.Blue))
+			? AMP_SCORING_POSITION_BLUE
+			: AMP_SCORING_POSITION_BLUE;
 
         var pathPlannerPath = new PathPlannerPath(
 			PathPlannerPath.bezierFromPoses(
@@ -45,7 +49,7 @@ public class AutoScoreAmp extends SequentialCommandGroup {
         this.addCommands(
             new ParallelRaceGroup(
                 followPathCommand,
-                new RunShooter(shooter, APM_SHOOTER_RPM)
+                new RunShooter(shooter, APM_SHOOTER_VELOCITY)
             ),
             new ParallelRaceGroup(
                 new WaitCommand(2),

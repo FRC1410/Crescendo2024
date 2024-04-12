@@ -1,17 +1,22 @@
 package org.frc1410.crescendo2024.commands.shooter;
 
+import static edu.wpi.first.units.Units.RPM;
+
 import org.frc1410.crescendo2024.subsystems.Shooter;
 
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class RunShooter extends Command {
 	private final Shooter shooter;
 
-	private final double rpm;
+	private final Measure<Velocity<Angle>> velocity;
 
-	public RunShooter(Shooter shooter, double rpm) {
+	public RunShooter(Shooter shooter, Measure<Velocity<Angle>> velocity) {
 		this.shooter = shooter;
-		this.rpm = rpm;
+		this.velocity = velocity;
 
 		this.addRequirements(shooter);
 	}
@@ -19,12 +24,12 @@ public class RunShooter extends Command {
 	// TODO: add back adjustment
 	@Override
 	public void initialize() {
-		this.shooter.setRPM(this.rpm);
+		this.shooter.setVelocity(this.velocity);
 	}
 
 	@Override
 	public void execute() {
-		this.shooter.setRPM(this.rpm);
+		this.shooter.setVelocity(this.velocity);
 	}
 
 	@Override
@@ -34,6 +39,6 @@ public class RunShooter extends Command {
 
 	@Override
 	public void end(boolean interrupted) {
-		shooter.setRPM(0);
+		this.shooter.setVelocity(RPM.zero());
 	}
 }

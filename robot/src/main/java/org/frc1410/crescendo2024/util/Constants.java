@@ -14,8 +14,16 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.util.Units;
+import static edu.wpi.first.math.util.Units.degreesToRadians;
+
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Time;
+import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj.DriverStation;
+
+import static edu.wpi.first.units.Units.*;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -30,8 +38,8 @@ public final class Constants {
 	// Physical constatns
 	public static final double DRIVE_GEAR_RATIO = (50.0 / 16.0) * (17.0 / 27.0) * (45.0 / 15.0);
 
-	public static final double WHEEL_RADIUS = 0.0508;
-	public static final double WHEEL_CIRCUMFERENCE = 2 * Math.PI * WHEEL_RADIUS;
+	public static final Measure<Distance> WHEEL_RADIUS = Inches.of(2);
+	public static final Measure<Distance> WHEEL_CIRCUMFERENCE = WHEEL_RADIUS.times(2 * Math.PI);
 
 	public static final Translation2d FRONT_LEFT_SWERVE_MODULE_LOCATION = new Translation2d(0.301625, .301625);
 	public static final Translation2d FRONT_RIGHT_SWERVE_MODULE_LOCATION = new Translation2d(0.301625, -0.301625);
@@ -47,24 +55,19 @@ public final class Constants {
 		BACK_RIGHT_SWERVE_MODULE_LOCATION
 	);
 
-	public static final int INTAKE_BAR_ENCODER_RANGE = 648;
+	public static final Measure<Angle> INTAKE_BAR_ENCODER_RANGE = Degrees.of(114);
 
-	public static final Transform3d CAMERA_POSE = new Transform3d(new Translation3d(0.3683,0,0.559), new Rotation3d(0, Units.degreesToRadians(-27), 0));
+	public static final Transform3d CAMERA_POSE = new Transform3d(new Translation3d(0.3683,0,0.559), new Rotation3d(0, degreesToRadians(-27), 0));
 
-	// Constraints
-	public static final double DRIVE_MOTOR_FREE_SPEED_RPM = 5676;
-	public static final double DRIVE_MOTOR_FREE_SPEED_RPS = DRIVE_MOTOR_FREE_SPEED_RPM / 60;
-	public static final double DRIVE_WHEEL_FREE_SPEED_METERS_PER_SECOND = ((DRIVE_MOTOR_FREE_SPEED_RPS * WHEEL_CIRCUMFERENCE) / DRIVE_GEAR_RATIO);
+	public static final Measure<Velocity<Distance>> SWERVE_DRIVE_MAX_SPEED = MetersPerSecond.of(5.5);
+	public static final Measure<Velocity<Angle>> SWERVE_DRIVE_MAX_ANGULAR_VELOCITY = DegreesPerSecond.of(570);
 
-	// TODO: new value: 5.5m/s
-	public static final double SWERVE_DRIVE_MAX_SPEED = 5.2;
-	public static final double SWERVE_DRIVE_MAX_ANGULAR_VELOCITY = 10;
-
+	// TODO: Speed up
 	public static final PathConstraints PATH_FOLLOWING_CONSTRAINTS = new PathConstraints(
 		2.2,
 		2.0,
-		Units.degreesToRadians(150), 
-		Units.degreesToRadians(150));
+		degreesToRadians(150), 
+		degreesToRadians(150));
 
 	public static final HolonomicPathFollowerConfig HOLONOMIC_PATH_FOLLOWING_CONFIG = new HolonomicPathFollowerConfig(
 		PATH_FOLLOWING_TRANSLATION_CONSTANTS,
@@ -77,44 +80,44 @@ public final class Constants {
 	public static final HolonomicPathFollowerConfig HOLONOMIC_AUTO_CONFIG = new HolonomicPathFollowerConfig(
 		AUTO_TRANSLATION_CONSTANTS,
 		AUTO_ROTATION_CONSTANTS,
-		5.5,
+		SWERVE_DRIVE_MAX_SPEED.in(MetersPerSecond),
 		DRIVE_BASE_RADIUS,
 		new ReplanningConfig()
 	);
 
-	public static final double MAX_SHOOTER_RPM = 5800;
+	public static final Measure<Velocity<Angle>> MAX_SHOOTER_VELOCITY = RPM.of(5800);
 
 	// Speeds
 	public static final double INTAKE_SPEED = 0.75;
 	public static final double OUTTAKE_SPEED = 0.75;
 
-	public static final double STORAGE_INTAKE_RPM = 300;
-	public static final double STORAGE_OUTTAKE_RPM = 400;
+	public static final Measure<Velocity<Angle>> STORAGE_INTAKE_VELOCITY = RPM.of(300);
+	public static final Measure<Velocity<Angle>> STORAGE_OUTTAKE_VELOCITY = RPM.of(400);
 
-	public static final double SHOOTER_OUTTAKE_RPM = 500;
+	public static final Measure<Velocity<Angle>> SHOOTER_OUTTAKE_VELOCITY = RPM.of(500);
 
 	public static final double INTAKE_BAR_SPEED_DOWN = 0.7;
 	public static final double INTAKE_BAR_SPEED_UP = 1;
 
-	public static final double AUTO_SPEAKER_SHOOTER_RPM = 3300;
-	public static final double AUTO_SPEAKER_STORAGE_RPM = 700;
+	public static final Measure<Velocity<Angle>> AUTO_SPEAKER_SHOOTER_VELOCITY = RPM.of(3300);
+	public static final Measure<Velocity<Angle>> AUTO_SPEAKER_STORAGE_VELOCITY = RPM.of(700);
 
-	public static final double MANUAL_SHOOTER_RPM = 2400; 
-	public static final double MANUAL_STORAGE_RPM = 575;
-	public static final double MANUAL_INTAKE_SPEED = 0.75;
+	public static final Measure<Velocity<Angle>> SPEAKER_SHOOTER_VELOCITY = RPM.of(2400); 
+	public static final Measure<Velocity<Angle>> SPEAKER_STORAGE_VELOCITY = RPM.of(575);
+	public static final double SPEAKER_INTAKE_SPEED = 0.75;
 
-	public static final double APM_SHOOTER_RPM = 450;
+	public static final Measure<Velocity<Angle>> APM_SHOOTER_VELOCITY = RPM.of(450);
 
-	public static final double SHOOTER_PLOP_RPM = 700;
+	public static final Measure<Velocity<Angle>> SHOOTER_PLOP_VELOCITY = RPM.of(700);
 
 	// Timings
-	public static final double SHOOTING_TIME = 0.3;
+	public static final Measure<Time> SHOOTING_TIME = Seconds.of(0.3);
 
 	// Offsets / inversions
-	public static final double FRONT_LEFT_STEER_ENCODER_OFFSET = -12.041016 + 90;
-	public static final double FRONT_RIGHT_STEER_ENCODER_OFFSET = 88.154297 - 90;
-	public static final double BACK_LEFT_STEER_ENCODER_OFFSET = 116.279297 - 90;
-	public static final double BACK_RIGHT_STEER_ENCODER_OFFSET = 18.984375 + 90;
+	public static final Measure<Angle> FRONT_LEFT_STEER_ENCODER_OFFSET = Degrees.of(-12.041016 + 90);
+	public static final Measure<Angle> FRONT_RIGHT_STEER_ENCODER_OFFSET = Degrees.of(88.154297 - 90);
+	public static final Measure<Angle> BACK_LEFT_STEER_ENCODER_OFFSET = Degrees.of(116.279297 - 90);
+	public static final Measure<Angle> BACK_RIGHT_STEER_ENCODER_OFFSET = Degrees.of(18.984375 + 90);
 
 	public static final boolean FRONT_LEFT_DRIVE_MOTOR_INVERTED = false;
 	public static final boolean FRONT_RIGHT_DRIVE_MOTOR_INVERTED = true;
@@ -139,20 +142,18 @@ public final class Constants {
 	public static final boolean SHOOTER_RIGHT_MOTOR_INVERTED = true;
 
 	// Field
-	public static final double FIELD_LENGTH = 16.54;
-
 	public static final List<ShootingPosition> SHOOTING_POSITIONS_BLUE = List.of(
-		new ShootingPosition(new Pose2d(1.12, 6.76, Rotation2d.fromDegrees(-133)), 1850, 575),
-		new ShootingPosition(new Pose2d(1.12, 4.34, Rotation2d.fromDegrees(137)), 1850, 575)
+		new ShootingPosition(new Pose2d(1.12, 6.76, Rotation2d.fromDegrees(-133)), RPM.of(1850), RPM.of(575)),
+		new ShootingPosition(new Pose2d(1.12, 4.34, Rotation2d.fromDegrees(137)), RPM.of(1850), RPM.of(575))
 	);
 
 	public static final List<ShootingPosition> SHOOTING_POSITIONS_RED = SHOOTING_POSITIONS_BLUE
 		.stream()
-		.map((position) -> 
+		.map((position) ->
 			new ShootingPosition(
-				GeometryUtil.flipFieldPose(position.pose),
-				position.shooterRPM,
-				position.storageRPM
+				GeometryUtil.flipFieldPose(position.pose), 
+				position.shooterVelocity, 
+				position.storageVelocity
 			)
 		)
 		.toList();
@@ -206,8 +207,8 @@ public final class Constants {
 	public static final int NUM_LEDS = 28;
 
 	// Shooter
-	public static final double STARTING_SHOOTER_RPM_ADJUSTMENT = 300;
-	public static final double SHOOTER_RPM_ADJUSTMENT_MAGNITUDE = 150;
+	public static final Measure<Velocity<Angle>> STARTING_SHOOTER_VELOCITY_ADJUSTMENT = RPM.of(300);
+	public static final Measure<Velocity<Angle>> SHOOTER_VELOCITY_ADJUSTMENT_MAGNITUDE = RPM.of(150);
 
 	// Feedforward
 	public static final double DRIVE_MOTOR_KS = 0.45245;

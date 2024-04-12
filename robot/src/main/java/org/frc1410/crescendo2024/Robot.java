@@ -42,15 +42,20 @@ import org.frc1410.crescendo2024.util.NetworkTables;
 import org.frc1410.framework.AutoSelector;
 import org.frc1410.framework.PhaseDrivenRobot;
 import org.frc1410.framework.control.Controller;
+import org.frc1410.framework.scheduler.task.Observer;
 import org.frc1410.framework.scheduler.task.TaskPersistence;
+import org.frc1410.framework.scheduler.task.impl.CommandTask;
 import org.frc1410.framework.scheduler.task.lock.LockPriority;
 
-import static org.frc1410.crescendo2024.util.IDs.*;
 
 import java.util.Optional;
 import java.util.function.Supplier;
 
 import static org.frc1410.crescendo2024.util.Constants.*;
+import static org.frc1410.crescendo2024.util.IDs.*;
+
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+import static edu.wpi.first.units.Units.Volts;
 
 public final class Robot extends PhaseDrivenRobot {
 	public Robot() {
@@ -62,17 +67,17 @@ public final class Robot extends PhaseDrivenRobot {
 			this.storage, 
 			this.intake, 
 			this.leds, 
-			AUTO_SPEAKER_SHOOTER_RPM, 
-			AUTO_SPEAKER_STORAGE_RPM
+			AUTO_SPEAKER_SHOOTER_VELOCITY, 
+			AUTO_SPEAKER_STORAGE_VELOCITY
 		));
-		NamedCommands.registerCommand("RunShooter", new RunShooter(this.shooter, AUTO_SPEAKER_SHOOTER_RPM));
+		NamedCommands.registerCommand("RunShooter", new RunShooter(this.shooter, AUTO_SPEAKER_SHOOTER_VELOCITY));
 		NamedCommands.registerCommand("IntakeNote", new IntakeNote(this.intake, this.storage, this.driverController, this.operatorController));
 		NamedCommands.registerCommand("ShootSpeakerLooped", new ShootSpeakerLooped(this.storage, this.intake));
 		NamedCommands.registerCommand("ShootSpeaker", new ShootSpeaker(this.storage, this.intake));
 		NamedCommands.registerCommand("FlipIntake", new FlipIntake(this.intake));
 		NamedCommands.registerCommand("RunIntake", new RunIntake(this.intake, INTAKE_SPEED));
-		NamedCommands.registerCommand("RunStorage", new RunStorage(this.storage, STORAGE_INTAKE_RPM));
-		NamedCommands.registerCommand("PlopNote", new RunShooter(this.shooter, SHOOTER_PLOP_RPM));
+		NamedCommands.registerCommand("RunStorage", new RunStorage(this.storage, STORAGE_INTAKE_VELOCITY));
+		NamedCommands.registerCommand("PlopNote", new RunShooter(this.shooter, SHOOTER_PLOP_VELOCITY));
 	}
 
 	private final Controller driverController = new Controller(this.scheduler, DRIVER_CONTROLLER, 0.1);
@@ -97,8 +102,8 @@ public final class Robot extends PhaseDrivenRobot {
 			this.storage, 
 			this.intake, 
 			this.leds, 
-			AUTO_SPEAKER_SHOOTER_RPM, 
-			AUTO_SPEAKER_STORAGE_RPM
+			AUTO_SPEAKER_SHOOTER_VELOCITY, 
+			AUTO_SPEAKER_STORAGE_VELOCITY
 		))
 		.add("2 source", () -> new PathPlannerAuto("2 piece source sub"))
 		.add("3", () -> new PathPlannerAuto("3 piece mid sub"))
@@ -179,18 +184,18 @@ public final class Robot extends PhaseDrivenRobot {
 			this.leds
 		), TaskPersistence.GAMEPLAY, LockPriority.HIGHEST);
 
-		this.driverController.RIGHT_BUMPER.whileHeld(new RunShooter(this.shooter, MANUAL_SHOOTER_RPM), TaskPersistence.GAMEPLAY);
+		this.driverController.RIGHT_BUMPER.whileHeld(new RunShooter(this.shooter, SPEAKER_SHOOTER_VELOCITY), TaskPersistence.GAMEPLAY);
 		this.driverController.LEFT_BUMPER.whileHeld(new ShootSpeakerLooped(this.storage, this.intake), TaskPersistence.GAMEPLAY);
 
-		this.operatorController.DPAD_UP.whileHeld(new RunStorage(this.storage, MANUAL_STORAGE_RPM), TaskPersistence.GAMEPLAY);
-		this.operatorController.LEFT_BUMPER.whileHeld(new RunShooter(this.shooter, APM_SHOOTER_RPM), TaskPersistence.GAMEPLAY);
+		this.operatorController.DPAD_UP.whileHeld(new RunStorage(this.storage, SPEAKER_STORAGE_VELOCITY), TaskPersistence.GAMEPLAY);
+		this.operatorController.LEFT_BUMPER.whileHeld(new RunShooter(this.shooter, APM_SHOOTER_VELOCITY), TaskPersistence.GAMEPLAY);
 		// this.operatorController.Y.whileHeld(new AutoScoreAmp(drivetrain, shooter, storage, intake), TaskPersistence.GAMEPLAY);
-		this.operatorController.RIGHT_BUMPER.whileHeld(new RunShooter(this.shooter, MANUAL_SHOOTER_RPM), TaskPersistence.GAMEPLAY);
+		this.operatorController.RIGHT_BUMPER.whileHeld(new RunShooter(this.shooter, SPEAKER_SHOOTER_VELOCITY), TaskPersistence.GAMEPLAY);
 
 		this.operatorController.LEFT_TRIGGER.button().whileHeld(new OuttakeNote(this.intake, this.storage, this.shooter), TaskPersistence.GAMEPLAY);
 
-		this.operatorController.A.whenPressed(new AdjustShooterRPM(this.shooter, SHOOTER_RPM_ADJUSTMENT_MAGNITUDE), TaskPersistence.GAMEPLAY);
-		this.operatorController.B.whenPressed(new AdjustShooterRPM(this.shooter, -SHOOTER_RPM_ADJUSTMENT_MAGNITUDE), TaskPersistence.GAMEPLAY);
+		this.operatorController.A.whenPressed(new AdjustShooterRPM(this.shooter, SHOOTER_VELOCITY_ADJUSTMENT_MAGNITUDE), TaskPersistence.GAMEPLAY);
+		this.operatorController.B.whenPressed(new AdjustShooterRPM(this.shooter, SHOOTER_VELOCITY_ADJUSTMENT_MAGNITUDE.negate()), TaskPersistence.GAMEPLAY);
 
 		// Intake
 		this.operatorController.RIGHT_TRIGGER.button().whileHeldOnce(new IntakeNote(this.intake, this.storage, this.driverController, this.operatorController), TaskPersistence.GAMEPLAY);
@@ -217,11 +222,16 @@ public final class Robot extends PhaseDrivenRobot {
             drivetrain,
             true,
             new FeedForwardCharacterizationData("drive"),
-            drivetrain::driveVolts,
-            drivetrain::getAverageModuleDriveVelocity
+            (volts) -> drivetrain.drive(Volts.of(volts)),
+			() -> drivetrain.getAverageDriveAngularVelocity().in(RotationsPerSecond)
 		);
 
-		this.scheduler.scheduleDefaultCommand(characterizationCommand, TaskPersistence.EPHEMERAL);
+		this.scheduler.schedule(
+			new CommandTask(characterizationCommand),
+			TaskPersistence.EPHEMERAL,
+			Observer.NO_OP,
+			LockPriority.NORMAL
+		);
 	}
 
 	@Override
