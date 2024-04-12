@@ -1,5 +1,7 @@
 package org.frc1410.framework.control;
 
+import java.util.function.Function;
+
 public class Axis {
 
 	private final Controller controller;
@@ -29,5 +31,13 @@ public class Axis {
 
 	public AxisButton button() {
 		return button;
+	}
+
+	public Axis transformed(Function<Double, Double> transformation) {
+		return new TransformedAxis(this.controller, this.id, transformation);
+	}
+
+	public Axis negated() {
+		return this.transformed((value) -> -value);
 	}
 }

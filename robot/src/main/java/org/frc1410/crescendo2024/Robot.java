@@ -159,9 +159,9 @@ public final class Robot extends PhaseDrivenRobot {
 		// Drivetrain
 		this.scheduler.scheduleDefaultCommand(new DriveLooped(
 			this.drivetrain, 
-			this.driverController.LEFT_X_AXIS, 
-			this.driverController.LEFT_Y_AXIS, 
-			this.driverController.RIGHT_X_AXIS, 
+			this.driverController.LEFT_Y_AXIS.negated(), 
+			this.driverController.LEFT_X_AXIS.negated(), 
+			this.driverController.RIGHT_X_AXIS.negated(), 
 			this.driverController.LEFT_TRIGGER
 		), TaskPersistence.EPHEMERAL);
 

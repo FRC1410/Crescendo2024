@@ -33,9 +33,6 @@ public class Shooter implements TickedSubsystem {
 	private final CANSparkMax leftMotor = new CANSparkMax(SHOOTER_LEFT_MOTOR_ID, MotorType.kBrushless);
 	private final CANSparkMax rightMotor = new CANSparkMax(SHOOTER_RIGHT_MOTOR_ID, MotorType.kBrushless);
 
-	private final SparkPIDController leftPIDController = leftMotor.getPIDController();
-	private final SparkPIDController rightPIDController = rightMotor.getPIDController();
-
 	private final RelativeEncoder leftEncoder = leftMotor.getEncoder();
 	private final RelativeEncoder rightEncoder = rightMotor.getEncoder();
 
@@ -57,22 +54,12 @@ public class Shooter implements TickedSubsystem {
 
 		this.leftMotor.setSmartCurrentLimit(40);
 		this.rightMotor.setSmartCurrentLimit(40);
-
-		this.leftPIDController.setP(SHOOTER_LEFT_P);
-		this.leftPIDController.setI(SHOOTER_LEFT_I);
-		this.leftPIDController.setD(SHOOTER_LEFT_D);
-		this.leftPIDController.setFF(SHOOTER_LEFT_FF);
-
-		this.rightPIDController.setP(SHOOTER_RIGHT_P);
-		this.rightPIDController.setI(SHOOTER_RIGHT_I);
-		this.rightPIDController.setD(SHOOTER_RIGHT_D);
-		this.rightPIDController.setFF(SHOOTER_RIGHT_FF);
 	}
 
 	public void setVelocity(Measure<Velocity<Angle>> velocity) {
 		var feedforwardOutput = this.feedforwardController.calculate(velocity.in(RPM));
 		var pidOutputLeft = this.pidController.calculate(this.leftEncoder.getVelocity(), velocity.in(RPM));
-		var pidOutputRight = this.pidController.calculate(this.leftEncoder.getVelocity(), velocity.in(RPM));
+		var pidOutputRight = this.pidController.calculate(this.rightEncoder.getVelocity(), velocity.in(RPM));
 
 		this.leftMotor.setVoltage(feedforwardOutput + pidOutputLeft);
 		this.rightMotor.setVoltage(feedforwardOutput + pidOutputRight);
