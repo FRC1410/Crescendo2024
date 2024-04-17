@@ -1,9 +1,7 @@
 package org.frc1410.crescendo2024.commands.shooter;
 
 import static edu.wpi.first.units.Units.Seconds;
-import static org.frc1410.crescendo2024.util.Constants.SPEAKER_INTAKE_SPEED;
-import static org.frc1410.crescendo2024.util.Constants.SPEAKER_STORAGE_VELOCITY;
-import static org.frc1410.crescendo2024.util.Constants.SHOOTING_TIME;
+import static org.frc1410.crescendo2024.util.Constants.*;
 
 import org.frc1410.crescendo2024.commands.RunStorage;
 import org.frc1410.crescendo2024.commands.intake.RunUnderBumperIntake;
@@ -20,7 +18,7 @@ public class ShootSpeaker extends ParallelRaceGroup {
             new WaitCommand(SHOOTING_TIME.in(Seconds)),
             new ParallelCommandGroup(
                 new RunStorage(storage, SPEAKER_STORAGE_VELOCITY),
-                new RunUnderBumperIntake(intake, SPEAKER_INTAKE_SPEED)
+                new RunUnderBumperIntake(intake, INTAKE_SPEED)
             )
         );
     }

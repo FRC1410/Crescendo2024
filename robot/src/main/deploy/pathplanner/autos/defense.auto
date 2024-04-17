@@ -2,25 +2,19 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.83,
-      "y": 4.46
+      "x": 0.8393111647334408,
+      "y": 4.479007328385028
     },
-    "rotation": 120.0
+    "rotation": 128.1253288607642
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "SpinUpAndShootNote"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "source sub to 5"
+            "pathName": "defensive"
           }
         }
       ]

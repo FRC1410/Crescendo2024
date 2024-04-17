@@ -11,11 +11,10 @@ import edu.wpi.first.networktables.StringSubscriber;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import org.frc1410.crescendo2024.commands.ClimbLooped;
-import org.frc1410.crescendo2024.commands.DefensiveAuto;
 import org.frc1410.crescendo2024.commands.RunStorage;
 import org.frc1410.crescendo2024.commands.drivetrain.AutoScoreAmp;
 import org.frc1410.crescendo2024.commands.drivetrain.AutoScoreSpeaker;
@@ -23,6 +22,7 @@ import org.frc1410.crescendo2024.commands.drivetrain.DriveLooped;
 import org.frc1410.crescendo2024.commands.drivetrain.FeedForwardCharacterization;
 import org.frc1410.crescendo2024.commands.drivetrain.LockDrivetrain;
 import org.frc1410.crescendo2024.commands.drivetrain.FeedForwardCharacterization.FeedForwardCharacterizationData;
+import org.frc1410.crescendo2024.commands.intake.FinishIntaking;
 import org.frc1410.crescendo2024.commands.intake.FlipIntake;
 import org.frc1410.crescendo2024.commands.intake.IntakeNote;
 import org.frc1410.crescendo2024.commands.intake.OuttakeNote;
@@ -49,11 +49,15 @@ import org.frc1410.framework.scheduler.task.TaskPersistence;
 import org.frc1410.framework.scheduler.task.impl.CommandTask;
 import org.frc1410.framework.scheduler.task.lock.LockPriority;
 
-import java.util.Optional;
-import java.util.function.Supplier;
-
 import static org.frc1410.crescendo2024.util.Constants.*;
 import static org.frc1410.crescendo2024.util.IDs.*;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.nio.file.FileSystem;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Volts;
@@ -72,6 +76,7 @@ public final class Robot extends PhaseDrivenRobot {
 			AUTO_SPEAKER_STORAGE_VELOCITY
 		));
 		NamedCommands.registerCommand("RunShooter", new RunShooter(this.shooter, AUTO_SPEAKER_SHOOTER_VELOCITY, true));
+		NamedCommands.registerCommand("RunShooterHighVelocity", new RunShooter(this.shooter, AUTO_SPEAKER_SHOOTER_HIGH_VELOCITY, true));
 		NamedCommands.registerCommand("IntakeNote", new IntakeNote(this.intake, this.storage, this.driverController, this.operatorController));
 		NamedCommands.registerCommand("ShootSpeakerLooped", new ShootSpeakerLooped(this.storage, this.intake));
 		NamedCommands.registerCommand("ShootSpeaker", new ShootSpeaker(this.storage, this.intake));
@@ -79,6 +84,7 @@ public final class Robot extends PhaseDrivenRobot {
 		NamedCommands.registerCommand("RunIntake", new RunIntake(this.intake, INTAKE_SPEED));
 		NamedCommands.registerCommand("RunStorage", new RunStorage(this.storage, STORAGE_INTAKE_VELOCITY));
 		NamedCommands.registerCommand("PlopNote", new RunShooter(this.shooter, SHOOTER_PLOP_VELOCITY, false));
+		NamedCommands.registerCommand("FinishIntaking", new FinishIntaking(this.intake, this.storage));
 	}
 
 	private final Controller driverController = new Controller(this.scheduler, DRIVER_CONTROLLER, 0.1);
@@ -95,9 +101,8 @@ public final class Robot extends PhaseDrivenRobot {
 	private final NetworkTable table = this.nt.getTable("Auto");
 
 	private final AutoSelector autoSelector = new AutoSelector()
-		.add("4", () -> new PathPlannerAuto("4 piece mid sub"))
-		.add("0", () -> new InstantCommand())
-		.add("1", () -> new SpinUpAndShootNote(
+		.add("0 note", () -> new InstantCommand())
+		.add("1 note", () -> new SpinUpAndShootNote(
 			this.drivetrain, 
 			this.shooter,
 			this.storage, 
@@ -106,15 +111,19 @@ public final class Robot extends PhaseDrivenRobot {
 			AUTO_SPEAKER_SHOOTER_VELOCITY, 
 			AUTO_SPEAKER_STORAGE_VELOCITY
 		))
-		.add("2 source", () -> new PathPlannerAuto("2 piece source sub"))
-		.add("3", () -> new PathPlannerAuto("3 piece mid sub"))
-		.add("3 amp",() -> new PathPlannerAuto("3 piece amp sub"))
-		.add("3 source", () -> new PathPlannerAuto("3 piece source sub"))
-		.add("5", () -> new PathPlannerAuto("thread the needle"))
-		.add("d 4", this.defensiveAutoToNote("4"))
-		.add("d 3", this.defensiveAutoToNote("3"))
-		.add("d 2", this.defensiveAutoToNote("2"))
-		.add("d 1", this.defensiveAutoToNote("1"));
+		.add("3 note from mid sub", () -> new PathPlannerAuto("3 note from mid sub"))
+		.add("3 note from source sub", () -> new PathPlannerAuto("3 note from source sub"))
+		.add("3.5 note from amp sub",() -> new PathPlannerAuto("3.5 note from amp sub"))
+		.add("4 note from mid sub", () -> new PathPlannerAuto("4 note from mid sub"))
+		.add("4 note from mid sub to 3", () -> new PathPlannerAuto("4 note from mid sub to 3"))
+		.add("5 note from mid sub to 1", () -> new PathPlannerAuto("5 note from mid sub to 1 driveby"))
+		.add("5 note from mid sub to 3", () -> new PathPlannerAuto("5 note from mid sub to 3"))
+		.add("1 scatter", () -> new PathPlannerAuto("defensive"));
+
+		// .add("d 4", this.defensiveAutoToNote("4"))
+		// .add("d 3", this.defensiveAutoToNote("3"))
+		// .add("d 2", this.defensiveAutoToNote("2"))
+		// .add("d 1", this.defensiveAutoToNote("1"));
 
 	{
 		var profiles = new String[this.autoSelector.getProfiles().size()];
@@ -122,27 +131,36 @@ public final class Robot extends PhaseDrivenRobot {
 			profiles[i] = this.autoSelector.getProfiles().get(i).name();
 		}
 
-		var pub = NetworkTables.PublisherFactory(this.table, "Choices", profiles);
-		pub.accept(profiles);
+		var autoChoicesPub = NetworkTables.PublisherFactory(this.table, "Choices", profiles);
+		autoChoicesPub.accept(profiles);
+
+		String dashboardLayout;
+		try (var br = new BufferedReader(new FileReader(new File(Filesystem.getDeployDirectory(), "dashboardLayout.json")))) {
+			dashboardLayout = br.lines().collect(Collectors.joining());
+		} catch(Exception e) {
+			dashboardLayout = null;
+		}
+
+		NetworkTables.PublisherFactory(nt.getTable("viridian"), "layout", dashboardLayout);
 	}
 
-	private final StringPublisher autoPublisher = NetworkTables.PublisherFactory(this.table, "Profile",
-		this.autoSelector.getProfiles().isEmpty() ? "" : this.autoSelector.getProfiles().get(0).name());
+	private final StringPublisher autoPublisher = NetworkTables.PublisherFactory(this.table, "Selection",
+		this.autoSelector.getProfiles().isEmpty() ? "0" : this.autoSelector.getProfiles().get(0).name());
 
 	private final StringSubscriber autoSubscriber = NetworkTables.SubscriberFactory(this.table, this.autoPublisher.getTopic());
 
-	private Supplier<Command> defensiveAutoToNote(String note) {
-		return () -> new DefensiveAuto(
-			this.drivetrain, 
-			this.intake, 
-			this.storage,
-			this.shooter, 
-			(DriverStation.getAlliance().equals(Optional.of(DriverStation.Alliance.Blue))
-				? DEFENSIVE_AUTO_STOPPING_POSITIONS_BLUE
-				: DEFENSIVE_AUTO_STOPPING_POSITIONS_RED
-			).get(note)
-		);
-	}
+	// private Supplier<Command> defensiveAutoToNote(String note) {
+	// 	return () -> new DefensiveAuto(
+	// 		this.drivetrain, 
+	// 		this.intake, 
+	// 		this.storage,
+	// 		this.shooter, 
+	// 		(DriverStation.getAlliance().equals(Optional.of(DriverStation.Alliance.Blue))
+	// 			? DEFENSIVE_AUTO_STOPPING_POSITIONS_BLUE
+	// 			: DEFENSIVE_AUTO_STOPPING_POSITIONS_RED
+	// 		).get(note)
+	// 	);
+	// }
 
 	@Override
 	public void autonomousSequence() {
@@ -160,9 +178,9 @@ public final class Robot extends PhaseDrivenRobot {
 		// Drivetrain
 		this.scheduler.scheduleDefaultCommand(new DriveLooped(
 			this.drivetrain, 
-			this.driverController.LEFT_Y_AXIS.negated(), 
-			this.driverController.LEFT_X_AXIS.negated(), 
-			this.driverController.RIGHT_X_AXIS.negated(), 
+			this.driverController.LEFT_Y_AXIS, 
+			this.driverController.LEFT_X_AXIS, 
+			this.driverController.RIGHT_X_AXIS, 
 			this.driverController.LEFT_TRIGGER
 		), TaskPersistence.EPHEMERAL);
 

@@ -2,32 +2,19 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8,
-      "y": 6.65
+      "x": 1.4,
+      "y": 5.55
     },
-    "rotation": -120.0
+    "rotation": 180.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "SpinUpAndShootNote"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "FlipIntake"
-                }
-              }
-            ]
+            "name": "SpinUpAndShootNote"
           }
         },
         {
@@ -47,7 +34,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "amp sub to A"
+                        "pathName": "mid sub to B"
                       }
                     },
                     {
@@ -79,26 +66,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "A to amp sub"
+                        "pathName": "B to mid sub"
                       }
                     },
                     {
-                      "type": "race",
+                      "type": "named",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "wait",
-                            "data": {
-                              "waitTime": 0.3
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "ShootSpeakerLooped"
-                            }
-                          }
-                        ]
+                        "name": "ShootSpeaker"
                       }
                     }
                   ]
@@ -124,7 +98,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "amp sub to 1"
+                        "pathName": "mid sub to 3 alt"
                       }
                     },
                     {
@@ -134,6 +108,82 @@
                       }
                     }
                   ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "3 to mid sub to A alt"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunShooter"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeNote"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.8
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "A to mid sub to C"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunShooter"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeNote"
+                }
+              },
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.8
                 }
               }
             ]
@@ -156,32 +206,25 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "1 to amp sub"
+                        "pathName": "C to mid sub"
                       }
                     },
                     {
-                      "type": "race",
+                      "type": "named",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "wait",
-                            "data": {
-                              "waitTime": 0.3
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "ShootSpeakerLooped"
-                            }
-                          }
-                        ]
+                        "name": "ShootSpeaker"
                       }
                     }
                   ]
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "mid sub to 3 alt"
           }
         }
       ]

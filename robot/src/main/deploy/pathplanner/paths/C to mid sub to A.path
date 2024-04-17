@@ -3,28 +3,28 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.46,
-        "y": 4.5
+        "x": 2.4151944044628832,
+        "y": 4.3511527624907105
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0032272711787,
-        "y": 4.7033683215379005
+        "x": 1.958421675641583,
+        "y": 4.554521084028611
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "C from mid sub"
     },
     {
       "anchor": {
-        "x": 1.49,
+        "x": 1.6,
         "y": 5.55
       },
       "prevControl": {
-        "x": 1.49,
+        "x": 1.6,
         "y": 4.95
       },
       "nextControl": {
-        "x": 1.49,
+        "x": 1.6,
         "y": 6.1499999999999995
       },
       "isLocked": false,
@@ -32,21 +32,21 @@
     },
     {
       "anchor": {
-        "x": 2.39,
-        "y": 6.64
+        "x": 2.5479184893554976,
+        "y": 6.664055517925852
       },
       "prevControl": {
-        "x": 1.9477095123924584,
-        "y": 6.406806679830054
+        "x": 2.105628001747956,
+        "y": 6.430862197755906
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "A from mid sub"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 1,
+      "waypointRelativePos": 0.7,
       "rotationDegrees": 180.0,
       "rotateFast": false
     }
@@ -55,7 +55,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.9,
+      "waypointRelativePos": 0.6,
       "command": {
         "type": "sequential",
         "data": {

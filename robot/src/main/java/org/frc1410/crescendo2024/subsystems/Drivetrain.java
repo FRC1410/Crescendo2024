@@ -34,6 +34,7 @@ import java.util.Optional;
 
 import org.frc1410.crescendo2024.util.NetworkTables;
 
+import static edu.wpi.first.units.Units.MetersPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 import static org.frc1410.crescendo2024.util.Constants.*;
 
@@ -176,7 +177,7 @@ public class Drivetrain implements TickedSubsystem {
 
     public void drive(ChassisSpeeds chassisSpeeds) {
         var swerveModuleStates = SWERVE_DRIVE_KINEMATICS.toSwerveModuleStates(chassisSpeeds);
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SWERVE_DRIVE_MAX_SPEED);
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SWERVE_DRIVE_MAX_SPEED.in(MetersPerSecond));
 
         this.frontLeft.setDesiredState(swerveModuleStates[0]);
         this.frontRight.setDesiredState(swerveModuleStates[1]);

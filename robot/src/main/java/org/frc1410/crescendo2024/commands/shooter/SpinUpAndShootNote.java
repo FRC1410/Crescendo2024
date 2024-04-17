@@ -5,12 +5,7 @@ import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-import static edu.wpi.first.units.Units.Seconds;
-import static org.frc1410.crescendo2024.util.Constants.SHOOTING_TIME;
-
-import org.frc1410.crescendo2024.commands.RunStorage;
 import org.frc1410.crescendo2024.subsystems.Drivetrain;
 import org.frc1410.crescendo2024.subsystems.Intake;
 import org.frc1410.crescendo2024.subsystems.LEDs;
@@ -31,12 +26,8 @@ public class SpinUpAndShootNote extends ParallelRaceGroup {
 			new RunShooter(shooter, shooterVelocity, true),
 
 			new SequentialCommandGroup(
-				new WaitCommand(0.8),
-
-				new ParallelRaceGroup(
-					new WaitCommand(SHOOTING_TIME.in(Seconds)),
-					new RunStorage(storage, storageVelocity)
-				)
+				new WaitForShooterVelocity(shooter, shooterVelocity),
+				new ShootSpeaker(storage, intake)
 			)
 		);
 	}

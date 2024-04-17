@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.38,
-      "y": 5.5
+      "x": 1.3887354302486385,
+      "y": 1.0240835990931243
     },
     "rotation": 180.0
   },
@@ -34,7 +34,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "mid sub to B"
+                        "pathName": "source to 5"
                       }
                     },
                     {
@@ -66,26 +66,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "B to mid sub"
+                        "pathName": "5 to source sub"
                       }
                     },
                     {
-                      "type": "race",
+                      "type": "named",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "wait",
-                            "data": {
-                              "waitTime": 0.3
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "ShootSpeakerLooped"
-                            }
-                          }
-                        ]
+                        "name": "ShootSpeaker"
                       }
                     }
                   ]
@@ -111,7 +98,7 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "mid sub to C"
+                        "pathName": "source sub to 4"
                       }
                     },
                     {
@@ -143,26 +130,13 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "C to mid sub"
+                        "pathName": "4 to source sub"
                       }
                     },
                     {
-                      "type": "race",
+                      "type": "named",
                       "data": {
-                        "commands": [
-                          {
-                            "type": "wait",
-                            "data": {
-                              "waitTime": 0.3
-                            }
-                          },
-                          {
-                            "type": "named",
-                            "data": {
-                              "name": "ShootSpeakerLooped"
-                            }
-                          }
-                        ]
+                        "name": "ShootSpeaker"
                       }
                     }
                   ]
@@ -172,9 +146,67 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "race",
           "data": {
-            "commands": []
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeNote"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "source sub to dropped note"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 0.8
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "RunShooter"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "dropped note to source sub"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "ShootSpeaker"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         }
       ]

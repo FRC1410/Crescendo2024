@@ -23,9 +23,9 @@ public class AdjustShooterRPM extends Command {
 
 	@Override
 	public void initialize() {
-		this.shooter.velocityAdjustment = this.shooter.velocityAdjustment.plus(this.adjustment);
+		this.shooter.setVelocityAdjustment(this.shooter.getVelocityAdjustment().plus(this.adjustment));
 
-		System.out.println("RPM ADJUSTMENT: " + shooter.velocityAdjustment.in(RPM));
+		System.out.println("RPM ADJUSTMENT: " + shooter.getVelocityAdjustment().in(RPM));
 	}
 
 	@Override

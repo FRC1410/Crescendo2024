@@ -15,13 +15,9 @@ public final class Tuning {
 	public static final double SWERVE_STEERING_D = 0;
 
 	// Shooter
-	public static final double SHOOTER_LEFT_P = 1;
-	public static final double SHOOTER_LEFT_I = 0;
-	public static final double SHOOTER_LEFT_D = 0;
-
-	public static final double SHOOTER_RIGHT_P = 1;
-	public static final double SHOOTER_RIGHT_I = 0;
-	public static final double SHOOTER_RIGHT_D = 0;
+	public static final double SHOOTER_P = 0;
+	public static final double SHOOTER_I = 0;
+	public static final double SHOOTER_D = 0;
 
 	// Auto
 	public static final PIDConstants AUTO_TRANSLATION_CONSTANTS = new PIDConstants(7.505, 0, 0);

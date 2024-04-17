@@ -27,7 +27,7 @@ public class RunShooter extends Command {
 	@Override
 	public void initialize() {
 		var velocity = this.useAdjustment
-			? this.velocity.plus(shooter.velocityAdjustment)
+			? this.velocity.plus(shooter.getVelocityAdjustment())
 			: this.velocity;
 		
 		this.shooter.setVelocity(velocity);
@@ -36,7 +36,7 @@ public class RunShooter extends Command {
 	@Override
 	public void execute() {
 		var velocity = this.useAdjustment
-			? this.velocity.plus(shooter.velocityAdjustment)
+			? this.velocity.plus(shooter.getVelocityAdjustment())
 			: this.velocity;
 		
 		this.shooter.setVelocity(velocity);

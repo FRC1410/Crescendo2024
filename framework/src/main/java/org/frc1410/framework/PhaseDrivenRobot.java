@@ -157,7 +157,7 @@ public abstract class PhaseDrivenRobot extends TimedRobot {
 
 	@Override
 	public final void simulationPeriodic() {
-
+		this.robotPeriodic();
 	}
 
 	@Override

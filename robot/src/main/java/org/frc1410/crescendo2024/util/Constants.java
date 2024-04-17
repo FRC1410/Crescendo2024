@@ -33,9 +33,13 @@ import java.util.Map;
 import static org.frc1410.crescendo2024.util.Tuning.*;
 
 public final class Constants {
+	// speaker april tag 14 trap position
+	// x: 24.905972
+	// y: 4.266160
+
 	private Constants() {}
 
-	// Physical constatns
+	// Physical constants
 	public static final double DRIVE_GEAR_RATIO = (50.0 / 16.0) * (17.0 / 27.0) * (45.0 / 15.0);
 
 	public static final double STORAGE_GEAR_RATIO = 12;
@@ -66,10 +70,10 @@ public final class Constants {
 
 	// TODO: Speed up
 	public static final PathConstraints PATH_FOLLOWING_CONSTRAINTS = new PathConstraints(
-		2.2,
-		2.0,
-		degreesToRadians(150), 
-		degreesToRadians(150));
+		5,
+		4,
+		degreesToRadians(300), 
+		degreesToRadians(400));
 
 	public static final HolonomicPathFollowerConfig HOLONOMIC_PATH_FOLLOWING_CONFIG = new HolonomicPathFollowerConfig(
 		PATH_FOLLOWING_TRANSLATION_CONSTANTS,
@@ -101,7 +105,8 @@ public final class Constants {
 	public static final double INTAKE_BAR_SPEED_DOWN = 0.7;
 	public static final double INTAKE_BAR_SPEED_UP = 1;
 
-	public static final Measure<Velocity<Angle>> AUTO_SPEAKER_SHOOTER_VELOCITY = RPM.of(3300);
+	public static final Measure<Velocity<Angle>> AUTO_SPEAKER_SHOOTER_VELOCITY = RPM.of(3900);
+	public static final Measure<Velocity<Angle>> AUTO_SPEAKER_SHOOTER_HIGH_VELOCITY = RPM.of(5800);
 	public static final Measure<Velocity<Angle>> AUTO_SPEAKER_STORAGE_VELOCITY = RPM.of(700);
 
 	public static final Measure<Velocity<Angle>> SPEAKER_SHOOTER_VELOCITY = RPM.of(2400); 
@@ -134,11 +139,11 @@ public final class Constants {
 	public static final boolean STORAGE_LEFT_MOTOR_INVERTED = false;
 	public static final boolean STORAGE_RIGHT_MOTOR_INVERTED = true;
 
-	public static final boolean INTAKE_FRONT_MOTOR_INVERTED = false;
-	public static final boolean INTAKE_BACK_MOTOR_INVERTED = false;
+	public static final boolean INTAKE_SUSHI_ROLLER_MOTOR_INVERTED = false;
+	public static final boolean INTAKE_INNER_MOTOR_INVERTED = false;
 
 	public static final boolean INTAKE_BAR_MOTOR_INVERTED = true;
-	public static final boolean INTAKE_EXTENDED_MOTOR_INVERTED = false;
+	public static final boolean INTAKE_OUTER_MOTOR_INVERTED = false;
 
 	public static final boolean SHOOTER_LEFT_MOTOR_INVERTED = false;
 	public static final boolean SHOOTER_RIGHT_MOTOR_INVERTED = true;
@@ -202,7 +207,7 @@ public final class Constants {
 	public static final String CAMERA_NAME = "Arducam_OV9281_USB_Camera";
 
 	public static final double MAX_APRIL_TAG_AMBIGUITY = 0.2;
-	public static final double MAX_APRIL_TAG_DISTANCE = 3;
+	public static final double MAX_APRIL_TAG_DISTANCE = 4;
   
 	// LEDs
 	public static final double LED_BRIGHTNESS = 1.0;

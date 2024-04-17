@@ -177,6 +177,6 @@ public class SwerveModule implements TickedSubsystem {
 	}
 
 	private static Measure<Velocity<Angle>> moduleVelocityToMotorAngularVelocity(Measure<Velocity<Distance>> linearVelocity) {
-		return RotationsPerSecond.of(linearVelocity.in(MetersPerSecond) / WHEEL_CIRCUMFERENCE.in(Meters));
+		return RotationsPerSecond.of(linearVelocity.in(MetersPerSecond) / WHEEL_CIRCUMFERENCE.in(Meters) * DRIVE_GEAR_RATIO);
 	}
 }

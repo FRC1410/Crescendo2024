@@ -1,0 +1,10 @@
+[
+  {
+    "name": "/Auto/Profile",
+    "type": "string",
+    "value": "0",
+    "properties": {
+      "persistent": true
+    }
+  }
+]
