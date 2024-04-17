@@ -1,16 +1,14 @@
 package org.frc1410.crescendo2024.subsystems;
 
-// import com.ctre.phoenix.led.*;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 
 import static org.frc1410.crescendo2024.util.IDs.*;
+import static org.frc1410.crescendo2024.util.Constants.*;
 
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.CANdleConfiguration;
 import com.ctre.phoenix.led.RainbowAnimation;
 import com.ctre.phoenix.led.StrobeAnimation;
-
-import static org.frc1410.crescendo2024.util.Constants.*;
 
 public class LEDs implements Subsystem {
 	private CANdle candle = new CANdle(LED_ID);

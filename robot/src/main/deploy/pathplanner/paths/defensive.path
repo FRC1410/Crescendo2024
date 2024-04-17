@@ -1,0 +1,125 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.83,
+        "y": 4.46
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.019666574794143,
+        "y": 2.9645439610028155
+      },
+      "isLocked": false,
+      "linkedName": "source sub"
+    },
+    {
+      "anchor": {
+        "x": 7.080663625866259,
+        "y": 0.5258170800029547
+      },
+      "prevControl": {
+        "x": 5.805821560400513,
+        "y": 0.32202391496594296
+      },
+      "nextControl": {
+        "x": 8.319836178679473,
+        "y": 0.723908203135555
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.923653932414248,
+        "y": 1.8
+      },
+      "prevControl": {
+        "x": 7.923653932414248,
+        "y": 1.3
+      },
+      "nextControl": {
+        "x": 7.923653932414248,
+        "y": 2.3000000000000007
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.92,
+        "y": 5.0
+      },
+      "prevControl": {
+        "x": 7.92,
+        "y": 2.3678046485578763
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.85,
+      "rotationDegrees": -135.0,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 1.25,
+      "rotationDegrees": 180.0,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.75,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "RunIntake"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "RunStorage"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "PlopNote"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 5.5,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 250.0,
+    "maxAngularAcceleration": 400.0
+  },
+  "goalEndState": {
+    "velocity": 5.55,
+    "rotation": -135.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": {
+    "rotation": 120.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

@@ -1,0 +1,109 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.4151944044628832,
+        "y": 4.3511527624907105
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.958421675641583,
+        "y": 4.554521084028611
+      },
+      "isLocked": false,
+      "linkedName": "C from mid sub"
+    },
+    {
+      "anchor": {
+        "x": 1.6,
+        "y": 5.55
+      },
+      "prevControl": {
+        "x": 1.6,
+        "y": 4.95
+      },
+      "nextControl": {
+        "x": 1.6,
+        "y": 6.1499999999999995
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.5479184893554976,
+        "y": 6.664055517925852
+      },
+      "prevControl": {
+        "x": 2.105628001747956,
+        "y": 6.430862197755906
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "A from mid sub"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.7,
+      "rotationDegrees": 180.0,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.6,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "ShootSpeaker"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 1.1,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "IntakeNote"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 5.5,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 250.0,
+    "maxAngularAcceleration": 400.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -151.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "To A",
+  "previewStartingState": {
+    "rotation": 153.42,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

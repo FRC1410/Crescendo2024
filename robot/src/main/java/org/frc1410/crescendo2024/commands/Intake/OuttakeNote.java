@@ -2,9 +2,10 @@ package org.frc1410.crescendo2024.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 
+import static edu.wpi.first.units.Units.RPM;
 import static org.frc1410.crescendo2024.util.Constants.OUTTAKE_SPEED;
-import static org.frc1410.crescendo2024.util.Constants.SHOOTER_OUTTAKE_RPM;
-import static org.frc1410.crescendo2024.util.Constants.STORAGE_OUTTAKE_RPM;
+import static org.frc1410.crescendo2024.util.Constants.SHOOTER_OUTTAKE_VELOCITY;
+import static org.frc1410.crescendo2024.util.Constants.STORAGE_OUTTAKE_VELOCITY;
 
 import org.frc1410.crescendo2024.subsystems.Intake;
 import org.frc1410.crescendo2024.subsystems.Shooter;
@@ -26,8 +27,8 @@ public class OuttakeNote extends Command {
 	@Override
 	public void initialize() {
 		this.intake.setSpeed(-OUTTAKE_SPEED);
-		this.storage.setRPM(-STORAGE_OUTTAKE_RPM);
-		this.shooter.setRPM(-SHOOTER_OUTTAKE_RPM);
+		this.storage.setVelocity(STORAGE_OUTTAKE_VELOCITY.negate());
+		this.shooter.setVelocity(SHOOTER_OUTTAKE_VELOCITY.negate());
 	}
 
 	@Override
@@ -38,7 +39,7 @@ public class OuttakeNote extends Command {
 	@Override
 	public void end(boolean interrupted) {
 		this.intake.setSpeed(0);
-		this.storage.setRPM(0);
-		this.shooter.setRPM(0);
+		this.storage.setVelocity(RPM.zero());
+		this.shooter.setVelocity(RPM.zero());
 	}
 }

@@ -1,0 +1,38 @@
+[{
+    "tabName": "Drive",
+    "id": "drive",
+
+    "components": [{
+        "type": "string_select",
+        "title": "Auto Selection",
+        "layout": {
+            "pos": [1, 1],
+            "size": [2, 1]
+        },
+        "topics": ["/Auto/Choices", "/Auto/Selection"]
+    }, {
+        "type": "clock",
+        "title": "Game Time",
+        "layout": {
+            "pos": [3, 1],
+            "size": [2, 1]
+        },
+        "topics": ["/FMSInfo/GameTime"]
+    }, {
+        "type": "boolean",
+        "title": "L'Bork Line Break",
+        "layout": {
+            "pos": [5, 1],
+            "size": [1, 1]
+        },
+        "topics": ["/Intake/Has Note"]
+    }, {
+        "type": "rpm",
+        "title": "Shooter RPM",
+        "layout": {
+            "pos": [6, 1],
+            "size": [1, 1]
+        },
+        "topics": ["/Shooter/RPM", "/Shooter/RPM Setpoint", "/Shooter/RPM Adjustment"]
+    }]
+}]

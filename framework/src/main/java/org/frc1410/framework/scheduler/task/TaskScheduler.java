@@ -7,7 +7,6 @@ import org.frc1410.framework.scheduler.task.impl.CommandTask;
 import org.frc1410.framework.scheduler.task.lock.LockHandler;
 import org.frc1410.framework.scheduler.task.lock.LockPriority;
 import org.frc1410.framework.scheduler.task.lock.TaskLock;
-import org.frc1410.framework.util.log.Logger;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
@@ -21,8 +20,6 @@ import java.util.function.Supplier;
  * no logic itself for scheduling or handling tasks.
  */
 public final class TaskScheduler {
-
-	private static final Logger LOG = new Logger("TaskScheduler");
 
 	public final LoopStore loopStore = new LoopStore(this);
 	public final LockHandler lockHandler = new LockHandler();
@@ -165,19 +162,5 @@ public final class TaskScheduler {
 	public void scheduleAutoCommand(@NotNull Command command, @Range(from = 0, to = Integer.MAX_VALUE) long period) {
 		Objects.requireNonNull(command);
 		schedule(new CommandTask(command), TaskPersistence.EPHEMERAL, Observer.NO_OP, LockPriority.HIGHEST, period);
-	}
-
-	public void printState() {
-		if (true) return;
-		LOG.debug("Scheduler state dump:");
-		for (var loop : loopStore.getLoops(true)) {
-			LOG.debug("\t– Dumping loop " + loop + "...");
-
-			for (var task : loop.getTasks()) {
-				LOG.debug("\t\t– " + task);
-			}
-
-			LOG.debug("");
-		}
 	}
 }

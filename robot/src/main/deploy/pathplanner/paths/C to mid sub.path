@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.53,
-        "y": 4.16
+        "x": 2.4151944044628832,
+        "y": 4.3511527624907105
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3112979289643736,
-        "y": 4.362904920657785
+        "x": 2.196492333427257,
+        "y": 4.554057683148495
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "C from mid sub"
     },
     {
       "anchor": {
@@ -25,17 +25,23 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "mid sub"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 180.0,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.5,
-    "maxAcceleration": 2.5,
-    "maxAngularVelocity": 300.0,
-    "maxAngularAcceleration": 500.0
+    "maxVelocity": 5.5,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 250.0,
+    "maxAngularAcceleration": 400.0
   },
   "goalEndState": {
     "velocity": 0,
@@ -43,9 +49,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "To mid sub",
   "previewStartingState": {
-    "rotation": 180.0,
+    "rotation": 153.42,
     "velocity": 0
   },
   "useDefaultConstraints": true

@@ -1,0 +1,142 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.75,
+        "y": 4.11
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.109901320990896,
+        "y": 3.9295108781322496
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.914320101788352,
+        "y": 4.84
+      },
+      "prevControl": {
+        "x": 5.023178134319233,
+        "y": 4.93572761738116
+      },
+      "nextControl": {
+        "x": 2.215040176118907,
+        "y": 4.808257511821943
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.65,
+        "y": 5.55
+      },
+      "prevControl": {
+        "x": 1.65,
+        "y": 5.1499999999999995
+      },
+      "nextControl": {
+        "x": 1.65,
+        "y": 5.95
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.5479184893554976,
+        "y": 6.664055517925852
+      },
+      "prevControl": {
+        "x": 1.984257135082434,
+        "y": 6.432486767554307
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "A from mid sub"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.75,
+      "rotationDegrees": 180.0,
+      "rotateFast": true
+    },
+    {
+      "waypointRelativePos": 0.7,
+      "rotationDegrees": 169.03445831768593,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "New Constraints Zone",
+      "minWaypointRelativePos": 0.8,
+      "maxWaypointRelativePos": 2.6,
+      "constraints": {
+        "maxVelocity": 2.8,
+        "maxAcceleration": 3.5,
+        "maxAngularVelocity": 250.0,
+        "maxAngularAcceleration": 400.0
+      }
+    }
+  ],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 1.6,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "ShootSpeaker"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 2.0999999999999996,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "IntakeNote"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 5.5,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 250.0,
+    "maxAngularAcceleration": 400.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -151.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "To A",
+  "previewStartingState": {
+    "rotation": 180.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

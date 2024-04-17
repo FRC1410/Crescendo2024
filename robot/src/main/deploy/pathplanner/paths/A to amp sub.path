@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.4809922953179244,
+        "y": 6.795294993367765
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.7166436655095538,
+        "y": 6.820943635405791
+      },
+      "isLocked": false,
+      "linkedName": "A from amp sub"
+    },
+    {
+      "anchor": {
+        "x": 0.9388393823127649,
+        "y": 6.608590508854218
+      },
+      "prevControl": {
+        "x": 1.5741321649353677,
+        "y": 6.924437435918443
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "amp sub shooting"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 5.5,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 250.0,
+    "maxAngularAcceleration": 400.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -130.0,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "To amp sub",
+  "previewStartingState": {
+    "rotation": 180.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

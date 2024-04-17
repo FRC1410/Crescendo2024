@@ -3,39 +3,39 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.81,
-        "y": 6.81
+        "x": 2.5479184893554976,
+        "y": 6.664055517925852
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8879276830110021,
-        "y": 5.9030156585179006
+        "x": 2.3385877829659996,
+        "y": 6.474498469366316
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "A from mid sub"
     },
     {
       "anchor": {
-        "x": 1.3679858486729504,
-        "y": 5.492445188825977
+        "x": 1.5,
+        "y": 5.55
       },
       "prevControl": {
-        "x": 1.720442224426489,
-        "y": 5.8742729292256435
+        "x": 1.8524563757535386,
+        "y": 5.931827740399666
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "mid sub"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.5,
-    "maxAcceleration": 2.5,
-    "maxAngularVelocity": 300.0,
-    "maxAngularAcceleration": 500.0
+    "maxVelocity": 5.5,
+    "maxAcceleration": 5.0,
+    "maxAngularVelocity": 250.0,
+    "maxAngularAcceleration": 400.0
   },
   "goalEndState": {
     "velocity": 0,
@@ -43,9 +43,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "To mid sub",
   "previewStartingState": {
-    "rotation": -127.73000000000002,
+    "rotation": 180.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

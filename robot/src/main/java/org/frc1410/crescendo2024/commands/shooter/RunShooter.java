@@ -1,29 +1,45 @@
 package org.frc1410.crescendo2024.commands.shooter;
 
+import static edu.wpi.first.units.Units.RPM;
+
 import org.frc1410.crescendo2024.subsystems.Shooter;
 
+import edu.wpi.first.units.Angle;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.Velocity;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class RunShooter extends Command {
 	private final Shooter shooter;
 
-	private final double rpm;
+	private final Measure<Velocity<Angle>> velocity;
 
-	public RunShooter(Shooter shooter, double rpm) {
+	private final boolean useAdjustment;
+
+	public RunShooter(Shooter shooter, Measure<Velocity<Angle>> velocity, boolean useAdjustment) {
 		this.shooter = shooter;
-		this.rpm = rpm;
+		this.velocity = velocity;
+		this.useAdjustment = useAdjustment;
 
 		this.addRequirements(shooter);
 	}
 
 	@Override
 	public void initialize() {
-		this.shooter.setRPM(this.rpm + this.shooter.rpmAdjustment);
+		var velocity = this.useAdjustment
+			? this.velocity.plus(shooter.getVelocityAdjustment())
+			: this.velocity;
+		
+		this.shooter.setVelocity(velocity);
 	}
 
 	@Override
 	public void execute() {
-		this.shooter.setRPM(this.rpm + this.shooter.rpmAdjustment);
+		var velocity = this.useAdjustment
+			? this.velocity.plus(shooter.getVelocityAdjustment())
+			: this.velocity;
+		
+		this.shooter.setVelocity(velocity);
 	}
 
 	@Override
@@ -33,6 +49,6 @@ public class RunShooter extends Command {
 
 	@Override
 	public void end(boolean interrupted) {
-		shooter.setRPM(0);
+		this.shooter.setVelocity(RPM.zero());
 	}
 }

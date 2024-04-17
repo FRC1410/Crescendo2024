@@ -18,6 +18,7 @@ public class RunIntake extends Command {
 	@Override
 	public void initialize() {
 		this.intake.setSpeed(this.speed);
+		this.intake.setExtended(true);
 	}
 
 	@Override
@@ -28,5 +29,6 @@ public class RunIntake extends Command {
 	@Override
 	public void end(boolean interrupted) {
 		this.intake.setSpeed(0);
+		this.intake.setExtended(false);
 	}
 }

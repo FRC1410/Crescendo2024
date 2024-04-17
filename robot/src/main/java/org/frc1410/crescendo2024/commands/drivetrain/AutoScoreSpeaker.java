@@ -17,7 +17,11 @@ import org.frc1410.crescendo2024.util.ShootingPosition;
 
 import edu.wpi.first.wpilibj.Timer;
 
+import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.Seconds;
 import static org.frc1410.crescendo2024.util.Constants.*;
+
+import java.util.Optional;
 
 public class AutoScoreSpeaker extends Command {
 	private final Drivetrain drivetrain;
@@ -46,8 +50,9 @@ public class AutoScoreSpeaker extends Command {
 
 	@Override
 	public void initialize() {
-		var alliance = DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue);
-		var shootingPositions = (alliance == DriverStation.Alliance.Blue) ? SHOOTING_POSITIONS_BLUE : SHOOTING_POSITIONS_RED;
+		var shootingPositions = DriverStation.getAlliance().equals(Optional.of(DriverStation.Alliance.Blue))
+			? SHOOTING_POSITIONS_BLUE
+			: SHOOTING_POSITIONS_RED;
 		
 		this.shootingTimer.stop();
 		this.shootingTimer.reset();
@@ -92,19 +97,27 @@ public class AutoScoreSpeaker extends Command {
 
 		this.leds.setColor(Color.LIMELIGHT_GREEN);
 
-		this.shooter.setRPM(nearestPosition.shooterRPM);
+		this.shooter.setVelocity(nearestPosition.shooterVelocity);
 	}
 
 	@Override
 	public void execute() {
-		if(this.followPathCommand != null) {
-			if(!this.followPathCommand.isFinished() && !this.storageIsRunning) {
-				// If not at goal pose, continue following path
+		if(!this.followPathCommand.isFinished() && !this.storageIsRunning) {
+			// If not at goal pose, continue following path
+			if(this.followPathCommand != null) {
 				this.followPathCommand.execute();
-			} else if(!this.storageIsRunning && Math.abs(this.shooter.getRPM() - this.shootingPosition.shooterRPM) <= 50) {
-				// Else, wait until shooter is spun up and then shoot
+			}
+		} else if(!this.storageIsRunning) {
+			// Else, wait until shooter is spun up and then shoot
+			if(this.followPathCommand != null) {
 				this.followPathCommand.end(false);
-				this.storage.setRPM(this.shootingPosition.storageRPM);
+				this.followPathCommand = null;
+			}
+
+			this.drivetrain.lockWheels();
+
+			if (Math.abs(this.shooter.getVelocity().in(RPM) - this.shootingPosition.shooterVelocity.in(RPM)) < 100) {
+				this.storage.setVelocity(this.shootingPosition.storageVelocity);
 				this.intake.setSpeed(0.75);
 				this.storageIsRunning = true;
 				this.shootingTimer.start();
@@ -114,7 +127,7 @@ public class AutoScoreSpeaker extends Command {
 
 	@Override
 	public boolean isFinished() {
-		return this.shootingTimer.hasElapsed(SHOOTING_TIME);
+		return this.shootingTimer.hasElapsed(SHOOTING_TIME.in(Seconds));
 	}
 
 	@Override
@@ -123,8 +136,8 @@ public class AutoScoreSpeaker extends Command {
 			followPathCommand.end(interrupted);
 		}
 
-		this.storage.setRPM(0);
-		this.shooter.setRPM(0);
+		this.storage.setVelocity(RPM.zero());
+		this.shooter.setVelocity(RPM.zero());
 		this.intake.setSpeed(0);
 	}
 }
