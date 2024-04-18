@@ -62,7 +62,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "RunShooter"
+                  "name": "RunShooterHighVelocity"
                 }
               }
             ]

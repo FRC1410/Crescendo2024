@@ -41,7 +41,7 @@ public class DriveLooped extends Command {
 		if (this.robotRelativeTrigger.button().isActive()) {
 			// Negate because intake should be forward
 			// TODO: does angle need to be negated?
-			this.drivetrain.drive(new ChassisSpeeds(xVelocity.negate(), yVelocity.negate(), angularVelocity));
+			this.drivetrain.drive(new ChassisSpeeds(xVelocity, yVelocity, angularVelocity));
 		} else {
 			this.drivetrain.driveFieldRelative(new ChassisSpeeds(xVelocity.in(MetersPerSecond), yVelocity.in(MetersPerSecond), angularVelocity.in(RadiansPerSecond)));
 		}

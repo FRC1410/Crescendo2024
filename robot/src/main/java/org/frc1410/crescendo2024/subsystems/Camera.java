@@ -26,7 +26,6 @@ public class Camera implements Subsystem {
 	public Optional<EstimatedRobotPose> getEstimatedPose() {
 		if(this.photonCamera.getLatestResult().hasTargets()) {
 			var pose = this.photonPoseEstimator.update();
-
 			return pose;
 		} else {
 			return Optional.empty();

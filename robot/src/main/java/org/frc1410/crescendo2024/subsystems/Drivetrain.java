@@ -234,18 +234,21 @@ public class Drivetrain implements TickedSubsystem {
     @Override
     public void periodic() {
         this.poseEstimator.update(
-                this.getGyroYaw(),
-                this.getSwerveModulePositions());
+            this.getGyroYaw(),
+            this.getSwerveModulePositions()
+        );
 
         var estimatedPose = this.camera.getEstimatedPose();
 
-        if (estimatedPose.isPresent() && this.validateVisionPose(estimatedPose.get())) {
-            var resultTimestamp = estimatedPose.get().timestampSeconds;
+        if (estimatedPose.isPresent()) {
+            if (this.validateVisionPose(estimatedPose.get())) {
+                var resultTimestamp = estimatedPose.get().timestampSeconds;
 
-            if ((resultTimestamp != this.previousPipelineTimestamp)) {
+                if ((resultTimestamp != this.previousPipelineTimestamp)) {
 
-                this.previousPipelineTimestamp = resultTimestamp;
-                this.poseEstimator.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), resultTimestamp);
+                    this.previousPipelineTimestamp = resultTimestamp;
+                    this.poseEstimator.addVisionMeasurement(estimatedPose.get().estimatedPose.toPose2d(), resultTimestamp);
+                }
             }
         }
 

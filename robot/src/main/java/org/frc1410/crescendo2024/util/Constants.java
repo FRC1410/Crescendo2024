@@ -113,7 +113,7 @@ public final class Constants {
 	public static final Measure<Velocity<Angle>> SPEAKER_STORAGE_VELOCITY = RPM.of(575);
 	public static final double SPEAKER_INTAKE_SPEED = 0.75;
 
-	public static final Measure<Velocity<Angle>> AMP_SHOOTER_VELOCITY = RPM.of(450);
+	public static final Measure<Velocity<Angle>> AMP_SHOOTER_VELOCITY = RPM.of(480);
 
 	public static final Measure<Velocity<Angle>> SHOOTER_PLOP_VELOCITY = RPM.of(700);
 
@@ -178,6 +178,7 @@ public final class Constants {
 		try {
 			layout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
 		} catch(IOException e) {
+			System.out.println("Failed to load april tag field layout");
 			DriverStation.reportError("Failed to load AprilTagFieldLayout", e.getStackTrace());
 			layout = null;
 		}
@@ -214,7 +215,7 @@ public final class Constants {
 	public static final int NUM_LEDS = 28;
 
 	// Shooter
-	public static final Measure<Velocity<Angle>> STARTING_SHOOTER_VELOCITY_ADJUSTMENT = RPM.of(300);
+	public static final Measure<Velocity<Angle>> STARTING_SHOOTER_VELOCITY_ADJUSTMENT = RPM.of(600);
 	public static final Measure<Velocity<Angle>> SHOOTER_VELOCITY_ADJUSTMENT_MAGNITUDE = RPM.of(150);
 
 	// Feedforward
