@@ -16,20 +16,32 @@
     },
     {
       "anchor": {
-        "x": 0.83,
-        "y": 4.46
+        "x": 0.9383643072841704,
+        "y": 4.489043288271762
       },
       "prevControl": {
-        "x": 1.1810000965800054,
-        "y": 3.8520499992618475
+        "x": 1.2893644038641758,
+        "y": 3.8810932875336093
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "source sub shooting"
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "New Constraints Zone",
+      "minWaypointRelativePos": 0.55,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 3.5,
+        "maxAcceleration": 4.0,
+        "maxAngularVelocity": 250.0,
+        "maxAngularAcceleration": 400.0
+      }
+    }
+  ],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 5.5,
@@ -39,7 +51,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 120.0,
+    "rotation": 128.5,
     "rotateFast": false
   },
   "reversed": false,

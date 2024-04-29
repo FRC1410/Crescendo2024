@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.7991830540967256,
-        "y": 6.652274544384274
+        "x": 0.9388393823127649,
+        "y": 6.608590508854218
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.2661066896207869,
-        "y": 6.802599271865211
+        "x": 1.4057630178368261,
+        "y": 6.758915236335155
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "amp sub shooting"
     },
     {
       "anchor": {
@@ -57,7 +57,7 @@
   "reversed": false,
   "folder": "To A",
   "previewStartingState": {
-    "rotation": -120.0,
+    "rotation": -129.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

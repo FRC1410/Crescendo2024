@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.8,
-      "y": 6.65
+      "x": 0.94,
+      "y": 6.61
     },
-    "rotation": -120.0
+    "rotation": -129.0
   },
   "command": {
     "type": "sequential",
@@ -19,12 +19,6 @@
                 "type": "named",
                 "data": {
                   "name": "SpinUpAndShootNote"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "FlipIntake"
                 }
               }
             ]

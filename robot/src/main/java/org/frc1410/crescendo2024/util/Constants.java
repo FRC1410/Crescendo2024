@@ -78,7 +78,7 @@ public final class Constants {
 	public static final HolonomicPathFollowerConfig HOLONOMIC_PATH_FOLLOWING_CONFIG = new HolonomicPathFollowerConfig(
 		PATH_FOLLOWING_TRANSLATION_CONSTANTS,
 		PATH_FOLLOWING_ROTATION_CONSTANTS,
-		3,
+		5,
 		DRIVE_BASE_RADIUS,
 		new ReplanningConfig(true, true)
 	);
@@ -105,11 +105,11 @@ public final class Constants {
 	public static final double INTAKE_BAR_SPEED_DOWN = 0.7;
 	public static final double INTAKE_BAR_SPEED_UP = 1;
 
-	public static final Measure<Velocity<Angle>> AUTO_SPEAKER_SHOOTER_VELOCITY = RPM.of(3900);
+	public static final Measure<Velocity<Angle>> AUTO_SPEAKER_SHOOTER_VELOCITY = RPM.of(4200);
 	public static final Measure<Velocity<Angle>> AUTO_SPEAKER_SHOOTER_HIGH_VELOCITY = RPM.of(5800);
 	public static final Measure<Velocity<Angle>> AUTO_SPEAKER_STORAGE_VELOCITY = RPM.of(700);
 
-	public static final Measure<Velocity<Angle>> SPEAKER_SHOOTER_VELOCITY = RPM.of(2400); 
+	public static final Measure<Velocity<Angle>> SPEAKER_SHOOTER_VELOCITY = RPM.of(3400); 
 	public static final Measure<Velocity<Angle>> SPEAKER_STORAGE_VELOCITY = RPM.of(575);
 	public static final double SPEAKER_INTAKE_SPEED = 0.75;
 
@@ -122,9 +122,9 @@ public final class Constants {
 
 	// Offsets / inversions
 	public static final Measure<Angle> FRONT_LEFT_STEER_ENCODER_OFFSET = Degrees.of(-12.041016 + 90);
-	public static final Measure<Angle> FRONT_RIGHT_STEER_ENCODER_OFFSET = Degrees.of(88.154297 - 90);
+	public static final Measure<Angle> FRONT_RIGHT_STEER_ENCODER_OFFSET = Degrees.of((-92.373047 + 90));
 	public static final Measure<Angle> BACK_LEFT_STEER_ENCODER_OFFSET = Degrees.of(116.279297 - 90);
-	public static final Measure<Angle> BACK_RIGHT_STEER_ENCODER_OFFSET = Degrees.of(18.984375 + 90);
+	public static final Measure<Angle> BACK_RIGHT_STEER_ENCODER_OFFSET = Degrees.of(128.583984 + 90);
 
 	public static final boolean FRONT_LEFT_DRIVE_MOTOR_INVERTED = false;
 	public static final boolean FRONT_RIGHT_DRIVE_MOTOR_INVERTED = true;
@@ -151,7 +151,7 @@ public final class Constants {
 	// Field
 	public static final List<ShootingPosition> SHOOTING_POSITIONS_BLUE = List.of(
 		new ShootingPosition(new Pose2d(1.12, 6.76, Rotation2d.fromDegrees(-133)), RPM.of(1850), RPM.of(575)),
-		new ShootingPosition(new Pose2d(1.12, 4.34, Rotation2d.fromDegrees(137)), RPM.of(1850), RPM.of(575))
+		new ShootingPosition(new Pose2d(1.12, 4.34, Rotation2d.fromDegrees(133)), RPM.of(1850), RPM.of(575))
 	);
 
 	public static final List<ShootingPosition> SHOOTING_POSITIONS_RED = SHOOTING_POSITIONS_BLUE
@@ -165,8 +165,9 @@ public final class Constants {
 		)
 		.toList();
 
-	public static final Pose2d AMP_SCORING_POSITION_BLUE = new Pose2d(1.83, 7.82, Rotation2d.fromDegrees(90));
-	public static final Pose2d AMP_SCORING_POSITION_RED = GeometryUtil.flipFieldPose(AMP_SCORING_POSITION_BLUE);
+	public static final Pose2d AMP_SCORING_POSITION_BLUE = new Pose2d(1.81, 7.8, Rotation2d.fromDegrees(90));
+	// public static final Pose2d AMP_SCORING_POSITION_RED = GeometryUtil.flipFieldPose(AMP_SCORING_POSITION_BLUE);
+	public static final Pose2d AMP_SCORING_POSITION_RED = new Pose2d(16.54 - 1.81, 7.8, Rotation2d.fromDegrees(90));
 
 	public static final AprilTagFieldLayout APRIL_TAG_FIELD_LAYOUT;
 
@@ -215,8 +216,11 @@ public final class Constants {
 	public static final int NUM_LEDS = 28;
 
 	// Shooter
-	public static final Measure<Velocity<Angle>> STARTING_SHOOTER_VELOCITY_ADJUSTMENT = RPM.of(600);
-	public static final Measure<Velocity<Angle>> SHOOTER_VELOCITY_ADJUSTMENT_MAGNITUDE = RPM.of(150);
+	public static final Measure<Velocity<Angle>> STARTING_SPEAKER_SHOOTER_VELOCITY_ADJUSTMENT = RPM.of(600);
+	public static final Measure<Velocity<Angle>> SHOOTER_SPEAKER_VELOCITY_ADJUSTMENT_MAGNITUDE = RPM.of(150);
+
+	public static final Measure<Velocity<Angle>> STARTING_AMP_SHOOTER_VELOCITY_ADJUSTMENT = RPM.of(0);
+	public static final Measure<Velocity<Angle>> SHOOTER_AMP_VELOCITY_ADJUSTMENT_MAGNITUDE = RPM.of(15);
 
 	// Feedforward
 	public static final double DRIVE_KS = 0.31720;

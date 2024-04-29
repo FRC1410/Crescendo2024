@@ -28,9 +28,9 @@ public final class IDs {
 	public static final int SHOOTER_LEFT_MOTOR_ID = 9;
 
 	// Intake
-	public static final int INTAKE_FRONT_MOTOR_ID = 13;
-	public static final int INTAKE_BACK_MOTOR_ID = 14;
-	public static final int INTAKE_EXTENDED_MOTOR_ID = 17;
+	public static final int INTAKE_SUSHI_ROLLER_MOTOR_ID = 13;
+	public static final int INTAKE_INNER_MOTOR_ID = 14;
+	public static final int INTAKE_OUTER_MOTOR_ID = 17;
 	public static final int INTAKE_BAR_MOTOR_ID = 18;
 	public static final int INTAKE_LIMIT_SWITCH_ID = 0;
 	public static final int INTAKE_BAR_ENCODER_CHANNEL_A = 1;

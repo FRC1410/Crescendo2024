@@ -97,7 +97,7 @@ public class AutoScoreSpeaker extends Command {
 
 		this.leds.setColor(Color.LIMELIGHT_GREEN);
 
-		this.shooter.setVelocity(nearestPosition.shooterVelocity);
+		this.shooter.setVelocity(nearestPosition.shooterVelocity.plus(shooter.getSpeakerVelocityAdjustment()));
 	}
 
 	@Override

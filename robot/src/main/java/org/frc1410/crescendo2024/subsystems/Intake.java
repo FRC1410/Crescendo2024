@@ -28,9 +28,9 @@ public class Intake implements TickedSubsystem {
     private final DoublePublisher barEncoderAngle = NetworkTables.PublisherFactory(this.table, "Bar Encoder Angle", 0);
 	private final BooleanPublisher hasNote = NetworkTables.PublisherFactory(this.table, "Has Note", false);
 
-	private final CANSparkMax sushiRollerMotor = new CANSparkMax(INTAKE_FRONT_MOTOR_ID, MotorType.kBrushless);
-	private final CANSparkMax innerMotor = new CANSparkMax(INTAKE_BACK_MOTOR_ID, MotorType.kBrushless);
-	private final CANSparkMax outerMotor = new CANSparkMax(INTAKE_EXTENDED_MOTOR_ID, MotorType.kBrushless);
+	private final CANSparkMax sushiRollerMotor = new CANSparkMax(INTAKE_SUSHI_ROLLER_MOTOR_ID, MotorType.kBrushless);
+	private final CANSparkMax innerMotor = new CANSparkMax(INTAKE_INNER_MOTOR_ID, MotorType.kBrushless);
+	private final CANSparkMax outerMotor = new CANSparkMax(INTAKE_OUTER_MOTOR_ID, MotorType.kBrushless);
 	private final CANSparkMax barMotor = new CANSparkMax(INTAKE_BAR_MOTOR_ID, MotorType.kBrushless);
 
 	private final Encoder barEncoder = new Encoder(INTAKE_BAR_ENCODER_CHANNEL_A, INTAKE_BAR_ENCODER_CHANNEL_B, true);

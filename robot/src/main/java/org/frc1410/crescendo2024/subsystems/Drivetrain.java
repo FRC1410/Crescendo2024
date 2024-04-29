@@ -3,6 +3,8 @@ package org.frc1410.crescendo2024.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -96,23 +98,9 @@ public class Drivetrain implements TickedSubsystem {
 
     private Rotation2d fieldRelativeOffset = new Rotation2d();
 
-    public Drivetrain(SubsystemStore subsystems) {
-        AutoBuilder.configureHolonomic(
-            this::getEstimatedPosition,
-            this::resetPose,
-            this::getChassisSpeeds,
-            this::drive,
-            HOLONOMIC_AUTO_CONFIG,
-            () -> {
-                var alliance = DriverStation.getAlliance();
-                if (alliance.isPresent()) {
-                    return alliance.get() == DriverStation.Alliance.Red;
-                }
-                return false;
-            },
-            this
-        );
+    private boolean hasSeenAprilTag = false;
 
+    public Drivetrain(SubsystemStore subsystems) {
         this.frontLeft = subsystems.track(new SwerveModule(
             FRONT_LEFT_DRIVE_MOTOR,
             FRONT_LEFT_STEER_MOTOR,
@@ -265,29 +253,36 @@ public class Drivetrain implements TickedSubsystem {
     }
 
     private boolean validateVisionPose(EstimatedRobotPose pose) {
-        var minAmbiguity = pose.targetsUsed
-            .stream()
-            .mapToDouble((target) -> target.getPoseAmbiguity())
-            .min();
+        // System.out.println("has seen april tag: " + this.hasSeenAprilTag);
+        // if (!this.hasSeenAprilTag) {
+        //     this.hasSeenAprilTag = true;
+        //     return true;
+        // }
+        
+        // var minAmbiguity = pose.targetsUsed
+        //     .stream()
+        //     .mapToDouble((target) -> target.getPoseAmbiguity())
+        //     .min();
 
-        var estimatedPosition = this.getEstimatedPosition();
+        // var estimatedPosition = this.getEstimatedPosition();
 
-        var minDistance = pose.targetsUsed
-            .stream()
-            .mapToDouble((target) -> APRIL_TAG_FIELD_LAYOUT
-                .getTagPose(target.getFiducialId())
-                .get()
-                .getTranslation()
-                .toTranslation2d()
-                .getDistance(estimatedPosition.getTranslation())
-            )
-            .min();
+        // var minDistance = pose.targetsUsed
+        //     .stream()
+        //     .mapToDouble((target) -> APRIL_TAG_FIELD_LAYOUT
+        //         .getTagPose(target.getFiducialId())
+        //         .get()
+        //         .getTranslation()
+        //         .toTranslation2d()
+        //         .getDistance(estimatedPosition.getTranslation())
+        //     )
+        //     .min();
 
-        if (minAmbiguity.isEmpty() || minDistance.isEmpty()) {
-            return false;
-        }
+        // if (minAmbiguity.isEmpty() || minDistance.isEmpty()) {
+        //     return false;
+        // }
 
-        return minAmbiguity.getAsDouble() < MAX_APRIL_TAG_AMBIGUITY && minDistance.getAsDouble() < MAX_APRIL_TAG_DISTANCE;
+        // return minDistance.getAsDouble() < MAX_APRIL_TAG_DISTANCE;
+        return true;
     }
 
     private SwerveModulePosition[] getSwerveModulePositions() {

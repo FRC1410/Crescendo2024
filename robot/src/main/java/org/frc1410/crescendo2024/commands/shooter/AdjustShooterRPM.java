@@ -14,18 +14,25 @@ public class AdjustShooterRPM extends Command {
 
 	private final Measure<Velocity<Angle>> adjustment;
 
-	public AdjustShooterRPM(Shooter shooter, Measure<Velocity<Angle>> adjustment) {
+	private final boolean amp;
+
+	public AdjustShooterRPM(Shooter shooter, Measure<Velocity<Angle>> adjustment, boolean amp) {
 		this.shooter = shooter;
 		this.adjustment = adjustment;
+		this.amp = amp;
 
 		this.addRequirements(shooter);
 	}
 
 	@Override
 	public void initialize() {
-		this.shooter.setVelocityAdjustment(this.shooter.getVelocityAdjustment().plus(this.adjustment));
-
-		System.out.println("RPM ADJUSTMENT: " + shooter.getVelocityAdjustment().in(RPM));
+		if (this.amp) {
+			this.shooter.setAmpVelocityAdjustment(this.shooter.getAmpVelocityAdjustment().plus(this.adjustment));
+		} else {
+			this.shooter.setSpeakerVelocityAdjustment(this.shooter.getSpeakerVelocityAdjustment().plus(this.adjustment));
+		}
+		
+		System.out.println("RPM ADJUSTMENT: " + shooter.getAmpVelocityAdjustment().in(RPM));
 	}
 
 	@Override

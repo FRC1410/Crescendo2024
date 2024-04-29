@@ -23,7 +23,7 @@ public class SpinUpAndShootNote extends ParallelRaceGroup {
 		Measure<Velocity<Angle>> storageVelocity
 	) {
 		addCommands(
-			new RunShooter(shooter, shooterVelocity, true),
+			new RunShooter(shooter, shooterVelocity, true, null),
 
 			new SequentialCommandGroup(
 				new WaitForShooterVelocity(shooter, shooterVelocity),

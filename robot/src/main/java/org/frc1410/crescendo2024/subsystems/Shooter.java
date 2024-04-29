@@ -29,7 +29,7 @@ public class Shooter implements TickedSubsystem {
 
     private final DoublePublisher rpmPub = NetworkTables.PublisherFactory(this.table, "RPM", 0);
 	private final DoublePublisher rpmSetpointPub = NetworkTables.PublisherFactory(this.table, "RPM Setpoint", 0);
-	private final DoublePublisher rpmAdjustmentPub = NetworkTables.PublisherFactory(this.table, "RPM Adjustment", STARTING_SHOOTER_VELOCITY_ADJUSTMENT.in(RPM));
+	private final DoublePublisher rpmAdjustmentPub = NetworkTables.PublisherFactory(this.table, "RPM Adjustment", STARTING_SPEAKER_SHOOTER_VELOCITY_ADJUSTMENT.in(RPM));
 
 	private final CANSparkMax leftMotor = new CANSparkMax(SHOOTER_LEFT_MOTOR_ID, MotorType.kBrushless);
 	private final CANSparkMax rightMotor = new CANSparkMax(SHOOTER_RIGHT_MOTOR_ID, MotorType.kBrushless);
@@ -41,14 +41,15 @@ public class Shooter implements TickedSubsystem {
 	private final PIDController pidController = new PIDController(SHOOTER_P, SHOOTER_I, SHOOTER_D);
 	private final SimpleMotorFeedforward feedforwardController = new SimpleMotorFeedforward(SHOOTER_LEFT_S, SHOOTER_LEFT_V);
 
-	private Measure<Velocity<Angle>> velocityAdjustment = STARTING_SHOOTER_VELOCITY_ADJUSTMENT;
+	private Measure<Velocity<Angle>> speakerVelocityAdjustment = STARTING_SPEAKER_SHOOTER_VELOCITY_ADJUSTMENT;
+	private Measure<Velocity<Angle>> ampVelocityAdjustment = STARTING_AMP_SHOOTER_VELOCITY_ADJUSTMENT;
 
 	public Shooter() {
 		this.leftMotor.restoreFactoryDefaults();
 		this.rightMotor.restoreFactoryDefaults();
 
-		this.leftMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
-		this.rightMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
+		this.leftMotor.setIdleMode(CANSparkBase.IdleMode.kCoast);
+		this.rightMotor.setIdleMode(CANSparkBase.IdleMode.kCoast);
 
 		this.leftMotor.setInverted(SHOOTER_LEFT_MOTOR_INVERTED);
 		this.rightMotor.setInverted(SHOOTER_RIGHT_MOTOR_INVERTED);
@@ -57,13 +58,22 @@ public class Shooter implements TickedSubsystem {
 		this.rightMotor.setSmartCurrentLimit(40);
 	}
 
-	public Measure<Velocity<Angle>> getVelocityAdjustment() {
-		return this.velocityAdjustment;
+	public Measure<Velocity<Angle>> getSpeakerVelocityAdjustment() {
+		return this.speakerVelocityAdjustment;
 	}
 
-	public void setVelocityAdjustment(Measure<Velocity<Angle>> adjustment) {
-		this.velocityAdjustment = adjustment;
+	public void setSpeakerVelocityAdjustment(Measure<Velocity<Angle>> adjustment) {
+		this.speakerVelocityAdjustment = adjustment;
 		this.rpmAdjustmentPub.set(adjustment.in(RPM));
+	}
+
+	public Measure<Velocity<Angle>> getAmpVelocityAdjustment() {
+		return this.ampVelocityAdjustment;
+	}
+
+	public void setAmpVelocityAdjustment(Measure<Velocity<Angle>> adjustment) {
+		this.ampVelocityAdjustment = adjustment;
+		// this.rpmAdjustmentPub.set(adjustment.in(RPM));
 	}
 
 	public void setVelocity(Measure<Velocity<Angle>> velocity) {

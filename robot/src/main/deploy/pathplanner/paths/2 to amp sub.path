@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 0.8,
-        "y": 6.65
+        "x": 0.9388393823127649,
+        "y": 6.608590508854218
       },
       "prevControl": {
-        "x": 1.332676577390192,
-        "y": 7.841647734221394
+        "x": 1.4715159597029568,
+        "y": 7.800238243075611
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "amp sub"
+      "linkedName": "amp sub shooting"
     }
   ],
   "rotationTargets": [],
@@ -51,7 +51,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -120.0,
+    "rotation": -129.0,
     "rotateFast": false
   },
   "reversed": false,

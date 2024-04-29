@@ -1,5 +1,6 @@
 package org.frc1410.crescendo2024;
 
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
@@ -11,16 +12,16 @@ import edu.wpi.first.networktables.StringSubscriber;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import org.frc1410.crescendo2024.commands.ClimbLooped;
 import org.frc1410.crescendo2024.commands.RunStorage;
-import org.frc1410.crescendo2024.commands.drivetrain.AutoScoreAmp;
+import org.frc1410.crescendo2024.commands.drivetrain.AutoScoreAmpOld;
 import org.frc1410.crescendo2024.commands.drivetrain.AutoScoreSpeaker;
+import org.frc1410.crescendo2024.commands.drivetrain.AutoScoreAmp;
 import org.frc1410.crescendo2024.commands.drivetrain.DriveLooped;
 import org.frc1410.crescendo2024.commands.drivetrain.FeedForwardCharacterization;
-import org.frc1410.crescendo2024.commands.drivetrain.LockDrivetrain;
 import org.frc1410.crescendo2024.commands.drivetrain.FeedForwardCharacterization.FeedForwardCharacterizationData;
 import org.frc1410.crescendo2024.commands.intake.FinishIntaking;
 import org.frc1410.crescendo2024.commands.intake.FlipIntake;
@@ -51,7 +52,7 @@ import org.frc1410.framework.scheduler.task.lock.LockPriority;
 
 import static org.frc1410.crescendo2024.util.Constants.*;
 import static org.frc1410.crescendo2024.util.IDs.*;
-
+import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 import static edu.wpi.first.units.Units.Volts;
 
@@ -68,17 +69,39 @@ public final class Robot extends PhaseDrivenRobot {
 			AUTO_SPEAKER_SHOOTER_VELOCITY, 
 			AUTO_SPEAKER_STORAGE_VELOCITY
 		));
-		NamedCommands.registerCommand("RunShooter", new RunShooter(this.shooter, AUTO_SPEAKER_SHOOTER_VELOCITY, true));
-		NamedCommands.registerCommand("RunShooterHighVelocity", new RunShooter(this.shooter, AUTO_SPEAKER_SHOOTER_HIGH_VELOCITY, true));
+		NamedCommands.registerCommand("RunShooter", new RunShooter(this.shooter, AUTO_SPEAKER_SHOOTER_VELOCITY, true, null));
+		NamedCommands.registerCommand("RunShooterHighVelocity", new RunShooter(this.shooter, AUTO_SPEAKER_SHOOTER_HIGH_VELOCITY, true, null));
 		NamedCommands.registerCommand("IntakeNote", new IntakeNote(this.intake, this.storage, this.driverController, this.operatorController));
 		NamedCommands.registerCommand("ShootSpeakerLooped", new ShootSpeakerLooped(this.storage, this.intake));
 		NamedCommands.registerCommand("ShootSpeaker", new ShootSpeaker(this.storage, this.intake));
 		NamedCommands.registerCommand("FlipIntake", new FlipIntake(this.intake));
 		NamedCommands.registerCommand("RunIntake", new RunIntake(this.intake, INTAKE_SPEED));
 		NamedCommands.registerCommand("RunStorage", new RunStorage(this.storage, STORAGE_INTAKE_VELOCITY));
-		NamedCommands.registerCommand("PlopNote", new RunShooter(this.shooter, SHOOTER_PLOP_VELOCITY, false));
+		NamedCommands.registerCommand("PlopNote", new RunShooter(this.shooter, SHOOTER_PLOP_VELOCITY, false, null));
 		NamedCommands.registerCommand("FinishIntaking", new FinishIntaking(this.intake, this.storage));
+
+		AutoBuilder.configureHolonomic(
+            drivetrain::getEstimatedPosition,
+            drivetrain::resetPose,
+            drivetrain::getChassisSpeeds,
+            drivetrain::drive,
+            HOLONOMIC_AUTO_CONFIG,
+            () -> {
+                var alliance = DriverStation.getAlliance();
+                if (alliance.isPresent()) {
+                    return alliance.get() == DriverStation.Alliance.Red;
+                }
+                return false;
+            },
+            drivetrain
+        );
+
+        // this._5mid = new PathPlannerAuto("5 note from mid sub to 3");
+
+		// this._5mid = new PathPlannerAuto("5 note from mid sub to 3");
 	}
+
+	// private PathPlannerAuto _5mid = null;
 
 	private final Controller driverController = new Controller(this.scheduler, DRIVER_CONTROLLER, 0.1);
 	private final Controller operatorController = new Controller(this.scheduler, OPERATOR_CONTROLLER,  0.1);
@@ -93,10 +116,21 @@ public final class Robot extends PhaseDrivenRobot {
 	private final NetworkTableInstance nt = NetworkTableInstance.getDefault();
 	private final NetworkTable table = this.nt.getTable("Auto");
 
+	
+	// private final Command _3mid = new PathPlannerAuto("3 note from mid sub");
+	// private final Command _3source = new PathPlannerAuto("3 note from source sub");
+	// private final Command _3amp = new PathPlannerAuto("3.5 note from amp sub");
+	// private final Command _4 = new PathPlannerAuto("4 note from mid sub");
+	// private final Command _4mid = new PathPlannerAuto("4 note from mid sub to 3");
+	// private final Command _5amp = new PathPlannerAuto("5 note from mid sub to 1 driveby");
+	// private Command _5mid = null;
+	// private final Command _5midAlt = new PathPlannerAuto("5 note from mid sub to 3 alt");
+	// private final Command _1scatter = new PathPlannerAuto("defensive");
+
 	private final AutoSelector autoSelector = new AutoSelector()
 		.add("0", () -> new InstantCommand())
 		.add("1", () -> new SpinUpAndShootNote(
-			this.drivetrain, 
+			this.drivetrain,
 			this.shooter,
 			this.storage, 
 			this.intake, 
@@ -104,14 +138,15 @@ public final class Robot extends PhaseDrivenRobot {
 			AUTO_SPEAKER_SHOOTER_VELOCITY, 
 			AUTO_SPEAKER_STORAGE_VELOCITY
 		))
-		.add("3 mid", () -> new PathPlannerAuto("3 note from mid sub"))
+		// .add("3 mid", () -> this._3mid)
 		.add("3 source", () -> new PathPlannerAuto("3 note from source sub"))
-		.add("3 amp",() -> new PathPlannerAuto("3.5 note from amp sub"))
-		.add("4", () -> new PathPlannerAuto("4 note from mid sub"))
-		.add("4 mid", () -> new PathPlannerAuto("4 note from mid sub to 3"))
-		.add("5 amp", () -> new PathPlannerAuto("5 note from mid sub to 1 driveby"))
-		.add("5 mid", () -> new PathPlannerAuto("5 note from mid sub to 3"))
-		.add("1 scatter", () -> new PathPlannerAuto("defensive"));
+		// .add("3 amp",() -> this._3amp)
+		// .add("4", () -> this._4)
+		// .add("4 mid", () -> this._4mid)
+		// .add("5 amp", () -> this._5amp)
+		.add("5 mid", () -> new PathPlannerAuto("5 note from mid sub to 3"));
+		// .add("5 mid alt", () -> this._5midAlt)
+		// .add("1 scatter", () -> this._1scatter);
 
 		// .add("d 4", this.defensiveAutoToNote("4"))
 		// .add("d 3", this.defensiveAutoToNote("3"))
@@ -198,19 +233,22 @@ public final class Robot extends PhaseDrivenRobot {
 			this.leds
 		), TaskPersistence.GAMEPLAY, LockPriority.HIGHEST);
 
-		this.driverController.RIGHT_BUMPER.whileHeld(new RunShooter(this.shooter, SPEAKER_SHOOTER_VELOCITY, true), TaskPersistence.GAMEPLAY);
+		this.driverController.RIGHT_BUMPER.whileHeld(new ShootSpeakerLooped(this.storage, this.intake), TaskPersistence.GAMEPLAY);
 		this.driverController.LEFT_BUMPER.whileHeld(new ShootSpeakerLooped(this.storage, this.intake), TaskPersistence.GAMEPLAY);
 
-		// this.driverController.A.whileHeld(new AutoScoreAmp(drivetrain, shooter, storage, intake), TaskPersistence.GAMEPLAY);
+		this.driverController.A.whileHeld(new AutoScoreAmp(this.drivetrain, this.shooter, this.storage, this.intake, this.leds), TaskPersistence.GAMEPLAY);
 
-		this.operatorController.DPAD_UP.whileHeld(new RunStorage(this.storage, SPEAKER_STORAGE_VELOCITY), TaskPersistence.GAMEPLAY);
-		this.operatorController.LEFT_BUMPER.whileHeld(new RunShooter(this.shooter, AMP_SHOOTER_VELOCITY, false), TaskPersistence.GAMEPLAY);
-		this.operatorController.RIGHT_BUMPER.whileHeld(new RunShooter(this.shooter, SPEAKER_SHOOTER_VELOCITY, true), TaskPersistence.GAMEPLAY);
+		this.operatorController.DPAD_RIGHT.whileHeld(new RunStorage(this.storage, SPEAKER_STORAGE_VELOCITY), TaskPersistence.GAMEPLAY);
+		this.operatorController.LEFT_BUMPER.whileHeld(new RunShooter(this.shooter, AMP_SHOOTER_VELOCITY, false, this.driverController), TaskPersistence.GAMEPLAY);
+		this.operatorController.RIGHT_BUMPER.whileHeld(new RunShooter(this.shooter, SPEAKER_SHOOTER_VELOCITY, true, this.driverController), TaskPersistence.GAMEPLAY);
 
 		this.operatorController.LEFT_TRIGGER.button().whileHeld(new OuttakeNote(this.intake, this.storage, this.shooter), TaskPersistence.GAMEPLAY);
 
-		this.operatorController.A.whenPressed(new AdjustShooterRPM(this.shooter, SHOOTER_VELOCITY_ADJUSTMENT_MAGNITUDE), TaskPersistence.GAMEPLAY);
-		this.operatorController.B.whenPressed(new AdjustShooterRPM(this.shooter, SHOOTER_VELOCITY_ADJUSTMENT_MAGNITUDE.negate()), TaskPersistence.GAMEPLAY);
+		this.operatorController.A.whenPressed(new AdjustShooterRPM(this.shooter, SHOOTER_SPEAKER_VELOCITY_ADJUSTMENT_MAGNITUDE, false), TaskPersistence.GAMEPLAY);
+		this.operatorController.B.whenPressed(new AdjustShooterRPM(this.shooter, SHOOTER_SPEAKER_VELOCITY_ADJUSTMENT_MAGNITUDE.negate(), false), TaskPersistence.GAMEPLAY);
+
+		this.operatorController.DPAD_UP.whenPressed(new AdjustShooterRPM(this.shooter, SHOOTER_AMP_VELOCITY_ADJUSTMENT_MAGNITUDE, true), TaskPersistence.GAMEPLAY);
+		this.operatorController.DPAD_DOWN.whenPressed(new AdjustShooterRPM(this.shooter, SHOOTER_AMP_VELOCITY_ADJUSTMENT_MAGNITUDE.negate(), true), TaskPersistence.GAMEPLAY);
 
 		// Intake
 		this.operatorController.RIGHT_TRIGGER.button().whileHeldOnce(new IntakeNote(this.intake, this.storage, this.driverController, this.operatorController), TaskPersistence.GAMEPLAY);

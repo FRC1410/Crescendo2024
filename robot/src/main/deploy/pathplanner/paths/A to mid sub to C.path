@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 2.5479184893554976,
-        "y": 6.664055517925852
+        "y": 6.66
       },
       "prevControl": null,
       "nextControl": {
         "x": 2.105628001747956,
-        "y": 6.430862197755906
+        "y": 6.4268066798300545
       },
       "isLocked": false,
       "linkedName": "A from mid sub"
@@ -46,7 +46,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.6,
+      "waypointRelativePos": 0.7,
       "rotationDegrees": 180.0,
       "rotateFast": false
     }
@@ -67,7 +67,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.6,
+      "waypointRelativePos": 0.75,
       "command": {
         "type": "sequential",
         "data": {

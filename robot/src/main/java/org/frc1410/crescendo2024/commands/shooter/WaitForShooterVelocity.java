@@ -27,6 +27,6 @@ public class WaitForShooterVelocity extends Command {
 
     @Override
     public boolean isFinished() {
-        return Math.abs(this.shooter.getVelocity().in(RPM) - this.target.in(RPM)) < 100 || timeoutTimer.hasElapsed(0.7);
+        return Math.abs(this.shooter.getVelocity().in(RPM) - this.target.in(RPM)) < 100 || timeoutTimer.hasElapsed(1);
     }
 }
